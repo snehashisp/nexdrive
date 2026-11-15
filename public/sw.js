@@ -8,27 +8,24 @@
  *   - Other same-origin GETs: stale-while-revalidate (instant from cache,
  *     refreshed in the background) so every visited screen works offline.
  *
- * Bump CACHE_VERSION to force clients to refetch the shell after a deploy.
+ * The cache name includes the version stamp that build.js writes into
+ * sw-precache.js, so every deploy that changes a file gets a fresh cache and
+ * the old one is deleted on activate.
  */
 'use strict';
 
-const CACHE_VERSION = 'nexdrive-v1';
 const SHELL_URL = '/index.html';
 const OFFLINE_URL = '/offline.html';
 
-// App shell + the assets needed for a first offline launch.
+// App shell + the assets needed for a first offline launch. The bundled app code
+// (dist/bundle/*, file names change on every build) comes from the generated list.
 const CORE = [
   '/',
   '/index.html',
   '/offline.html',
   '/manifest.webmanifest',
-  '/css/nexdrive-base.css',
   '/js/config.js',
-  '/js/nexdrive-runtime.js',
   '/js/product.js',
-  '/js/vendor/react.production.min.js',
-  '/js/vendor/react-dom.production.min.js',
-  '/js/vendor/qrcode-generator.js',
   '/assets/logos/app-icon.svg',
   '/assets/logos/app-icon-180.png',
   '/assets/logos/app-icon-192.png',
@@ -37,8 +34,8 @@ const CORE = [
   '/assets/fonts/hanken-grotesk-latin-ext.woff2',
 ];
 
-// Optional fuller precache list written by build.js (scans public/).
-// Absent in a raw checkout — the try/catch keeps install working regardless.
+// Fuller precache list + version stamp written by build.js (scans dist/).
+// Absent when not built — the try/catch keeps install working regardless.
 let PRECACHE = CORE.slice();
 try {
   importScripts('/sw-precache.js');
@@ -48,6 +45,7 @@ try {
 } catch (e) {
   /* no generated list — CORE is enough to launch offline */
 }
+const CACHE_VERSION = 'nexdrive-' + (self.__PRECACHE_VERSION || 'v1');
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

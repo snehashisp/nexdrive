@@ -2,8 +2,10 @@
 /**
  * NexDrive app server for GoDaddy Node.js Hosting.
  *
- * Serves the installable PWA in public/ at the document root. The app runs
- * fully client-side in demo mode (in-memory sample data) — no backend or DB.
+ * Serves the built installable PWA in dist/ at the document root. `npm run build`
+ * creates dist/ from src/ (the React app) and public/ (static files, copied as-is).
+ * The app runs fully client-side in demo mode (in-memory sample data) — no
+ * backend or DB.
  *
  *   /            NexDrive app (installable PWA)
  *   /sw.js       service worker (served at root scope, no-cache)
@@ -22,10 +24,10 @@ const HOST = process.env.HOST || '0.0.0.0';
 // HOST env var to override (e.g. a real hostname in production).
 const DISPLAY_HOST =
   HOST === '0.0.0.0' || HOST === '127.0.0.1' ? 'nexdrive.localhost' : HOST;
-const PUBLIC = path.join(__dirname, 'public');
+const DIST = path.join(__dirname, 'dist');
 
-if (!fs.existsSync(path.join(PUBLIC, 'index.html'))) {
-  console.error('public/index.html not found — run `npm run build` first.');
+if (!fs.existsSync(path.join(DIST, 'index.html'))) {
+  console.error('dist/index.html not found — run `npm run build` first.');
   process.exit(1);
 }
 
@@ -33,12 +35,18 @@ const app = express();
 app.disable('x-powered-by');
 
 app.use(
-  express.static(PUBLIC, {
+  express.static(DIST, {
     index: 'index.html',
     etag: true,
     setHeaders(res, filePath) {
       const base = path.basename(filePath);
       const ext = path.extname(filePath).toLowerCase();
+
+      // Bundled JS/CSS have a content hash in their file name (index-3f9a2c.js),
+      // so a changed file always gets a new name: safe to cache for a year.
+      if (path.basename(path.dirname(filePath)) === 'bundle') {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      }
 
       if (ext === '.webmanifest') {
         res.setHeader('Content-Type', 'application/manifest+json; charset=utf-8');
@@ -58,7 +66,7 @@ app.use(
 app.get('*', (req, res, next) => {
   if (req.method !== 'GET') return next();
   if (!req.headers.accept || !req.headers.accept.includes('text/html')) return next();
-  res.sendFile(path.join(PUBLIC, 'index.html'));
+  res.sendFile(path.join(DIST, 'index.html'));
 });
 
 app.use((req, res) => {
