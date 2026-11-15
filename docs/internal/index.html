@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NexDrive internal developer docs · NexDrive internal docs</title>
+<!-- Generated from README.md by docs/internal/tools/build-html.mjs. Edit the .md file, then rebuild. -->
+<style>/* Stylesheet embedded into every generated docs page (build-html.mjs). */
+:root {
+  --ink: #1A1A24; --muted: #5B5B6B; --line: #E4E4EA; --soft: #F7F7F9; --page: #FFFFFF;
+  --accent: #6D28D9; --accent-soft: #F3EEFF; --warn: #92400E; --warn-soft: #FFFBEB; --code-bg: #F4F4F7;
+  --sidebar: #FAFAFC;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #E8E8EE; --muted: #A2A2B2; --line: #2E2E3A; --soft: #1C1C26; --page: #12121A;
+    --accent: #B79CFF; --accent-soft: #241C3A; --warn: #FCD34D; --warn-soft: #2A2214; --code-bg: #1E1E2A;
+    --sidebar: #16161F;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* top bar */
+.topbar {
+  position: sticky; top: 0; z-index: 10; height: 56px; display: flex; align-items: center; gap: 16px;
+  padding: 0 24px; background: #0A0A0F; color: #fff; border-bottom: 1px solid #000;
+}
+.brand { font-size: 18px; letter-spacing: .02em; }
+.brand b { font-weight: 600; letter-spacing: .1em; }
+.brand i { font-style: normal; color: #A78BFA; font-weight: 600; }
+.crumb { color: #A2A2B2; font-size: 14px; border-left: 1px solid #333; padding-left: 16px; }
+
+/* layout */
+.layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); min-height: calc(100vh - 56px); }
+.sidebar {
+  position: sticky; top: 56px; align-self: start; height: calc(100vh - 56px); overflow-y: auto;
+  padding: 20px 16px 40px; background: var(--sidebar); border-right: 1px solid var(--line); font-size: 14px;
+}
+.toc-title { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 8px 8px 6px; }
+.sidebar a { display: block; padding: 5px 8px; border-radius: 6px; color: var(--ink); line-height: 1.35; }
+.sidebar a:hover { background: var(--soft); text-decoration: none; }
+.sidebar a.page { font-weight: 500; }
+.sidebar a.current { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.sidebar a.toc { color: var(--muted); }
+.sidebar a.toc.d3 { padding-left: 22px; font-size: 13px; }
+.sep { height: 1px; background: var(--line); margin: 14px 8px; }
+
+.content { padding: 32px 48px 64px; max-width: 980px; }
+
+/* typography */
+h1 { font-size: 34px; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 16px; }
+h2 { font-size: 24px; line-height: 1.3; margin: 48px 0 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+h3 { font-size: 19px; margin: 32px 0 8px; }
+h4 { font-size: 16px; margin: 24px 0 6px; }
+h1 + p { font-size: 18px; color: var(--muted); }
+.anchor { margin-left: 8px; color: var(--line); font-weight: 400; opacity: 0; }
+h2:hover .anchor, h3:hover .anchor, h4:hover .anchor { opacity: 1; color: var(--muted); }
+p, ul, ol { margin: 0 0 14px; }
+li { margin: 4px 0; }
+li > ul, li > ol { margin: 4px 0 0; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+hr + h2 { border-top: 0; margin-top: 24px; padding-top: 0; }
+strong { font-weight: 650; }
+
+/* inline and block code */
+code {
+  font: 0.88em/1.4 ui-monospace, "Cascadia Code", Consolas, Menlo, monospace;
+  background: var(--code-bg); padding: 2px 5px; border-radius: 4px;
+}
+pre.code {
+  background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; margin: 0 0 18px; line-height: 1.5;
+}
+pre.code code { background: none; padding: 0; font-size: 13.5px; }
+
+/* tables */
+.table-wrap { overflow-x: auto; margin: 0 0 20px; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+th { background: var(--soft); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td code { white-space: nowrap; }
+
+/* callouts (from > blockquotes) */
+.callout { margin: 0 0 20px; padding: 14px 18px; border-radius: 8px; border-left: 4px solid var(--accent); background: var(--accent-soft); }
+.callout > :last-child { margin-bottom: 0; }
+.callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.callout.note { border-left-color: var(--muted); background: var(--soft); }
+.callout pre.code { background: var(--page); }
+
+/* diagrams stay on a light card in both themes, because they are drawn in light colours */
+figure.diagram {
+  margin: 8px 0 24px; padding: 20px; background: #FFFFFF; border: 1px solid var(--line);
+  border-radius: 10px; overflow-x: auto; text-align: center;
+}
+figure.diagram svg { max-width: none; height: auto; }
+figure.diagram { cursor: zoom-in; }
+figure.diagram::after { content: "Click to enlarge"; display: block; margin-top: 8px; font-size: 12px; color: #8A8A9C; }
+.zoom { position: fixed; inset: 0; z-index: 50; background: rgba(10,10,15,.75); overflow: auto; padding: 56px 24px 24px; cursor: zoom-out; }
+.zoom[hidden] { display: none; }
+.zoom-body { background: #FFFFFF; border-radius: 10px; padding: 24px; width: max-content; margin: 0 auto; cursor: default; }
+.zoom-close { position: fixed; top: 12px; right: 16px; padding: 8px 14px; border: 0; border-radius: 6px; background: #FFFFFF; color: #1A1A24; font: 600 14px system-ui, sans-serif; cursor: pointer; }
+
+.foot { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+/* narrow screens: sidebar on top */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+  .sidebar a.toc, .sidebar .sep, .sidebar .toc-title:not(:first-child) { display: none; }
+  .content { padding: 24px 16px 48px; }
+  .crumb { display: none; }
+}
+
+@media print {
+  .topbar, .sidebar { display: none; }
+  .layout { display: block; }
+  .content { max-width: none; padding: 0; }
+}
+</style>
+</head>
+<body>
+<header class="topbar"><span class="brand"><b>NEX</b><i>Drive</i></span><span class="crumb">Internal developer docs</span></header>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="toc-title">Pages</div><a class="page current" href="index.html">Start here</a><a class="page" href="setup.html">Setup</a><a class="page" href="overview.html">How it works</a><a class="page" href="component-diagram.html">Component diagrams</a><a class="page" href="database.html">Database</a><a class="page" href="gaps-and-quirks.html">Gaps & quirks</a>
+    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#reading-these-docs">Reading these docs</a>
+  </nav>
+  <main class="content">
+<h1 id="nexdrive-internal-developer-docs">NexDrive internal developer docs</h1>
+<p>Internal notes for engineers joining the project. They describe the code <strong>as it is</strong> (November 2026, branch <code>react-vite-jsx</code>), including the parts that are unfinished or unusual.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Read</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="setup.html">Setup</a></td>
+<td>First. Get the app running locally and find your way around it in Chrome</td>
+</tr>
+<tr>
+<td><a href="overview.html">How it works</a></td>
+<td>How the codebase works, end to end. Includes a short primer on every framework and tool in use (React, JSX, Vite, Express, npm, service workers) for readers who know HTTP and backend coding but not the JavaScript ecosystem</td>
+</tr>
+<tr>
+<td><a href="component-diagram.html">Component diagrams</a></td>
+<td>Diagrams: the running system, the build pipeline, the React component tree, and how one click flows through the code</td>
+</tr>
+<tr>
+<td><a href="database.html">Database</a></td>
+<td>The PostgreSQL data model, how the database is meant to be used, and how that differs from what the front end does today</td>
+</tr>
+<tr>
+<td><a href="gaps-and-quirks.html">Gaps & quirks</a></td>
+<td>What is incomplete, and what is done in a non-standard way (flagged only, nothing changed)</td>
+</tr>
+</tbody></table>
+</div>
+<p>The older documents in the repository root (<code>README.md</code>, <code>DEPLOYMENT.md</code>, <code>DEVELOPER_HANDOVER.md</code>, <code>API_DOCUMENTATION.md</code>, <code>DATABASE_SETUP.md</code>) are the original handover pack. They are still the reference for the <strong>planned</strong> backend and API. Some of what they say about the front end is out of date; see <a href="gaps-and-quirks.html#documentation-that-is-out-of-date">Gaps & quirks</a>.</p>
+<h2 id="reading-these-docs">Reading these docs<a class="anchor" href="#reading-these-docs" aria-hidden="true">#</a></h2>
+<ul>
+<li><strong>In a browser (easiest):</strong> open <code>docs/internal/index.html</code>. Double-clicking it works; it needs no server and no internet. Every page has a sidebar with all pages and the sections of the current page. Click a diagram to see it full size.</li>
+<li><strong>On GitHub or in an editor:</strong> read the <code>.md</code> files. Diagrams are written in <a href="https://mermaid.js.org/" target="_blank" rel="noopener">Mermaid</a>, which GitHub renders automatically. In VS Code, install the &quot;Markdown Preview Mermaid Support&quot; extension and open the Markdown preview.</li>
+</ul>
+<p>The <code>.md</code> files are the source; the <code>.html</code> files are generated from them. After editing a <code>.md</code> file, regenerate the HTML. This needs Chrome; set <code>CHROME_PATH</code> if it is not in the default Windows location.</p>
+<pre class="code"><code data-lang="bash">cd docs/internal/tools
+npm install      # first time only
+npm run build    # rewrites docs/internal/*.html</code></pre>
+
+    <footer class="foot">Generated from the Markdown source in <code>docs/internal/</code>. To update, edit the <code>.md</code> file and run <code>npm run build</code> in <code>docs/internal/tools</code>.</footer>
+  </main>
+</div>
+<div class="zoom" hidden><button class="zoom-close" aria-label="Close">Close ✕</button><div class="zoom-body"></div></div>
+<script>
+// Click a diagram to see it full size; click again, press Esc or use Close to return.
+(function () {
+  var zoom = document.querySelector('.zoom'), body = zoom.querySelector('.zoom-body');
+  function close() { zoom.hidden = true; body.innerHTML = ''; document.body.style.overflow = ''; }
+  document.querySelectorAll('figure.diagram').forEach(function (fig) {
+    fig.addEventListener('click', function () {
+      var svg = fig.querySelector('svg').cloneNode(true);
+      // keep the id: Mermaid's embedded styles are scoped to it
+      svg.style.width = svg.style.maxWidth; svg.style.minWidth = '0'; svg.style.maxWidth = 'none';
+      body.appendChild(svg); zoom.hidden = false; document.body.style.overflow = 'hidden';
+    });
+  });
+  zoom.addEventListener('click', function (e) { if (e.target === zoom || e.target.classList.contains('zoom-close')) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !zoom.hidden) close(); });
+})();
+</script>
+</body>
+</html>

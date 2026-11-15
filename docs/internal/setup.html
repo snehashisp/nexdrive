@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setup: run NexDrive locally and explore it · NexDrive internal docs</title>
+<!-- Generated from setup.md by docs/internal/tools/build-html.mjs. Edit the .md file, then rebuild. -->
+<style>/* Stylesheet embedded into every generated docs page (build-html.mjs). */
+:root {
+  --ink: #1A1A24; --muted: #5B5B6B; --line: #E4E4EA; --soft: #F7F7F9; --page: #FFFFFF;
+  --accent: #6D28D9; --accent-soft: #F3EEFF; --warn: #92400E; --warn-soft: #FFFBEB; --code-bg: #F4F4F7;
+  --sidebar: #FAFAFC;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #E8E8EE; --muted: #A2A2B2; --line: #2E2E3A; --soft: #1C1C26; --page: #12121A;
+    --accent: #B79CFF; --accent-soft: #241C3A; --warn: #FCD34D; --warn-soft: #2A2214; --code-bg: #1E1E2A;
+    --sidebar: #16161F;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* top bar */
+.topbar {
+  position: sticky; top: 0; z-index: 10; height: 56px; display: flex; align-items: center; gap: 16px;
+  padding: 0 24px; background: #0A0A0F; color: #fff; border-bottom: 1px solid #000;
+}
+.brand { font-size: 18px; letter-spacing: .02em; }
+.brand b { font-weight: 600; letter-spacing: .1em; }
+.brand i { font-style: normal; color: #A78BFA; font-weight: 600; }
+.crumb { color: #A2A2B2; font-size: 14px; border-left: 1px solid #333; padding-left: 16px; }
+
+/* layout */
+.layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); min-height: calc(100vh - 56px); }
+.sidebar {
+  position: sticky; top: 56px; align-self: start; height: calc(100vh - 56px); overflow-y: auto;
+  padding: 20px 16px 40px; background: var(--sidebar); border-right: 1px solid var(--line); font-size: 14px;
+}
+.toc-title { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 8px 8px 6px; }
+.sidebar a { display: block; padding: 5px 8px; border-radius: 6px; color: var(--ink); line-height: 1.35; }
+.sidebar a:hover { background: var(--soft); text-decoration: none; }
+.sidebar a.page { font-weight: 500; }
+.sidebar a.current { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.sidebar a.toc { color: var(--muted); }
+.sidebar a.toc.d3 { padding-left: 22px; font-size: 13px; }
+.sep { height: 1px; background: var(--line); margin: 14px 8px; }
+
+.content { padding: 32px 48px 64px; max-width: 980px; }
+
+/* typography */
+h1 { font-size: 34px; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 16px; }
+h2 { font-size: 24px; line-height: 1.3; margin: 48px 0 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+h3 { font-size: 19px; margin: 32px 0 8px; }
+h4 { font-size: 16px; margin: 24px 0 6px; }
+h1 + p { font-size: 18px; color: var(--muted); }
+.anchor { margin-left: 8px; color: var(--line); font-weight: 400; opacity: 0; }
+h2:hover .anchor, h3:hover .anchor, h4:hover .anchor { opacity: 1; color: var(--muted); }
+p, ul, ol { margin: 0 0 14px; }
+li { margin: 4px 0; }
+li > ul, li > ol { margin: 4px 0 0; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+hr + h2 { border-top: 0; margin-top: 24px; padding-top: 0; }
+strong { font-weight: 650; }
+
+/* inline and block code */
+code {
+  font: 0.88em/1.4 ui-monospace, "Cascadia Code", Consolas, Menlo, monospace;
+  background: var(--code-bg); padding: 2px 5px; border-radius: 4px;
+}
+pre.code {
+  background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; margin: 0 0 18px; line-height: 1.5;
+}
+pre.code code { background: none; padding: 0; font-size: 13.5px; }
+
+/* tables */
+.table-wrap { overflow-x: auto; margin: 0 0 20px; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+th { background: var(--soft); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td code { white-space: nowrap; }
+
+/* callouts (from > blockquotes) */
+.callout { margin: 0 0 20px; padding: 14px 18px; border-radius: 8px; border-left: 4px solid var(--accent); background: var(--accent-soft); }
+.callout > :last-child { margin-bottom: 0; }
+.callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.callout.note { border-left-color: var(--muted); background: var(--soft); }
+.callout pre.code { background: var(--page); }
+
+/* diagrams stay on a light card in both themes, because they are drawn in light colours */
+figure.diagram {
+  margin: 8px 0 24px; padding: 20px; background: #FFFFFF; border: 1px solid var(--line);
+  border-radius: 10px; overflow-x: auto; text-align: center;
+}
+figure.diagram svg { max-width: none; height: auto; }
+figure.diagram { cursor: zoom-in; }
+figure.diagram::after { content: "Click to enlarge"; display: block; margin-top: 8px; font-size: 12px; color: #8A8A9C; }
+.zoom { position: fixed; inset: 0; z-index: 50; background: rgba(10,10,15,.75); overflow: auto; padding: 56px 24px 24px; cursor: zoom-out; }
+.zoom[hidden] { display: none; }
+.zoom-body { background: #FFFFFF; border-radius: 10px; padding: 24px; width: max-content; margin: 0 auto; cursor: default; }
+.zoom-close { position: fixed; top: 12px; right: 16px; padding: 8px 14px; border: 0; border-radius: 6px; background: #FFFFFF; color: #1A1A24; font: 600 14px system-ui, sans-serif; cursor: pointer; }
+
+.foot { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+/* narrow screens: sidebar on top */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+  .sidebar a.toc, .sidebar .sep, .sidebar .toc-title:not(:first-child) { display: none; }
+  .content { padding: 24px 16px 48px; }
+  .crumb { display: none; }
+}
+
+@media print {
+  .topbar, .sidebar { display: none; }
+  .layout { display: block; }
+  .content { max-width: none; padding: 0; }
+}
+</style>
+</head>
+<body>
+<header class="topbar"><span class="brand"><b>NEX</b><i>Drive</i></span><span class="crumb">Internal developer docs</span></header>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="toc-title">Pages</div><a class="page" href="index.html">Start here</a><a class="page current" href="setup.html">Setup</a><a class="page" href="overview.html">How it works</a><a class="page" href="component-diagram.html">Component diagrams</a><a class="page" href="database.html">Database</a><a class="page" href="gaps-and-quirks.html">Gaps & quirks</a>
+    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#1-what-you-are-going-to-run">1. What you are going to run</a><a class="toc d2" href="#2-prerequisites">2. Prerequisites</a><a class="toc d2" href="#3-get-the-code">3. Get the code</a><a class="toc d2" href="#4-run-it">4. Run it</a><a class="toc d3" href="#option-a-development-mode-when-changing-code">Option A: development mode (when changing code)</a><a class="toc d3" href="#option-b-production-mode-what-the-hosting-runs">Option B: production mode (what the hosting runs)</a><a class="toc d3" href="#why-nexdrivelocalhost">Why nexdrive.localhost?</a><a class="toc d2" href="#5-explore-the-app-in-chrome">5. Explore the app in Chrome</a><a class="toc d3" href="#the-demo-panel">The demo panel</a><a class="toc d3" href="#useful-demo-values">Useful demo values</a><a class="toc d3" href="#settings-you-can-flip">Settings you can flip</a><a class="toc d3" href="#chrome-devtools-f12">Chrome DevTools (F12)</a><a class="toc d2" href="#6-where-to-start-reading-code">6. Where to start reading code</a><a class="toc d2" href="#7-optional-load-the-planned-database-locally">7. Optional: load the planned database locally</a><a class="toc d2" href="#8-troubleshooting">8. Troubleshooting</a>
+  </nav>
+  <main class="content">
+<h1 id="setup-run-nexdrive-locally-and-explore-it">Setup: run NexDrive locally and explore it</h1>
+<h2 id="1-what-you-are-going-to-run">1. What you are going to run<a class="anchor" href="#1-what-you-are-going-to-run" aria-hidden="true">#</a></h2>
+<p>Only the <strong>front end</strong> (the app that runs in the browser) and a <strong>small web server</strong> that hands its files to the browser. There is no API and no database connection yet. All data in the app is made-up demo data that lives in the browser&#39;s memory, and refreshing the page resets it. See <a href="gaps-and-quirks.html">Gaps & quirks</a>.</p>
+<h2 id="2-prerequisites">2. Prerequisites<a class="anchor" href="#2-prerequisites" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Version</th>
+<th>Why</th>
+<th>Check with</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Node.js</td>
+<td><strong>20.19 or newer</strong> (22.12+ also fine)</td>
+<td>Runs the build tool (Vite) and the web server (Express)</td>
+<td><code>node --version</code></td>
+</tr>
+<tr>
+<td>npm</td>
+<td>Comes with Node.js</td>
+<td>Downloads the project&#39;s libraries</td>
+<td><code>npm --version</code></td>
+</tr>
+<tr>
+<td>Git</td>
+<td>Any recent</td>
+<td>Get the code</td>
+<td><code>git --version</code></td>
+</tr>
+<tr>
+<td>Chrome (or Edge)</td>
+<td>Current</td>
+<td>Explore the app, DevTools</td>
+<td></td>
+</tr>
+<tr>
+<td>Docker Desktop + <code>psql</code></td>
+<td>Optional</td>
+<td>Only if you want to load the planned database schema (section 7)</td>
+<td><code>docker --version</code>, <code>psql --version</code></td>
+</tr>
+</tbody></table>
+</div>
+<p>Node.js is a program that runs JavaScript outside the browser. npm (Node Package Manager) installs JavaScript libraries listed in <code>package.json</code> into a local <code>node_modules/</code> folder, much like <code>pip install -r requirements.txt</code> or Maven/Gradle dependency resolution.</p>
+<h2 id="3-get-the-code">3. Get the code<a class="anchor" href="#3-get-the-code" aria-hidden="true">#</a></h2>
+<pre class="code"><code data-lang="bash">git clone &lt;repository url&gt; nexdrive
+cd nexdrive
+git checkout react-vite-jsx     # the React + Vite version; see note below
+npm install                      # downloads React, Vite, Express … into node_modules/</code></pre>
+<aside class="callout warn"><p><strong>Branch note.</strong> At the time of writing, the React + Vite version lives on <code>react-vite-jsx</code> and is not merged into <code>main</code> yet. The version on <code>main</code> uses the older &quot;template + runtime&quot; engine, and it has a bug that makes the page show a fragment of script text instead of the app (see <a href="gaps-and-quirks.html#the-version-on-main-does-not-render">Gaps & quirks</a>).</p>
+</aside>
+<p><code>npm install</code> reads <code>package.json</code> (the list of libraries and their allowed version ranges) and <code>package-lock.json</code> (the exact versions last installed). Commit the lock file whenever it changes; it keeps everyone on identical versions.</p>
+<h2 id="4-run-it">4. Run it<a class="anchor" href="#4-run-it" aria-hidden="true">#</a></h2>
+<p>There are two ways. Use one at a time, because both use port 3300.</p>
+<h3 id="option-a-development-mode-when-changing-code">Option A: development mode (when changing code)<a class="anchor" href="#option-a-development-mode-when-changing-code" aria-hidden="true">#</a></h3>
+<pre class="code"><code data-lang="bash">npm run dev</code></pre>
+<p>Open <strong><a href="http://nexdrive.localhost:3300" target="_blank" rel="noopener">http://nexdrive.localhost:3300</a></strong> in Chrome. This runs Vite&#39;s development server. When you save a file under <code>src/</code>, the page updates within a second without a reload. The service worker (offline support) is turned off in this mode on purpose.</p>
+<h3 id="option-b-production-mode-what-the-hosting-runs">Option B: production mode (what the hosting runs)<a class="anchor" href="#option-b-production-mode-what-the-hosting-runs" aria-hidden="true">#</a></h3>
+<pre class="code"><code data-lang="bash">npm start</code></pre>
+<p>This first runs <code>npm run build</code>, which creates the optimised app in <code>dist/</code>. It then starts <code>server.js</code>, the Express web server, which serves <code>dist/</code> at <strong><a href="http://nexdrive.localhost:3300" target="_blank" rel="noopener">http://nexdrive.localhost:3300</a></strong>. Use this mode to test install-to-home-screen, offline mode and caching.</p>
+<p>Stop either mode with <strong>Ctrl+C</strong> in the terminal.</p>
+<h3 id="why-nexdrivelocalhost">Why <code>nexdrive.localhost</code>?<a class="anchor" href="#why-nexdrivelocalhost" aria-hidden="true">#</a></h3>
+<p>Any name ending in <code>.localhost</code> points at your own machine; Chrome and Edge resolve it with no setup. It keeps NexDrive separate from anything else you run on <code>localhost:3000</code>. If it doesn&#39;t resolve (some command-line tools such as <code>curl</code> on Windows don&#39;t support it), use <strong><a href="http://127.0.0.1:3300" target="_blank" rel="noopener">http://127.0.0.1:3300</a></strong>; it is the same server.</p>
+<p>To use a different port: <code>PORT=4000 npm start</code> (macOS/Linux/Git Bash) or <code>$env:PORT=4000; npm start</code> (PowerShell). For dev mode, change <code>server.port</code> in <code>vite.config.mjs</code>.</p>
+<h2 id="5-explore-the-app-in-chrome">5. Explore the app in Chrome<a class="anchor" href="#5-explore-the-app-in-chrome" aria-hidden="true">#</a></h2>
+<h3 id="the-demo-panel">The demo panel<a class="anchor" href="#the-demo-panel" aria-hidden="true">#</a></h3>
+<p>On a window at least 1060px wide, a panel on the left lists <strong>workflows</strong> (onboarding, booking, multiple lessons, calendar, navigation, subscription, referrals, edge cases, empty state). Clicking one resets the demo data and jumps straight to that workflow&#39;s starting point. This is the fastest way to see every screen.</p>
+<p>On a desktop the app is drawn inside a phone frame. On a narrow window or a phone it fills the screen.</p>
+<h3 id="useful-demo-values">Useful demo values<a class="anchor" href="#useful-demo-values" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Where</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sign-up → verify mobile</td>
+<td>Code <strong>482913</strong> (or click the &quot;fill code&quot; helper)</td>
+</tr>
+<tr>
+<td>Sign-up → referral code</td>
+<td><strong>NEXDANIEL25</strong> is valid; <strong>NEXMARK14</strong> is inactive; mobile <strong>07700 900301</strong> has already used a referral; <strong>07700 900123</strong> counts as a self-referral</td>
+</tr>
+<tr>
+<td>Open the app with a referral link</td>
+<td><a href="http://nexdrive.localhost:3300/?ref=NEXDANIEL25" target="_blank" rel="noopener">http://nexdrive.localhost:3300/?ref=NEXDANIEL25</a></td>
+</tr>
+<tr>
+<td>&quot;I already have an account&quot;</td>
+<td>Loads the populated demo account (no password check)</td>
+</tr>
+</tbody></table>
+</div>
+<h3 id="settings-you-can-flip">Settings you can flip<a class="anchor" href="#settings-you-can-flip" aria-hidden="true">#</a></h3>
+<p><code>public/js/config.js</code> is read by the app at start-up. It is not bundled, so in production mode you can edit <code>dist/js/config.js</code> and just reload the page.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>showDemoPanel: false</code></td>
+<td>Hides the workflow panel and demo-only buttons (what real users should see)</td>
+</tr>
+<tr>
+<td><code>deviceFrame: false</code></td>
+<td>No phone frame on desktop; the app fills the browser</td>
+</tr>
+<tr>
+<td><code>launchAnimation: false</code></td>
+<td>Skips the logo animation at start-up</td>
+</tr>
+</tbody></table>
+</div>
+<p>More &quot;preview&quot; switches live at the top of <code>src/App.jsx</code> in <code>static defaultProps</code>: start on onboarding, empty data, subscription state (<code>trial</code>, <code>payment_failed</code>, <code>expired</code>), offline banner. Change one, save, and dev mode reloads.</p>
+<h3 id="chrome-devtools-f12">Chrome DevTools (F12)<a class="anchor" href="#chrome-devtools-f12" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>What to look at</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Device toolbar</strong> (Ctrl+Shift+M)</td>
+<td>Pick a phone size. The frame disappears and you see the app as on a phone</td>
+</tr>
+<tr>
+<td><strong>Console</strong></td>
+<td>JavaScript errors and warnings. In dev mode React prints extra warnings here</td>
+</tr>
+<tr>
+<td><strong>Network</strong></td>
+<td>In dev mode you see each source file served separately. In production mode you see one bundled JS and one CSS file under <code>/bundle/</code></td>
+</tr>
+<tr>
+<td><strong>Application → Manifest</strong></td>
+<td>The install metadata (<code>manifest.webmanifest</code>)</td>
+</tr>
+<tr>
+<td><strong>Application → Service workers</strong></td>
+<td>Production mode only. Tick <strong>Offline</strong>, reload, and the app still opens. <strong>Unregister</strong> clears it if you get stale files</td>
+</tr>
+<tr>
+<td><strong>Application → Cache storage</strong></td>
+<td>The files the service worker saved for offline use</td>
+</tr>
+<tr>
+<td><strong>Sources</strong></td>
+<td>In dev mode, your <code>src/*.jsx</code> files appear as written, and you can set breakpoints in them</td>
+</tr>
+</tbody></table>
+</div>
+<p>Install the <strong>React Developer Tools</strong> Chrome extension. It adds a <strong>Components</strong> tab: select <code>App</code> to watch its <code>state</code> object change as you click around. That state is the single source of truth for everything on screen.</p>
+<h2 id="6-where-to-start-reading-code">6. Where to start reading code<a class="anchor" href="#6-where-to-start-reading-code" aria-hidden="true">#</a></h2>
+<ol>
+<li><code>src/main.jsx</code>: the entry point (about 20 lines).</li>
+<li><code>src/App.jsx</code>: the state (<code>init()</code>) and the actions (methods such as <code>openBooking</code>, <code>confirmBooking</code>, <code>saveLearner</code>).</li>
+<li><code>src/viewModel.js</code> → <code>buildViewModel()</code>: turns the state into display values.</li>
+<li><code>src/AppView.jsx</code>: picks which screen to show. Then any screen in <code>src/screens/</code>.</li>
+</ol>
+<p><a href="overview.html">How it works</a> explains each step.</p>
+<h2 id="7-optional-load-the-planned-database-locally">7. Optional: load the planned database locally<a class="anchor" href="#7-optional-load-the-planned-database-locally" aria-hidden="true">#</a></h2>
+<p>Nothing in the app reads from this database yet; this is for backend work against the schema. See <a href="database.html">Database</a>.</p>
+<pre class="code"><code data-lang="bash">cp .env.example .env              # then set POSTGRES_PASSWORD (any local value) and FIELD_ENCRYPTION_KEY
+docker compose up -d              # PostgreSQL 16 on localhost:5432, Redis 7 on localhost:6379
+
+# load schema, reference data and demo data
+export $(grep -v '^#' .env | xargs)                    # bash; in PowerShell set the variables by hand
+psql &quot;postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB&quot; -v ON_ERROR_STOP=1 -f database/schema.sql
+psql &quot;postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB&quot; -v ON_ERROR_STOP=1 -f database/seed.sql
+psql &quot;postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB&quot; -v enc_key=&quot;$FIELD_ENCRYPTION_KEY&quot; -f database/demo_data.sql</code></pre>
+<p>Generate an encryption key with <code>openssl rand -base64 32</code>. Stop the containers with <code>docker compose down</code> (add <code>-v</code> to delete the data volume too).</p>
+<h2 id="8-troubleshooting">8. Troubleshooting<a class="anchor" href="#8-troubleshooting" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause / fix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Port 3300 is already in use</code></td>
+<td>Another <code>npm run dev</code> / <code>npm start</code> is still running. Stop it, or use another port (section 4)</td>
+</tr>
+<tr>
+<td><code>npm install</code> or <code>vite</code> complains about the Node version</td>
+<td>Vite 8 needs Node 20.19+ or 22.12+. Upgrade Node</td>
+</tr>
+<tr>
+<td><code>dist/index.html not found</code></td>
+<td>You ran <code>node server.js</code> directly. Run <code>npm start</code> (which builds first) or <code>npm run build</code></td>
+</tr>
+<tr>
+<td>Old screens after a change in production mode</td>
+<td>The service worker served a cached copy. Reload once more, or DevTools → Application → Service workers → Unregister</td>
+</tr>
+<tr>
+<td>Page shows a line of script text</td>
+<td>You are on <code>main</code> (see section 3)</td>
+</tr>
+<tr>
+<td><code>nexdrive.localhost</code> does not open</td>
+<td>Use <code>http://127.0.0.1:3300</code></td>
+</tr>
+</tbody></table>
+</div>
+
+    <footer class="foot">Generated from the Markdown source in <code>docs/internal/</code>. To update, edit the <code>.md</code> file and run <code>npm run build</code> in <code>docs/internal/tools</code>.</footer>
+  </main>
+</div>
+<div class="zoom" hidden><button class="zoom-close" aria-label="Close">Close ✕</button><div class="zoom-body"></div></div>
+<script>
+// Click a diagram to see it full size; click again, press Esc or use Close to return.
+(function () {
+  var zoom = document.querySelector('.zoom'), body = zoom.querySelector('.zoom-body');
+  function close() { zoom.hidden = true; body.innerHTML = ''; document.body.style.overflow = ''; }
+  document.querySelectorAll('figure.diagram').forEach(function (fig) {
+    fig.addEventListener('click', function () {
+      var svg = fig.querySelector('svg').cloneNode(true);
+      // keep the id: Mermaid's embedded styles are scoped to it
+      svg.style.width = svg.style.maxWidth; svg.style.minWidth = '0'; svg.style.maxWidth = 'none';
+      body.appendChild(svg); zoom.hidden = false; document.body.style.overflow = 'hidden';
+    });
+  });
+  zoom.addEventListener('click', function (e) { if (e.target === zoom || e.target.classList.contains('zoom-close')) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !zoom.hidden) close(); });
+})();
+</script>
+</body>
+</html>

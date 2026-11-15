@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the NexDrive codebase works · NexDrive internal docs</title>
+<!-- Generated from overview.md by docs/internal/tools/build-html.mjs. Edit the .md file, then rebuild. -->
+<style>/* Stylesheet embedded into every generated docs page (build-html.mjs). */
+:root {
+  --ink: #1A1A24; --muted: #5B5B6B; --line: #E4E4EA; --soft: #F7F7F9; --page: #FFFFFF;
+  --accent: #6D28D9; --accent-soft: #F3EEFF; --warn: #92400E; --warn-soft: #FFFBEB; --code-bg: #F4F4F7;
+  --sidebar: #FAFAFC;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #E8E8EE; --muted: #A2A2B2; --line: #2E2E3A; --soft: #1C1C26; --page: #12121A;
+    --accent: #B79CFF; --accent-soft: #241C3A; --warn: #FCD34D; --warn-soft: #2A2214; --code-bg: #1E1E2A;
+    --sidebar: #16161F;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* top bar */
+.topbar {
+  position: sticky; top: 0; z-index: 10; height: 56px; display: flex; align-items: center; gap: 16px;
+  padding: 0 24px; background: #0A0A0F; color: #fff; border-bottom: 1px solid #000;
+}
+.brand { font-size: 18px; letter-spacing: .02em; }
+.brand b { font-weight: 600; letter-spacing: .1em; }
+.brand i { font-style: normal; color: #A78BFA; font-weight: 600; }
+.crumb { color: #A2A2B2; font-size: 14px; border-left: 1px solid #333; padding-left: 16px; }
+
+/* layout */
+.layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); min-height: calc(100vh - 56px); }
+.sidebar {
+  position: sticky; top: 56px; align-self: start; height: calc(100vh - 56px); overflow-y: auto;
+  padding: 20px 16px 40px; background: var(--sidebar); border-right: 1px solid var(--line); font-size: 14px;
+}
+.toc-title { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 8px 8px 6px; }
+.sidebar a { display: block; padding: 5px 8px; border-radius: 6px; color: var(--ink); line-height: 1.35; }
+.sidebar a:hover { background: var(--soft); text-decoration: none; }
+.sidebar a.page { font-weight: 500; }
+.sidebar a.current { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.sidebar a.toc { color: var(--muted); }
+.sidebar a.toc.d3 { padding-left: 22px; font-size: 13px; }
+.sep { height: 1px; background: var(--line); margin: 14px 8px; }
+
+.content { padding: 32px 48px 64px; max-width: 980px; }
+
+/* typography */
+h1 { font-size: 34px; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 16px; }
+h2 { font-size: 24px; line-height: 1.3; margin: 48px 0 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+h3 { font-size: 19px; margin: 32px 0 8px; }
+h4 { font-size: 16px; margin: 24px 0 6px; }
+h1 + p { font-size: 18px; color: var(--muted); }
+.anchor { margin-left: 8px; color: var(--line); font-weight: 400; opacity: 0; }
+h2:hover .anchor, h3:hover .anchor, h4:hover .anchor { opacity: 1; color: var(--muted); }
+p, ul, ol { margin: 0 0 14px; }
+li { margin: 4px 0; }
+li > ul, li > ol { margin: 4px 0 0; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+hr + h2 { border-top: 0; margin-top: 24px; padding-top: 0; }
+strong { font-weight: 650; }
+
+/* inline and block code */
+code {
+  font: 0.88em/1.4 ui-monospace, "Cascadia Code", Consolas, Menlo, monospace;
+  background: var(--code-bg); padding: 2px 5px; border-radius: 4px;
+}
+pre.code {
+  background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; margin: 0 0 18px; line-height: 1.5;
+}
+pre.code code { background: none; padding: 0; font-size: 13.5px; }
+
+/* tables */
+.table-wrap { overflow-x: auto; margin: 0 0 20px; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+th { background: var(--soft); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td code { white-space: nowrap; }
+
+/* callouts (from > blockquotes) */
+.callout { margin: 0 0 20px; padding: 14px 18px; border-radius: 8px; border-left: 4px solid var(--accent); background: var(--accent-soft); }
+.callout > :last-child { margin-bottom: 0; }
+.callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.callout.note { border-left-color: var(--muted); background: var(--soft); }
+.callout pre.code { background: var(--page); }
+
+/* diagrams stay on a light card in both themes, because they are drawn in light colours */
+figure.diagram {
+  margin: 8px 0 24px; padding: 20px; background: #FFFFFF; border: 1px solid var(--line);
+  border-radius: 10px; overflow-x: auto; text-align: center;
+}
+figure.diagram svg { max-width: none; height: auto; }
+figure.diagram { cursor: zoom-in; }
+figure.diagram::after { content: "Click to enlarge"; display: block; margin-top: 8px; font-size: 12px; color: #8A8A9C; }
+.zoom { position: fixed; inset: 0; z-index: 50; background: rgba(10,10,15,.75); overflow: auto; padding: 56px 24px 24px; cursor: zoom-out; }
+.zoom[hidden] { display: none; }
+.zoom-body { background: #FFFFFF; border-radius: 10px; padding: 24px; width: max-content; margin: 0 auto; cursor: default; }
+.zoom-close { position: fixed; top: 12px; right: 16px; padding: 8px 14px; border: 0; border-radius: 6px; background: #FFFFFF; color: #1A1A24; font: 600 14px system-ui, sans-serif; cursor: pointer; }
+
+.foot { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+/* narrow screens: sidebar on top */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+  .sidebar a.toc, .sidebar .sep, .sidebar .toc-title:not(:first-child) { display: none; }
+  .content { padding: 24px 16px 48px; }
+  .crumb { display: none; }
+}
+
+@media print {
+  .topbar, .sidebar { display: none; }
+  .layout { display: block; }
+  .content { max-width: none; padding: 0; }
+}
+</style>
+</head>
+<body>
+<header class="topbar"><span class="brand"><b>NEX</b><i>Drive</i></span><span class="crumb">Internal developer docs</span></header>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="toc-title">Pages</div><a class="page" href="index.html">Start here</a><a class="page" href="setup.html">Setup</a><a class="page current" href="overview.html">How it works</a><a class="page" href="component-diagram.html">Component diagrams</a><a class="page" href="database.html">Database</a><a class="page" href="gaps-and-quirks.html">Gaps & quirks</a>
+    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#1-the-product-in-one-paragraph">1. The product in one paragraph</a><a class="toc d2" href="#2-what-exists-today-and-what-doesnt">2. What exists today and what doesn&#39;t</a><a class="toc d2" href="#3-repository-map">3. Repository map</a><a class="toc d2" href="#4-tools-and-frameworks-one-at-a-time">4. Tools and frameworks, one at a time</a><a class="toc d3" href="#41-npm-and-packagejson">4.1 npm and package.json</a><a class="toc d3" href="#42-javascript-modules-import--export">4.2 JavaScript modules (import / export)</a><a class="toc d3" href="#43-react">4.3 React</a><a class="toc d3" href="#44-jsx">4.4 JSX</a><a class="toc d3" href="#45-vite-build-tool-and-development-server">4.5 Vite (build tool and development server)</a><a class="toc d3" href="#46-nodejs-and-express-the-web-server">4.6 Node.js and Express (the web server)</a><a class="toc d3" href="#47-service-worker-and-pwa">4.7 Service worker and PWA</a><a class="toc d3" href="#48-small-libraries">4.8 Small libraries</a><a class="toc d2" href="#5-what-happens-when-someone-opens-the-app-production">5. What happens when someone opens the app (production)</a><a class="toc d2" href="#6-how-the-app-is-structured-inside">6. How the app is structured inside</a><a class="toc d3" href="#61-app-state-and-actions">6.1 App: state and actions</a><a class="toc d3" href="#62-buildviewmodel-state-into-display-values">6.2 buildViewModel: state into display values</a><a class="toc d3" href="#63-the-views-appview-screens-sheets">6.3 The views: AppView, screens, sheets</a><a class="toc d3" href="#64-one-click-end-to-end">6.4 One click, end to end</a><a class="toc d2" href="#7-cross-cutting-details">7. Cross-cutting details</a><a class="toc d3" href="#71-configuration">7.1 Configuration</a><a class="toc d3" href="#72-styling">7.2 Styling</a><a class="toc d3" href="#73-dates-and-time">7.3 Dates and time</a><a class="toc d3" href="#74-business-rules-in-the-front-end">7.4 Business rules in the front end</a><a class="toc d2" href="#8-things-that-look-odd-at-first">8. Things that look odd at first</a><a class="toc d2" href="#9-where-to-look-for">9. Where to look for…</a>
+  </nav>
+  <main class="content">
+<h1 id="how-the-nexdrive-codebase-works">How the NexDrive codebase works</h1>
+<p>Written for an engineer who knows client/server, HTTP and backend programming, but has not worked with React or the JavaScript tool chain. Every tool or framework gets a short &quot;how it works inside&quot; box the first time it appears, followed by how this codebase uses it.</p>
+<p>Diagrams for everything below: <a href="component-diagram.html">Component diagrams</a>.</p>
+<hr>
+<h2 id="1-the-product-in-one-paragraph">1. The product in one paragraph<a class="anchor" href="#1-the-product-in-one-paragraph" aria-hidden="true">#</a></h2>
+<p>NexDrive is a business app for independent UK driving instructors. They run their diary, learners, prices, booking messages, reminders, pickup navigation, referrals and subscription from their phone. It is a <strong>web app that can be installed on a phone</strong> (a Progressive Web App, section 7), so one codebase serves desktop browsers, phones and the home-screen &quot;app&quot;.</p>
+<h2 id="2-what-exists-today-and-what-doesnt">2. What exists today and what doesn&#39;t<a class="anchor" href="#2-what-exists-today-and-what-doesnt" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>State</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Front end (<code>src/</code>, <code>public/</code>)</td>
+<td><strong>Complete for demo use.</strong> Every screen and workflow works, on made-up data held in browser memory</td>
+</tr>
+<tr>
+<td>Web server (<code>server.js</code>)</td>
+<td><strong>Complete for its job:</strong> it serves the built front-end files. It has no API, no business logic and no database access</td>
+</tr>
+<tr>
+<td>API, auth, payments, SMS/e-mail, push, jobs</td>
+<td><strong>Not built.</strong> Specified in <code>API_DOCUMENTATION.md</code> and <code>DEVELOPER_HANDOVER.md</code></td>
+</tr>
+<tr>
+<td>Database (<code>database/</code>)</td>
+<td><strong>Schema written, not connected.</strong> PostgreSQL DDL, seed and demo data exist; nothing reads or writes them yet (<a href="database.html">Database</a>)</td>
+</tr>
+</tbody></table>
+</div>
+<p>So the browser currently does everything a backend normally would: it holds the data, checks the rules (for example, no overlapping lessons) and &quot;sends&quot; messages (it only shows a confirmation). Full list: <a href="gaps-and-quirks.html">Gaps & quirks</a>.</p>
+<h2 id="3-repository-map">3. Repository map<a class="anchor" href="#3-repository-map" aria-hidden="true">#</a></h2>
+<pre class="code"><code data-lang="text">nexdrive/
+├── index.html            Entry HTML page for the app (Vite's starting point, see §5)
+├── vite.config.mjs       Build tool settings
+├── package.json          Library list + npm scripts (dev, build, start)
+├── package-lock.json     Exact installed library versions (generated, commit it)
+├── build.js              Post-build step: writes the offline precache list into dist/
+├── server.js             Express web server: serves dist/ (used in production and by `npm start`)
+│
+├── src/                  ← THE APP (React + JSX). Everything here gets compiled and bundled
+│   ├── main.jsx            Entry point: mounts &lt;App/&gt; into the page
+│   ├── App.jsx             The single stateful component: all data + all actions
+│   ├── viewModel.js        Turns App's state into display-ready values (&quot;v&quot;)
+│   ├── AppView.jsx         Top-level layout: phone frame, current screen, nav, sheets
+│   ├── screens/            One file per full-screen page (27, incl. onboarding/)
+│   ├── sheets/             One file per pop-up panel that slides up from the bottom (14)
+│   ├── components/         Shared pieces: nav bar, status bar, toast, icons, QR code, splash…
+│   ├── lib/                Pure helpers: dates.js, format.js, validation.js
+│   ├── data/               constants.js (plans, statuses, demo flows), seeds.js (demo data)
+│   └── styles/             base.css (font + design tokens), app.css, interactions.css
+│
+├── public/               ← Static files copied into the build unchanged
+│   ├── js/config.js        Runtime settings read by the app (demo mode, demo panel…)
+│   ├── sw.js               Service worker (offline support)
+│   ├── manifest.webmanifest  Install metadata (name, icons, colours)
+│   ├── offline.html        Fallback page when offline with nothing cached
+│   ├── assets/             Fonts, icons, logos, shared Nexyra site navigation
+│   ├── css/product.css, js/product.js   Used by the marketing page
+│
+├── dist/                 ← Build output (generated by `npm run build`, git-ignored). This is what gets served
+│
+├── product/index.html    Public marketing page (plain HTML, not React; not served by server.js)
+├── database/             PostgreSQL schema, migrations, seed + demo data (not connected yet)
+├── docs/                 Business rules, user flows, security, brand; docs/internal = these notes
+├── *.md (root)           Original handover pack: API contract, deployment, DB setup…
+├── docker-compose.yml    Local PostgreSQL + Redis for future backend work
+├── .htaccess, server/nginx.conf.example   Settings for hosting on Apache / Nginx instead of Node
+└── design-system.html    Old visual reference page (currently broken, see gaps-and-quirks.md)</code></pre>
+<h2 id="4-tools-and-frameworks-one-at-a-time">4. Tools and frameworks, one at a time<a class="anchor" href="#4-tools-and-frameworks-one-at-a-time" aria-hidden="true">#</a></h2>
+<h3 id="41-npm-and-packagejson">4.1 npm and <code>package.json</code><a class="anchor" href="#41-npm-and-packagejson" aria-hidden="true">#</a></h3>
+<aside class="callout explain"><p><strong>How it works.</strong> <code>package.json</code> lists dependencies with version ranges (<code>&quot;react&quot;: &quot;^18.3.1&quot;</code> means 18.3.1 or any newer 18.x). <code>npm install</code> resolves them, downloads them into <code>node_modules/</code> and records the exact result in <code>package-lock.json</code>. <code>package.json</code> also holds <strong>scripts</strong>, named shell commands you run with <code>npm run &lt;name&gt;</code>. <code>npm start</code> is a shortcut for <code>npm run start</code>. npm runs a script called <code>pre&lt;name&gt;</code> automatically before <code>&lt;name&gt;</code>.</p>
+</aside>
+<p><strong>In this repo:</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Runs</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>npm run dev</code></td>
+<td><code>vite</code></td>
+<td>Development server with instant reload</td>
+</tr>
+<tr>
+<td><code>npm run build</code></td>
+<td><code>vite build &amp;&amp; node build.js</code></td>
+<td>Compile <code>src/</code> + copy <code>public/</code> into <code>dist/</code>, then write the offline precache list</td>
+</tr>
+<tr>
+<td><code>npm start</code></td>
+<td><code>prestart</code> (= <code>npm run build</code>), then <code>node server.js</code></td>
+<td>Build and serve, as the hosting does</td>
+</tr>
+<tr>
+<td><code>npm run clean</code></td>
+<td>delete <code>dist/</code></td>
+<td></td>
+</tr>
+</tbody></table>
+</div>
+<p>Dependencies: <code>react</code>, <code>react-dom</code> (UI library), <code>qrcode-generator</code> (QR codes), <code>express</code> (web server), <code>vite</code> and <code>@vitejs/plugin-react</code> (build tool).</p>
+<h3 id="42-javascript-modules-import--export">4.2 JavaScript modules (<code>import</code> / <code>export</code>)<a class="anchor" href="#42-javascript-modules-import--export" aria-hidden="true">#</a></h3>
+<aside class="callout explain"><p><strong>How it works.</strong> Each <code>.js</code>/<code>.jsx</code> file is a <strong>module</strong> with its own scope. A file makes things public with <code>export</code> and another file pulls them in with <code>import { name } from &#39;./file&#39;</code>. A path starting with <code>./</code> or <code>../</code> is another file in the project. A bare name such as <code>&#39;react&#39;</code> means a package in <code>node_modules/</code>. Imports are <strong>live bindings</strong>: if the exporting module reassigns an exported <code>let</code> variable, importers see the new value.</p>
+</aside>
+<p><strong>In this repo:</strong> <code>src/lib/dates.js</code> exports <code>let TODAY, NOW</code> (the current date and minute of the day) and a <code>syncClock()</code> function that updates them. Every other module imports them and always sees the current value (section 8.6).</p>
+<h3 id="43-react">4.3 React<a class="anchor" href="#43-react" aria-hidden="true">#</a></h3>
+<aside class="callout explain"><p><strong>How it works.</strong> React is a library for building user interfaces from <strong>components</strong>. A component is a function or class that returns a <em>description</em> of some UI, not the UI itself. You never write &quot;find this button and make it purple&quot;. You describe &quot;given this data, the screen looks like this&quot;. When the data changes:</p>
+<ol>
+<li>React calls your component again to get a new description. Descriptions are cheap plain JavaScript objects (&quot;React elements&quot;; the tree of them is often called the <strong>virtual DOM</strong>).</li>
+<li>It compares the new tree with the previous one (<strong>reconciliation</strong>).</li>
+<li>It applies only the differences to the real page (the <strong>DOM</strong>, the browser&#39;s live object model of the page).</li>
+</ol>
+<p><strong>State</strong> is the data a component owns. A class component keeps it in <code>this.state</code> and changes it <strong>only</strong> through <code>this.setState({...})</code>. That call merges the change and schedules a re-render. It is <strong>asynchronous</strong>: right after you call it, <code>this.state</code> still holds the old values. React batches several <code>setState</code> calls from the same event into one re-render. <code>setState(update, callback)</code> runs <code>callback</code> once the new state is applied.</p>
+<p><strong>Props</strong> are inputs a parent passes to a child component, like function arguments: <code>&lt;Home v={v} /&gt;</code> gives <code>Home</code> a prop called <code>v</code>.</p>
+<p><strong>Lifecycle (class components):</strong> constructor → <code>render()</code> → <code>componentDidMount()</code> (once, after the first paint: start timers, add listeners) → [<code>setState</code> → <code>render()</code> → <code>componentDidUpdate()</code>]… → <code>componentWillUnmount()</code> (clean up).</p>
+<p><strong>Events:</strong> React attaches one listener at the root of the page and routes clicks to whichever element&#39;s <code>onClick</code> prop matches (&quot;synthetic events&quot;). Handlers are plain functions.</p>
+<p><strong>Lists</strong> need a <code>key</code> on each item so React can match items between renders.</p>
+<p><strong>Refs</strong> (<code>createRef()</code>) give direct access to a real DOM element when you must, here to scroll a container back to the top.</p>
+<p><strong>StrictMode</strong> (development only) deliberately renders twice and mounts → unmounts → mounts once, to expose code with hidden side effects. It does nothing in production.</p>
+</aside>
+<p><strong>In this repo:</strong></p>
+<ul>
+<li><code>src/main.jsx</code> does <code>createRoot(document.getElementById(&#39;root&#39;)).render(&lt;StrictMode&gt;&lt;App /&gt;&lt;/StrictMode&gt;)</code>. That hands the empty <code>&lt;div id=&quot;root&quot;&gt;</code> from <code>index.html</code> to React.</li>
+<li>There is <strong>one</strong> stateful component, <code>App</code> (<code>src/App.jsx</code>), a class component. Its <code>init()</code> returns the whole initial state. That is roughly 60 fields: which screen is open, the learners, the bookings, form drafts, toasts and so on. Every user action is a method on <code>App</code> that calls <code>this.setState</code>.</li>
+<li><strong>All other components are stateless functions</strong> that only display what they&#39;re given (section 6).</li>
+</ul>
+<h3 id="44-jsx">4.4 JSX<a class="anchor" href="#44-jsx" aria-hidden="true">#</a></h3>
+<aside class="callout explain"><p><strong>How it works.</strong> JSX is HTML-like syntax inside JavaScript. Browsers don&#39;t understand it, so a build step rewrites it into ordinary function calls:</p>
+<pre class="code"><code data-lang="jsx">&lt;button onClick={save} style={{ color: 'red' }}&gt;Save {name}&lt;/button&gt;
+// becomes roughly:
+jsx('button', { onClick: save, style: { color: 'red' }, children: ['Save ', name] })</code></pre>
+<p>The differences from HTML: <code>{ … }</code> embeds any JavaScript expression; <code>className</code> instead of <code>class</code>; <code>style</code> takes an object with camelCase keys (<code>fontSize</code>, not <code>font-size</code>); event props are camelCase (<code>onClick</code>). A component name starts with a capital letter (<code>&lt;Home /&gt;</code>), and lowercase names are HTML tags. Conditional UI is written as <code>{cond &amp;&amp; &lt;X/&gt;}</code> or <code>{cond ? &lt;X/&gt; : null}</code>, and lists as <code>{items.map((it, i) =&gt; &lt;Row key={i} … /&gt;)}</code>. Text is escaped automatically, so user input can&#39;t inject HTML.</p>
+</aside>
+<p><strong>In this repo:</strong> every file under <code>src/screens</code>, <code>src/sheets</code>, <code>src/components</code>, plus <code>App.jsx</code>, <code>AppView.jsx</code> and <code>main.jsx</code>, is JSX. They use <code>.jsx</code> extensions. Styling is almost entirely inline <code>style={{ … }}</code> objects (section 8.3).</p>
+<h3 id="45-vite-build-tool-and-development-server">4.5 Vite (build tool and development server)<a class="anchor" href="#45-vite-build-tool-and-development-server" aria-hidden="true">#</a></h3>
+<aside class="callout explain"><p><strong>How it works.</strong> Vite has two modes.</p>
+<ul>
+<li><strong>Dev server</strong> (<code>vite</code>): an HTTP server. When the browser requests <code>index.html</code>, it serves it. When the browser then asks for <code>/src/main.jsx</code>, Vite reads the file, compiles the JSX to JavaScript <strong>on that request</strong>, rewrites bare imports like <code>&#39;react&#39;</code> to URLs it can serve, and responds. Each source file is a separate request, so start-up is instant. It also keeps a WebSocket open to the page. When you save a file, it pushes the change and the page swaps that module in place (<strong>hot module replacement</strong>).</li>
+<li><strong>Production build</strong> (<code>vite build</code>): starts at <code>index.html</code>, follows every <code>import</code>, compiles JSX, and <strong>bundles</strong> everything into a few files with <strong>content hashes</strong> in their names (<code>bundle/index-FzDhyoyp.js</code>). It minifies them and rewrites <code>index.html</code> to reference them. Files in <code>public/</code> are copied as-is. Because the name changes whenever the content changes, browsers can cache these files forever.</li>
+</ul>
+<p>Plugins extend Vite. <code>@vitejs/plugin-react</code> adds the JSX compilation and React-specific dev features.</p>
+</aside>
+<p><strong>In this repo</strong> (<code>vite.config.mjs</code>):</p>
+<ul>
+<li><code>base: &#39;./&#39;</code>: links in the built page are relative, so the app also works from a sub-folder.</li>
+<li><code>build.assetsDir: &#39;bundle&#39;</code>: compiled JS/CSS land in <code>dist/bundle/</code>, kept apart from <code>public/assets/</code>.</li>
+<li><code>server.port: 3300</code>.</li>
+<li>CSS files are imported from <code>main.jsx</code> (<code>import &#39;./styles/base.css&#39;</code>). Vite bundles them into one CSS file.</li>
+</ul>
+<h3 id="46-nodejs-and-express-the-web-server">4.6 Node.js and Express (the web server)<a class="anchor" href="#46-nodejs-and-express-the-web-server" aria-hidden="true">#</a></h3>
+<aside class="callout explain"><p><strong>How it works.</strong> Node.js runs JavaScript on the server with an event loop (single thread, non-blocking I/O, similar in spirit to Python&#39;s asyncio). <strong>Express</strong> is a minimal HTTP framework. You build a pipeline of <strong>middleware</strong> functions <code>(req, res, next) =&gt; …</code>. Each one either sends a response or calls <code>next()</code> to pass the request on, like servlet filters or WSGI middleware. <code>express.static(dir)</code> is ready-made middleware that maps a URL path to a file under <code>dir</code>, and sets ETags and content types.</p>
+</aside>
+<p><strong>In this repo</strong> (<code>server.js</code>, about 80 lines; CommonJS <code>require</code> syntax, not <code>import</code>):</p>
+<ol>
+<li>Refuses to start if <code>dist/index.html</code> is missing (you must build first).</li>
+<li><code>express.static(&#39;dist&#39;)</code>, with extra headers:<ul>
+<li><code>/bundle/*</code>: <code>Cache-Control: max-age=1 year, immutable</code>, because the names are content-hashed.</li>
+<li><code>sw.js</code>, <code>sw-precache.js</code>: never cached, and allowed to control the whole site.</li>
+<li><code>.webmanifest</code>: correct content type.</li>
+</ul>
+</li>
+<li><strong>SPA fallback:</strong> any <code>GET</code> that asks for HTML and matched no file gets <code>index.html</code>. (The app has no URL routes, so this rarely matters; see <a href="gaps-and-quirks.html">Gaps & quirks</a>.)</li>
+<li>Anything else: plain-text 404.</li>
+<li>Listens on <code>PORT</code> (default 3300) and <code>HOST</code> (default <code>0.0.0.0</code>).</li>
+</ol>
+<p>There are no API routes, no sessions and no security headers here (see gaps).</p>
+<h3 id="47-service-worker-and-pwa">4.7 Service worker and PWA<a class="anchor" href="#47-service-worker-and-pwa" aria-hidden="true">#</a></h3>
+<aside class="callout explain"><p><strong>How it works.</strong> A <strong>service worker</strong> is a script the browser runs in the background, separate from any page. Once registered, it intercepts every network request from the site, like a programmable proxy living in the browser. It can answer from its own <strong>Cache Storage</strong>. Lifecycle: <strong>install</strong> (pre-download files), <strong>activate</strong> (clean up old caches), <strong>fetch</strong> (handle each request). The browser re-checks the worker script on each visit and installs a new version if it changed. A <strong>web app manifest</strong> (JSON) tells the phone the app&#39;s name, icons and colours, so it can be added to the home screen and open full-screen.</p>
+</aside>
+<p><strong>In this repo:</strong></p>
+<ul>
+<li><code>src/main.jsx</code> registers <code>sw.js</code>, in production builds only.</li>
+<li><code>public/sw.js</code> (hand-written) behaves like this:<ul>
+<li><strong>Install:</strong> pre-caches a core list plus every file named in <code>dist/sw-precache.js</code>.</li>
+<li><strong>Navigations:</strong> network first, falling back to the cached <code>index.html</code>, then to <code>offline.html</code>.</li>
+<li><strong>Other requests:</strong> answered from cache immediately while a fresh copy downloads in the background (&quot;stale-while-revalidate&quot;).</li>
+</ul>
+</li>
+<li><code>build.js</code> runs after <code>vite build</code>. It scans <code>dist/</code> and writes <code>sw-precache.js</code>, which holds the file list plus a <strong>version hash</strong> of all file contents. The cache name includes that hash, so every deploy that changes any file gets a fresh cache, and the old one is deleted when the new worker activates.</li>
+</ul>
+<h3 id="48-small-libraries">4.8 Small libraries<a class="anchor" href="#48-small-libraries" aria-hidden="true">#</a></h3>
+<ul>
+<li><strong>qrcode-generator</strong>: computes QR code modules. It is used by <code>src/components/QrCode.jsx</code> (on-screen SVG) and <code>App.qrPng()</code> (the downloadable PNG, drawn on a canvas).</li>
+</ul>
+<h2 id="5-what-happens-when-someone-opens-the-app-production">5. What happens when someone opens the app (production)<a class="anchor" href="#5-what-happens-when-someone-opens-the-app-production" aria-hidden="true">#</a></h2>
+<ol>
+<li>The browser requests <code>GET /</code>. Express finds <code>dist/index.html</code> and returns it.</li>
+<li>The browser parses the HTML and requests:<ul>
+<li><code>js/config.js</code>: a classic script that sets <code>window.NEXDRIVE_CONFIG</code> (runtime settings). It is deliberately <strong>not</strong> bundled, so each environment can edit it without rebuilding.</li>
+<li><code>bundle/index-&lt;hash&gt;.css</code> and <code>bundle/index-&lt;hash&gt;.js</code>: the compiled app, with React included.</li>
+</ul>
+</li>
+<li>The bundle runs <code>main.jsx</code>, which mounts <code>&lt;App/&gt;</code> into <code>&lt;div id=&quot;root&quot;&gt;</code>.</li>
+<li><code>App</code>&#39;s constructor builds the initial state from the demo <strong>seed</strong> data (<code>src/data/seeds.js</code>).</li>
+<li><code>render()</code> → <code>buildViewModel(this)</code> → <code>&lt;AppView v={…}/&gt;</code>. React creates the page.</li>
+<li><code>componentDidMount()</code>:<ul>
+<li>listens for window resizes (the phone frame scales to fit)</li>
+<li>starts a 15-second clock tick (lesson statuses move from upcoming → ongoing → completed in real time)</li>
+<li>reads <code>?ref=CODE</code> from the URL (referral link)</li>
+<li>plays the launch animation</li>
+</ul>
+</li>
+<li>After the page has loaded, <code>main.jsx</code> registers the service worker, which pre-caches every file for offline use.</li>
+</ol>
+<p>In <strong>dev mode</strong> (<code>npm run dev</code>) steps 1–2 are served by Vite instead: <code>index.html</code> loads <code>/src/main.jsx</code> directly, and Vite compiles each file as it is requested. There is no service worker.</p>
+<h2 id="6-how-the-app-is-structured-inside">6. How the app is structured inside<a class="anchor" href="#6-how-the-app-is-structured-inside" aria-hidden="true">#</a></h2>
+<p>Three layers, each in its own place:</p>
+<pre class="code"><code data-lang="text">App (src/App.jsx)               state + actions        &quot;what is true, and how it changes&quot;
+   │  render()
+   ▼
+buildViewModel (src/viewModel.js)  state → display values  &quot;what exactly to show: text, colours, handlers&quot;
+   │  returns one object, `v`
+   ▼
+AppView + screens + sheets (src/*.jsx)   JSX            &quot;how it looks&quot;</code></pre>
+<h3 id="61-app-state-and-actions">6.1 <code>App</code>: state and actions<a class="anchor" href="#61-app-state-and-actions" aria-hidden="true">#</a></h3>
+<p><code>init(phase, data)</code> returns the full state object. The main fields:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field(s)</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>phase</code></td>
+<td><code>&#39;onboarding&#39;</code> or <code>&#39;app&#39;</code></td>
+</tr>
+<tr>
+<td><code>ob</code></td>
+<td>Current onboarding step: <code>welcome</code>, <code>register</code>, <code>verify</code>, <code>details</code>, <code>plan</code>, <code>started</code></td>
+</tr>
+<tr>
+<td><code>tab</code></td>
+<td>Bottom-nav tab: <code>home</code>, <code>calendar</code>, <code>learners</code>, <code>more</code></td>
+</tr>
+<tr>
+<td><code>stack</code></td>
+<td>Screens opened on top of the tab, e.g. <code>[{name:&#39;learner&#39;, params:{lid:&#39;L1&#39;}}, {name:&#39;learnerForm&#39;}]</code>. The last entry is visible; <code>back()</code> pops it. <strong>This is the app&#39;s whole navigation system; there is no URL routing</strong></td>
+</tr>
+<tr>
+<td><code>sheet</code></td>
+<td>The pop-up panel currently open, e.g. <code>{type:&#39;conflict&#39;, cid:&#39;b12&#39;}</code>, or <code>null</code></td>
+</tr>
+<tr>
+<td><code>learners</code>, <code>bookings</code>, <code>notifs</code>, <code>refs</code>, <code>credit</code></td>
+<td>The data, as arrays of plain objects</td>
+</tr>
+<tr>
+<td><code>inst</code>, <code>bank</code>, <code>sub</code>, <code>prefs</code></td>
+<td>The instructor&#39;s profile, bank details, subscription and preferences</td>
+</tr>
+<tr>
+<td><code>draft</code>, <code>lf</code>, <code>profForm</code>, <code>priceForm</code>, <code>bankForm</code>, <code>pw</code>, <code>reg</code>, <code>det</code></td>
+<td>Form contents while being edited</td>
+</tr>
+<tr>
+<td><code>toast</code></td>
+<td>A short message shown for 3 seconds</td>
+</tr>
+</tbody></table>
+</div>
+<p>Action methods change state with <code>setState</code>. Examples:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>goTab(t)</code>, <code>push(name, params)</code>, <code>back()</code>, <code>sheet(type, params)</code></td>
+<td>Navigation</td>
+</tr>
+<tr>
+<td><code>openBooking(lid, opts)</code>, <code>setDraft(patch)</code>, <code>pickSlot(t)</code>, <code>review()</code>, <code>confirmBooking()</code>, <code>openEdit(id)</code>, <code>saveEdit()</code>, <code>cancelLesson(id, reason)</code></td>
+<td>Booking flow</td>
+</tr>
+<tr>
+<td><code>bfModel()</code></td>
+<td>Pure calculation for the booking form: price, discount, sessions, clashes, validation errors</td>
+</tr>
+<tr>
+<td><code>overlap(date, startMin, durMin, excludeIds)</code></td>
+<td>The double-booking check</td>
+</tr>
+<tr>
+<td><code>openLearnerForm</code>, <code>saveLearner</code>, <code>deleteLearner</code> (archives)</td>
+<td>Learners</td>
+</tr>
+<tr>
+<td><code>sendMsg</code>, <code>skipMsg</code></td>
+<td>&quot;Send&quot; the booking message (simulated: waits 0.7s, shows a toast)</td>
+</tr>
+<tr>
+<td><code>obNext</code>, <code>obBack</code>, <code>finishOb</code></td>
+<td>Onboarding steps</td>
+</tr>
+<tr>
+<td><code>flow(key)</code></td>
+<td>Demo panel: reset the data and jump to a workflow</td>
+</tr>
+<tr>
+<td><code>tick</code>, <code>schedulePush</code></td>
+<td>Clock tick and the simulated &quot;lesson starts in 30 minutes&quot; notification</td>
+</tr>
+</tbody></table>
+</div>
+<h3 id="62-buildviewmodel-state-into-display-values">6.2 <code>buildViewModel</code>: state into display values<a class="anchor" href="#62-buildviewmodel-state-into-display-values" aria-hidden="true">#</a></h3>
+<p><code>src/viewModel.js</code> exports <code>buildViewModel(app)</code>. It is called on <strong>every</strong> render and returns one object, conventionally called <code>v</code>, holding everything the screens need already worked out:</p>
+<ul>
+<li><strong>Formatted text:</strong> <code>&quot;£80&quot;</code>, <code>&quot;Tue 4 Nov&quot;</code>, <code>&quot;3 lessons · 4 hours · £160&quot;</code>.</li>
+<li><strong>Colours that depend on state:</strong> for example, the highlighted tab or a selected option.</li>
+<li><strong>Which screen is visible:</strong> <code>v.is.home</code>, <code>v.is.calendar</code> and so on, worked out from <code>phase</code>, <code>ob</code>, <code>tab</code> and <code>stack</code>.</li>
+<li><strong>Which sheet is open:</strong> <code>v.sh.conflict</code> and so on.</li>
+<li><strong>Per-screen sub-objects:</strong> <code>v.hm</code> (home), <code>v.cal</code> (calendar), <code>v.bf</code> (booking form), <code>v.lp</code> (learner profile)… Each is only computed while that screen is visible.</li>
+<li><strong>Event handlers:</strong> small arrow functions such as <code>go.newBooking = () =&gt; app.openBooking(null)</code>, which call back into <code>App</code>&#39;s methods.</li>
+</ul>
+<p>Helper functions in the same file are <code>bvm(app, booking)</code> (booking → display card), <code>rvm(app, referral)</code>, <code>msgVm(app, sheet)</code> (the message preview) and <code>vmRest(…)</code> (the second half of the view model, split out for size).</p>
+<h3 id="63-the-views-appview-screens-sheets">6.3 The views: <code>AppView</code>, screens, sheets<a class="anchor" href="#63-the-views-appview-screens-sheets" aria-hidden="true">#</a></h3>
+<ul>
+<li><p><code>AppView.jsx</code> draws the frame:</p>
+<ul>
+<li>the demo panel, the phone frame, the status bar and the offline banner</li>
+<li>the scrolling area, which shows exactly one screen chosen by <code>is.*</code></li>
+<li>the per-screen footer buttons, the bottom nav, the in-app push banner and the toast</li>
+<li>the sheet overlay, which shows one sheet chosen by <code>sh.*</code></li>
+<li>the launch splash</li>
+</ul>
+</li>
+<li><p>Every screen, sheet and component has the same shape:</p>
+<pre class="code"><code data-lang="jsx">export default function Home({ v }) {
+  const { dismissReminder, go, hm, ic, icl, ics } = v;   // take what this screen uses from v
+  if (!hm) return null;                                   // its data isn't there → render nothing
+  return ( &lt;div …&gt; … {hm.greeting} … &lt;button onClick={go.notifications}&gt; … &lt;/div&gt; );
+}</code></pre>
+</li>
+<li><p>They hold no state and contain almost no logic. They only place the values from <code>v</code> into markup.</p>
+</li>
+<li><p>Icons are passed in <code>v</code> as ready-made elements: <code>ic</code> (20px), <code>ics</code> (16px), <code>icl</code> (24px), built by <code>iconSet(size)</code> in <code>components/Icon.jsx</code>. <code>{ic.bell}</code> draws the bell icon.</p>
+</li>
+</ul>
+<h3 id="64-one-click-end-to-end">6.4 One click, end to end<a class="anchor" href="#64-one-click-end-to-end" aria-hidden="true">#</a></h3>
+<p>Tapping <strong>Confirm</strong> in the &quot;Confirm booking&quot; sheet:</p>
+<ol>
+<li>In <code>ConfirmBookingSheet.jsx</code>, the button has <code>onClick={cm.confirm}</code>.</li>
+<li><code>cm.confirm</code> was created in <code>buildViewModel</code> as <code>() =&gt; app.confirmBooking()</code>.</li>
+<li><code>App.confirmBooking()</code> reads <code>this.state</code>, recomputes the booking with <code>bfModel()</code>, builds the new booking objects and a &quot;Booking created&quot; notification, then calls <code>this.setState({ bookings: [...], notifs: [...], sheet: { type: &#39;message&#39;, kind: &#39;new&#39;, ids } })</code>.</li>
+<li>React re-runs <code>App.render()</code> → <code>buildViewModel</code> → <code>v.sh.message</code> is now true and <code>v.msg</code> holds the message preview.</li>
+<li><code>AppView</code> → <code>SheetOverlay</code> → <code>MessageSheet</code> renders the preview. React updates only the parts of the page that changed.</li>
+</ol>
+<p>The same loop drives every interaction: <strong>event → App method → setState → render → buildViewModel → JSX</strong>. A sequence diagram is in <a href="component-diagram.html#4-one-interaction-end-to-end">Component diagrams</a>.</p>
+<h2 id="7-cross-cutting-details">7. Cross-cutting details<a class="anchor" href="#7-cross-cutting-details" aria-hidden="true">#</a></h2>
+<h3 id="71-configuration">7.1 Configuration<a class="anchor" href="#71-configuration" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Where</th>
+<th>What</th>
+<th>Read by</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>public/js/config.js</code> → <code>window.NEXDRIVE_CONFIG</code></td>
+<td><code>mode</code> (<code>demo</code>/<code>live</code>), <code>apiBaseUrl</code>, <code>referralBaseUrl</code>, <code>showDemoPanel</code>, <code>deviceFrame</code>, <code>launchAnimation</code></td>
+<td><code>App.cfg()</code> at runtime</td>
+</tr>
+<tr>
+<td><code>App.defaultProps</code> in <code>src/App.jsx</code></td>
+<td>Preview switches: device size, start screen, empty data, subscription state, offline</td>
+<td><code>App</code></td>
+</tr>
+<tr>
+<td><code>PORT</code>, <code>HOST</code> environment variables</td>
+<td>Web server listen address</td>
+<td><code>server.js</code></td>
+</tr>
+<tr>
+<td><code>.env</code> (from <code>.env.example</code>)</td>
+<td><strong>Backend</strong> secrets (database, Stripe, Twilio…), for the planned API only</td>
+<td>Nothing yet</td>
+</tr>
+</tbody></table>
+</div>
+<p><code>mode: &#39;live&#39;</code> and <code>apiBaseUrl</code> exist but nothing uses them yet.</p>
+<h3 id="72-styling">7.2 Styling<a class="anchor" href="#72-styling" aria-hidden="true">#</a></h3>
+<ul>
+<li><code>src/styles/base.css</code> holds the self-hosted font, colour tokens as CSS variables (<code>--nd-violet</code>…) and a small reset.</li>
+<li><code>src/styles/app.css</code> holds body defaults and every <code>@keyframes</code> animation.</li>
+<li><code>src/styles/interactions.css</code> holds hover, focus and pressed-state classes such as <code>hover-bg-mist</code>. They use <code>!important</code> because they must override inline styles.</li>
+<li>Everything else is inline <code>style={{…}}</code> in the JSX, using literal hex colours (section 8.3).</li>
+</ul>
+<h3 id="73-dates-and-time">7.3 Dates and time<a class="anchor" href="#73-dates-and-time" aria-hidden="true">#</a></h3>
+<ul>
+<li>Dates are <code>&#39;YYYY-MM-DD&#39;</code> strings. Times are <code>&#39;HH:MM&#39;</code> strings or &quot;minutes since midnight&quot; integers. Small helpers live in <code>src/lib/dates.js</code> (<code>addDays</code>, <code>fS</code> = &quot;Tue 4 Nov&quot;, <code>tm</code>/<code>hm</code> = time ↔ minutes…).</li>
+<li><code>TODAY</code> and <code>NOW</code> come from the <strong>device clock</strong>, re-read every 15 seconds.</li>
+<li>The demo data was written around 7 Oct 2026. <code>sd()</code> shifts every seed date by (today − 7 Oct), so the demo always looks current.</li>
+</ul>
+<h3 id="74-business-rules-in-the-front-end">7.4 Business rules in the front end<a class="anchor" href="#74-business-rules-in-the-front-end" aria-hidden="true">#</a></h3>
+<p>Implemented in <code>App</code>/<code>viewModel</code> for demo purposes. The plan is that the API and database enforce them, with the UI only previewing:</p>
+<ul>
+<li>price = rate × hours × lessons − discount, where the discount can&#39;t exceed the value</li>
+<li>no overlapping lessons (<code>overlap()</code>)</li>
+<li>a learner must have a phone, address, postcode and licence before booking (<code>missing()</code>)</li>
+<li>the field formats: UK mobile, e-mail, postcode, DVLA licence, ADI number, theory certificate (<code>src/lib/validation.js</code>)</li>
+<li>the referral reward = 20% of the referred instructor&#39;s plan</li>
+</ul>
+<h2 id="8-things-that-look-odd-at-first">8. Things that look odd at first<a class="anchor" href="#8-things-that-look-odd-at-first" aria-hidden="true">#</a></h2>
+<p>All of these are listed with their impact in <a href="gaps-and-quirks.html#part-b-non-standard-patterns">Gaps & quirks</a>. They exist because the app was originally exported from a design tool and then converted mechanically to React, keeping its behaviour identical.</p>
+<ol>
+<li><strong>One big state component and a single <code>v</code> object</strong> instead of many components with their own state and specific props.</li>
+<li><strong>A 2,100-line view-model function.</strong></li>
+<li><strong>Inline styles everywhere</strong> rather than CSS classes or a component library.</li>
+<li><strong>Very short variable names</strong> (<code>s</code>, <code>v</code>, <code>B</code>, <code>L</code>, <code>hm</code>, <code>bf</code>, <code>bk2</code>, <code>fS</code>, <code>fDM</code>) inherited from the original code.</li>
+<li><strong>Navigation is a stack in state</strong>, not URLs. The browser&#39;s back button does not move between screens.</li>
+<li><strong>A module-level mutable clock</strong> (<code>TODAY</code>, <code>NOW</code>) instead of passing time in.</li>
+</ol>
+<h2 id="9-where-to-look-for">9. Where to look for…<a class="anchor" href="#9-where-to-look-for" aria-hidden="true">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Change wording or layout of a screen</td>
+<td><code>src/screens/&lt;Screen&gt;.jsx</code> (or <code>src/sheets/…</code>)</td>
+</tr>
+<tr>
+<td>Change what a button does</td>
+<td>Find its <code>onClick={x.y}</code> → find <code>y:</code> under that screen&#39;s section in <code>src/viewModel.js</code> → follow to the <code>App</code> method</td>
+</tr>
+<tr>
+<td>Change a calculation shown on screen</td>
+<td><code>src/viewModel.js</code> (display) or <code>App.bfModel()</code> (booking maths)</td>
+</tr>
+<tr>
+<td>Add or change demo data</td>
+<td><code>src/data/seeds.js</code></td>
+</tr>
+<tr>
+<td>Plans, prices, status colours, demo workflows</td>
+<td><code>src/data/constants.js</code></td>
+</tr>
+<tr>
+<td>Date / money / validation helpers</td>
+<td><code>src/lib/</code></td>
+</tr>
+<tr>
+<td>Hover/focus colours</td>
+<td><code>src/styles/interactions.css</code></td>
+</tr>
+<tr>
+<td>Offline behaviour</td>
+<td><code>public/sw.js</code>, <code>build.js</code></td>
+</tr>
+<tr>
+<td>Server headers / port</td>
+<td><code>server.js</code></td>
+</tr>
+<tr>
+<td>Planned API contract</td>
+<td><code>API_DOCUMENTATION.md</code></td>
+</tr>
+<tr>
+<td>Planned data model</td>
+<td><code>database/schema.sql</code>, <a href="database.html">Database</a></td>
+</tr>
+</tbody></table>
+</div>
+
+    <footer class="foot">Generated from the Markdown source in <code>docs/internal/</code>. To update, edit the <code>.md</code> file and run <code>npm run build</code> in <code>docs/internal/tools</code>.</footer>
+  </main>
+</div>
+<div class="zoom" hidden><button class="zoom-close" aria-label="Close">Close ✕</button><div class="zoom-body"></div></div>
+<script>
+// Click a diagram to see it full size; click again, press Esc or use Close to return.
+(function () {
+  var zoom = document.querySelector('.zoom'), body = zoom.querySelector('.zoom-body');
+  function close() { zoom.hidden = true; body.innerHTML = ''; document.body.style.overflow = ''; }
+  document.querySelectorAll('figure.diagram').forEach(function (fig) {
+    fig.addEventListener('click', function () {
+      var svg = fig.querySelector('svg').cloneNode(true);
+      // keep the id: Mermaid's embedded styles are scoped to it
+      svg.style.width = svg.style.maxWidth; svg.style.minWidth = '0'; svg.style.maxWidth = 'none';
+      body.appendChild(svg); zoom.hidden = false; document.body.style.overflow = 'hidden';
+    });
+  });
+  zoom.addEventListener('click', function (e) { if (e.target === zoom || e.target.classList.contains('zoom-close')) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !zoom.hidden) close(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Incomplete parts and non-standard patterns · NexDrive internal docs</title>
+<!-- Generated from gaps-and-quirks.md by docs/internal/tools/build-html.mjs. Edit the .md file, then rebuild. -->
+<style>/* Stylesheet embedded into every generated docs page (build-html.mjs). */
+:root {
+  --ink: #1A1A24; --muted: #5B5B6B; --line: #E4E4EA; --soft: #F7F7F9; --page: #FFFFFF;
+  --accent: #6D28D9; --accent-soft: #F3EEFF; --warn: #92400E; --warn-soft: #FFFBEB; --code-bg: #F4F4F7;
+  --sidebar: #FAFAFC;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #E8E8EE; --muted: #A2A2B2; --line: #2E2E3A; --soft: #1C1C26; --page: #12121A;
+    --accent: #B79CFF; --accent-soft: #241C3A; --warn: #FCD34D; --warn-soft: #2A2214; --code-bg: #1E1E2A;
+    --sidebar: #16161F;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* top bar */
+.topbar {
+  position: sticky; top: 0; z-index: 10; height: 56px; display: flex; align-items: center; gap: 16px;
+  padding: 0 24px; background: #0A0A0F; color: #fff; border-bottom: 1px solid #000;
+}
+.brand { font-size: 18px; letter-spacing: .02em; }
+.brand b { font-weight: 600; letter-spacing: .1em; }
+.brand i { font-style: normal; color: #A78BFA; font-weight: 600; }
+.crumb { color: #A2A2B2; font-size: 14px; border-left: 1px solid #333; padding-left: 16px; }
+
+/* layout */
+.layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); min-height: calc(100vh - 56px); }
+.sidebar {
+  position: sticky; top: 56px; align-self: start; height: calc(100vh - 56px); overflow-y: auto;
+  padding: 20px 16px 40px; background: var(--sidebar); border-right: 1px solid var(--line); font-size: 14px;
+}
+.toc-title { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 8px 8px 6px; }
+.sidebar a { display: block; padding: 5px 8px; border-radius: 6px; color: var(--ink); line-height: 1.35; }
+.sidebar a:hover { background: var(--soft); text-decoration: none; }
+.sidebar a.page { font-weight: 500; }
+.sidebar a.current { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.sidebar a.toc { color: var(--muted); }
+.sidebar a.toc.d3 { padding-left: 22px; font-size: 13px; }
+.sep { height: 1px; background: var(--line); margin: 14px 8px; }
+
+.content { padding: 32px 48px 64px; max-width: 980px; }
+
+/* typography */
+h1 { font-size: 34px; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 16px; }
+h2 { font-size: 24px; line-height: 1.3; margin: 48px 0 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+h3 { font-size: 19px; margin: 32px 0 8px; }
+h4 { font-size: 16px; margin: 24px 0 6px; }
+h1 + p { font-size: 18px; color: var(--muted); }
+.anchor { margin-left: 8px; color: var(--line); font-weight: 400; opacity: 0; }
+h2:hover .anchor, h3:hover .anchor, h4:hover .anchor { opacity: 1; color: var(--muted); }
+p, ul, ol { margin: 0 0 14px; }
+li { margin: 4px 0; }
+li > ul, li > ol { margin: 4px 0 0; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+hr + h2 { border-top: 0; margin-top: 24px; padding-top: 0; }
+strong { font-weight: 650; }
+
+/* inline and block code */
+code {
+  font: 0.88em/1.4 ui-monospace, "Cascadia Code", Consolas, Menlo, monospace;
+  background: var(--code-bg); padding: 2px 5px; border-radius: 4px;
+}
+pre.code {
+  background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; margin: 0 0 18px; line-height: 1.5;
+}
+pre.code code { background: none; padding: 0; font-size: 13.5px; }
+
+/* tables */
+.table-wrap { overflow-x: auto; margin: 0 0 20px; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+th { background: var(--soft); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td code { white-space: nowrap; }
+
+/* callouts (from > blockquotes) */
+.callout { margin: 0 0 20px; padding: 14px 18px; border-radius: 8px; border-left: 4px solid var(--accent); background: var(--accent-soft); }
+.callout > :last-child { margin-bottom: 0; }
+.callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.callout.note { border-left-color: var(--muted); background: var(--soft); }
+.callout pre.code { background: var(--page); }
+
+/* diagrams stay on a light card in both themes, because they are drawn in light colours */
+figure.diagram {
+  margin: 8px 0 24px; padding: 20px; background: #FFFFFF; border: 1px solid var(--line);
+  border-radius: 10px; overflow-x: auto; text-align: center;
+}
+figure.diagram svg { max-width: none; height: auto; }
+figure.diagram { cursor: zoom-in; }
+figure.diagram::after { content: "Click to enlarge"; display: block; margin-top: 8px; font-size: 12px; color: #8A8A9C; }
+.zoom { position: fixed; inset: 0; z-index: 50; background: rgba(10,10,15,.75); overflow: auto; padding: 56px 24px 24px; cursor: zoom-out; }
+.zoom[hidden] { display: none; }
+.zoom-body { background: #FFFFFF; border-radius: 10px; padding: 24px; width: max-content; margin: 0 auto; cursor: default; }
+.zoom-close { position: fixed; top: 12px; right: 16px; padding: 8px 14px; border: 0; border-radius: 6px; background: #FFFFFF; color: #1A1A24; font: 600 14px system-ui, sans-serif; cursor: pointer; }
+
+.foot { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+/* narrow screens: sidebar on top */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+  .sidebar a.toc, .sidebar .sep, .sidebar .toc-title:not(:first-child) { display: none; }
+  .content { padding: 24px 16px 48px; }
+  .crumb { display: none; }
+}
+
+@media print {
+  .topbar, .sidebar { display: none; }
+  .layout { display: block; }
+  .content { max-width: none; padding: 0; }
+}
+</style>
+</head>
+<body>
+<header class="topbar"><span class="brand"><b>NEX</b><i>Drive</i></span><span class="crumb">Internal developer docs</span></header>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="toc-title">Pages</div><a class="page" href="index.html">Start here</a><a class="page" href="setup.html">Setup</a><a class="page" href="overview.html">How it works</a><a class="page" href="component-diagram.html">Component diagrams</a><a class="page" href="database.html">Database</a><a class="page current" href="gaps-and-quirks.html">Gaps & quirks</a>
+    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#part-a-incomplete">Part A: Incomplete</a><a class="toc d3" href="#a1-no-backend-at-all-high">A1. No backend at all (High)</a><a class="toc d3" href="#a2-database-designed-but-unused-high">A2. Database designed but unused (High)</a><a class="toc d3" href="#a3-the-react-conversion-is-not-merged-high">A3. The React conversion is not merged (High)</a><a class="toc d3" href="#a4-hosting-and-security-gaps-high--medium">A4. Hosting and security gaps (High / Medium)</a><a class="toc d3" href="#a5-time-zone-medium">A5. Time zone (Medium)</a><a class="toc d3" href="#a6-offline-writes-medium">A6. Offline writes (Medium)</a><a class="toc d3" href="#a7-no-tests-linting-or-ci-medium">A7. No tests, linting or CI (Medium)</a><a class="toc d3" href="#a8-broken-or-outdated-pieces-of-the-repository-medium--low">A8. Broken or outdated pieces of the repository (Medium / Low)</a><a class="toc d3" href="#a9-placeholder-business-values-medium">A9. Placeholder business values (Medium)</a><a class="toc d2" href="#part-b-non-standard-patterns">Part B: Non-standard patterns</a>
+  </nav>
+  <main class="content">
+<h1 id="incomplete-parts-and-non-standard-patterns">Incomplete parts and non-standard patterns</h1>
+<p>An honest list as of November 2026 (branch <code>react-vite-jsx</code>). <strong>Nothing listed here has been changed.</strong> Each item says what it is, why it matters, and where it lives, so it can be planned.</p>
+<p>Severity: <strong>High</strong> = blocks real users or is a security risk · <strong>Medium</strong> = will bite during the next phase of work · <strong>Low</strong> = tidy-up.</p>
+<hr>
+<h2 id="part-a-incomplete">Part A: Incomplete<a class="anchor" href="#part-a-incomplete" aria-hidden="true">#</a></h2>
+<h3 id="a1-no-backend-at-all-high">A1. No backend at all (High)<a class="anchor" href="#a1-no-backend-at-all-high" aria-hidden="true">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Missing</th>
+<th>What the app does instead</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>API server</td>
+<td>Nothing. <code>server.js</code> only serves static files</td>
+<td><code>API_DOCUMENTATION.md</code> (contract), <code>DEVELOPER_HANDOVER.md</code> §5 and A1–A5</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>All data lives in browser memory and resets on reload</td>
+<td><a href="database.html">Database</a></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>&quot;I already have an account&quot; loads the demo account with no password. Passwords typed during sign-up are never stored or checked</td>
+<td>API §1</td>
+</tr>
+<tr>
+<td>Phone verification</td>
+<td>Fixed code <code>482913</code></td>
+<td><code>App.obNext()</code></td>
+</tr>
+<tr>
+<td>Payments (Stripe)</td>
+<td>&quot;Add card&quot; just shows &quot;Card saved&quot;; upgrades and credit are simulated</td>
+<td><code>viewModel.js</code> (<code>addCard</code>, <code>up.confirm</code>)</td>
+</tr>
+<tr>
+<td>SMS / WhatsApp / e-mail</td>
+<td>&quot;Send message&quot; waits 0.7s and shows a toast</td>
+<td><code>App.sendMsg()</code></td>
+</tr>
+<tr>
+<td>Push notifications</td>
+<td>An in-app banner pretends to be a push, triggered by a timer</td>
+<td><code>App.schedulePush()</code></td>
+</tr>
+<tr>
+<td>Profile photo upload</td>
+<td>Toast only</td>
+<td><code>viewModel.js</code> (<code>pf.photo</code>)</td>
+</tr>
+<tr>
+<td>Background jobs (Redis/BullMQ)</td>
+<td>Lesson status changes are computed in the browser every 15s</td>
+<td><code>App.tick()</code>, <code>liveStatus()</code></td>
+</tr>
+<tr>
+<td>Referral validation</td>
+<td>Codes are checked against a hard-coded demo table</td>
+<td><code>REF_CODES</code> in <code>src/data/constants.js</code></td>
+</tr>
+<tr>
+<td><code>mode: &#39;live&#39;</code></td>
+<td>The setting exists in <code>config.js</code> but no code reads it; there is no <code>api.js</code> client</td>
+<td><code>public/js/config.js</code></td>
+</tr>
+</tbody></table>
+</div>
+<h3 id="a2-database-designed-but-unused-high">A2. Database designed but unused (High)<a class="anchor" href="#a2-database-designed-but-unused-high" aria-hidden="true">#</a></h3>
+<p>Complete schema, but nothing connects to it, and the front-end data shapes differ from it (IDs, money units, statuses, times). See <a href="database.html#7-front-end-model-vs-database-model">database.md §7</a>.</p>
+<h3 id="a3-the-react-conversion-is-not-merged-high">A3. The React conversion is not merged (High)<a class="anchor" href="#a3-the-react-conversion-is-not-merged-high" aria-hidden="true">#</a></h3>
+<p>The React + Vite version is on branch <code>react-vite-jsx</code> and is <strong>not committed or merged</strong> at the time of writing.</p>
+<h4 id="the-version-on-main-does-not-render">The version on <code>main</code> does not render<a class="anchor" href="#the-version-on-main-does-not-render" aria-hidden="true">#</a></h4>
+<p>On <code>main</code>, the page shows a fragment of script text instead of the app. Commit <code>36668b6</code> added a comment containing the text <code>&lt;x-dc&gt;</code> inside a <code>&lt;script&gt;</code> in <code>&lt;head&gt;</code>. The old runtime re-downloads the page as raw text and takes the <strong>first</strong> <code>&lt;x-dc&gt;</code> it finds, which is the one in the comment, and re-renders from there. The React version does not have this problem (the runtime is gone). If <code>main</code> must keep working before the merge, remove those characters from the comment.</p>
+<h3 id="a4-hosting-and-security-gaps-high--medium">A4. Hosting and security gaps (High / Medium)<a class="anchor" href="#a4-hosting-and-security-gaps-high--medium" aria-hidden="true">#</a></h3>
+<ul>
+<li><strong>No security headers from <code>server.js</code></strong> (High). The CSP, HSTS, <code>X-Content-Type-Options</code>, <code>frame-ancestors</code> and so on are defined only in <code>.htaccess</code> (Apache) and <code>server/nginx.conf.example</code>. GoDaddy Node.js hosting runs <code>server.js</code>, so production currently sends none of them.</li>
+<li><strong><code>&#39;unsafe-eval&#39;</code> is still in the CSP</strong> in <code>.htaccess</code> and the nginx example. The React build no longer needs it. <code>&#39;unsafe-inline&#39;</code> for scripts is also no longer needed, since there are no inline scripts.</li>
+<li><strong>Known vulnerable dependencies</strong> (Medium). <code>npm audit</code> reports <code>body-parser</code> (high) and <code>qs</code> (moderate), both pulled in by Express 4. <code>npm audit fix</code> resolves them.</li>
+<li><strong>Node version</strong> (Medium). Vite 8 requires Node ≥ 20.19 (<code>engines</code> in <code>package.json</code>). Confirm the GoDaddy Node.js version before deploying.</li>
+<li><strong>The marketing page is not served by <code>server.js</code></strong> (Medium). <code>product/index.html</code> sits outside <code>public/</code>, so the Node deployment has no product page. Its asset links (<code>../css/product.css</code>) assume it sits next to the app&#39;s files.</li>
+<li><strong><code>HOST</code> defaults to <code>0.0.0.0</code></strong> (Low). On a developer machine, the server is reachable from the local network.</li>
+</ul>
+<h3 id="a5-time-zone-medium">A5. Time zone (Medium)<a class="anchor" href="#a5-time-zone-medium" aria-hidden="true">#</a></h3>
+<p><code>TODAY</code> and <code>NOW</code> come from the <strong>device clock</strong> in whatever time zone the device is set to. The spec says Europe/London with BST/GMT handling (handover §5 step 4).</p>
+<h3 id="a6-offline-writes-medium">A6. Offline writes (Medium)<a class="anchor" href="#a6-offline-writes-medium" aria-hidden="true">#</a></h3>
+<p>The offline banner exists (preview prop <code>offline</code>), but there is no queue of changes made offline. Offline support is read-only caching of the app files.</p>
+<h3 id="a7-no-tests-linting-or-ci-medium">A7. No tests, linting or CI (Medium)<a class="anchor" href="#a7-no-tests-linting-or-ci-medium" aria-hidden="true">#</a></h3>
+<p>There are no unit, integration or end-to-end tests. There is no ESLint/Prettier config and no CI pipeline. The test plan in <code>DEVELOPER_HANDOVER.md</code> A6 is not implemented.</p>
+<h3 id="a8-broken-or-outdated-pieces-of-the-repository-medium--low">A8. Broken or outdated pieces of the repository (Medium / Low)<a class="anchor" href="#a8-broken-or-outdated-pieces-of-the-repository-medium--low" aria-hidden="true">#</a></h3>
+<ul>
+<li><strong><code>design-system.html</code></strong> (Medium) loads <code>css/nexdrive-base.css</code>, <code>js/vendor/react*.js</code> and <code>js/nexdrive-runtime.js</code> from paths that no longer exist, and the old runtime has been removed. It doesn&#39;t render.</li>
+<li><strong><code>.gitignore</code></strong> (Low) still lists <code>public/sw-precache.js</code>. That file is now written to <code>dist/</code>, which is ignored anyway.</li>
+</ul>
+<h4 id="documentation-that-is-out-of-date">Documentation that is out of date<a class="anchor" href="#documentation-that-is-out-of-date" aria-hidden="true">#</a></h4>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Problem</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>README.md</code>, <code>DEPLOYMENT.md</code>, <code>DEVELOPER_HANDOVER.md</code> §2, §8, A3, A8</td>
+<td>Describe the old &quot;no build step, template + runtime&quot; front end, <code>js/nexdrive-runtime.js</code>, <code>&#39;unsafe-eval&#39;</code> and a root-level <code>index.html</code> app</td>
+</tr>
+<tr>
+<td><code>public/js/config.js</code> comment</td>
+<td>Points to <code>docs/developer-guide.md</code>, which does not exist</td>
+</tr>
+<tr>
+<td><code>database/schema.sql</code>, <code>migrations/002_*.sql</code> comments</td>
+<td>Point to <code>docs/business-rules.md</code>; the file is <code>docs/BUSINESS_RULES.md</code>. That works on Windows but breaks on Linux and on GitHub</td>
+</tr>
+<tr>
+<td><code>DEVELOPER_HANDOVER.md</code> A10</td>
+<td>Links to <code>user-flows.md</code> and <code>database-schema.md</code>, which do not exist (the real files are <code>docs/USER_FLOWS.md</code> and <code>DATABASE_SETUP.md</code>)</td>
+</tr>
+<tr>
+<td><code>DEVELOPER_HANDOVER.md</code> §6 vs <code>DATABASE_SETUP.md</code></td>
+<td>The <code>complete-lessons</code> job runs &quot;every 15 minutes&quot; in one and &quot;every 5 min&quot; in the other</td>
+</tr>
+<tr>
+<td><code>API_DOCUMENTATION.md</code> §0.2</td>
+<td>The example uses booking status <code>&quot;booked&quot;</code>, which is not a value of <code>booking_status</code></td>
+</tr>
+<tr>
+<td><code>CHANGELOG.md</code></td>
+<td>No entry for the Node/PWA packaging or the React conversion</td>
+</tr>
+</tbody></table>
+</div>
+<h3 id="a9-placeholder-business-values-medium">A9. Placeholder business values (Medium)<a class="anchor" href="#a9-placeholder-business-values-medium" aria-hidden="true">#</a></h3>
+<ul>
+<li>Subscription prices are marked &quot;placeholder, confirm before launch&quot; in <code>seed.sql</code>.</li>
+<li>The same prices are hard-coded in three places: <code>database/seed.sql</code>, <code>src/data/constants.js</code> (<code>PLANS</code>), and <code>product/index.html</code>. They must be changed together.</li>
+<li>The demo referral code <code>NEXMARK14</code> would fail the database&#39;s code format check (it needs two digits from 20 to 99).</li>
+</ul>
+<hr>
+<h2 id="part-b-non-standard-patterns">Part B: Non-standard patterns<a class="anchor" href="#part-b-non-standard-patterns" aria-hidden="true">#</a></h2>
+<p>Most of these come from how the app was made. It was exported from a design tool as one HTML template plus one logic class, then converted to React mechanically so that behaviour stayed identical. They work, but an experienced React developer will find them unusual.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Pattern</th>
+<th>What is usual instead</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B1</td>
+<td><strong>One stateful class component (<code>App</code>, ~1,100 lines) holds every piece of state and every action</strong></td>
+<td>Function components with hooks (<code>useState</code>, <code>useReducer</code>); state split by feature, or a store (Zustand, Redux Toolkit); context for shared data</td>
+<td>Hard to test pieces in isolation; every change re-renders the whole app</td>
+</tr>
+<tr>
+<td>B2</td>
+<td><strong>A single &quot;view model&quot; object <code>v</code> (built by a ~2,100-line function) is passed to every component</strong>, and each one destructures what it needs</td>
+<td>Each component receives only the props it uses, or reads from a store; derived values computed close to where they&#39;re used (<code>useMemo</code>)</td>
+<td>Unclear which component depends on what; one large function to change</td>
+</tr>
+<tr>
+<td>B3</td>
+<td><strong>Class component, not hooks</strong></td>
+<td>Hooks are the norm since 2019. Classes still work but are legacy style</td>
+<td>Most current docs and examples won&#39;t match</td>
+</tr>
+<tr>
+<td>B4</td>
+<td><strong>Inline <code>style={{…}}</code> on almost every element</strong> (roughly 1,500 style objects) with literal hex colours, while <code>base.css</code> defines colour tokens (<code>--nd-violet</code>…) that the components don&#39;t use</td>
+<td>CSS modules, a utility framework (Tailwind), styled components, or a component library; tokens referenced, not repeated</td>
+<td>Theming or a brand change means editing many files</td>
+</tr>
+<tr>
+<td>B5</td>
+<td><strong>Hover/focus/pressed styles via <code>!important</code> utility classes</strong> (<code>interactions.css</code>), needed because inline styles beat normal CSS</td>
+<td>Normal CSS rules, possible once styles move out of inline objects</td>
+<td>Fragile ordering; <code>!important</code> spreads</td>
+</tr>
+<tr>
+<td>B6</td>
+<td><strong>Very short identifiers</strong> (<code>s</code>, <code>p</code>, <code>v</code>, <code>B</code>, <code>L</code>, <code>d</code>, <code>m</code>, <code>hm</code>, <code>bf</code>, <code>bk2</code>, <code>sh</code>, <code>fS</code>, <code>fDM</code>, <code>bvm</code>, <code>rvm</code>) and dense one-line logic</td>
+<td>Descriptive names</td>
+<td>Slow to read; easy to misread</td>
+</tr>
+<tr>
+<td>B7</td>
+<td><strong>Navigation is a stack in state</strong> (<code>tab</code> + <code>stack</code>), with no URLs</td>
+<td>A router (React Router) with a URL per screen</td>
+<td>No deep links, no browser back button, no bookmarkable screens; the server&#39;s SPA fallback has nothing to route</td>
+</tr>
+<tr>
+<td>B8</td>
+<td><strong>A module-level mutable clock</strong>: <code>export let TODAY, NOW</code>, reassigned by <code>syncClock()</code>, plus <code>sd()</code> shifting all demo dates relative to 7 Oct 2026</td>
+<td>Pass &quot;now&quot; in explicitly, or use a date library and a clock abstraction</td>
+<td>Hidden global state; tests need clock mocking</td>
+</tr>
+<tr>
+<td>B9</td>
+<td><strong>Hand-rolled date/time helpers on <code>&#39;YYYY-MM-DD&#39;</code> strings and minutes</strong></td>
+<td>A time-zone-aware library (Luxon, date-fns-tz)</td>
+<td>BST/GMT and time-zone issues once real data arrives (A5)</td>
+</tr>
+<tr>
+<td>B10</td>
+<td><strong><code>setState</code> is sometimes followed by code that reads <code>this.state</code> in the same handler.</strong> It was safe under the old runtime, where updates were synchronous. React applies updates later. One case was fixed during the conversion (demo flow &quot;booking clash&quot;); the rest were checked and are safe today</td>
+<td>Read the new values from the update callback (<code>setState(update, callback)</code>) or compute them first</td>
+<td>A trap for future edits: <code>this.state</code> is stale right after <code>setState</code></td>
+</tr>
+<tr>
+<td>B11</td>
+<td><strong>Runtime config through a global</strong> (<code>window.NEXDRIVE_CONFIG</code> from a separately loaded <code>js/config.js</code>)</td>
+<td><code>import.meta.env</code> / <code>.env</code> files baked in at build time</td>
+<td>Deliberate (edit per environment without rebuilding), but differs from Vite convention</td>
+</tr>
+<tr>
+<td>B12</td>
+<td><strong>Build tools listed in <code>dependencies</code>, not <code>devDependencies</code></strong></td>
+<td>Vite and plugins in <code>devDependencies</code></td>
+<td>Deliberate: the host runs the build and may skip dev dependencies. Installs are larger in production</td>
+</tr>
+<tr>
+<td>B13</td>
+<td><strong>Hand-written service worker plus a custom <code>build.js</code></strong> for the precache list and cache versioning</td>
+<td><code>vite-plugin-pwa</code> / Workbox</td>
+<td>More code to maintain; offline edge cases are ours to handle</td>
+</tr>
+<tr>
+<td>B14</td>
+<td><strong>Mixed absolute and relative URLs.</strong> Vite <code>base: &#39;./&#39;</code> and image paths like <code>&#39;assets/logos/…&#39;</code> are relative, while <code>sw.js</code> uses root-absolute paths (<code>&#39;/index.html&#39;</code>, <code>&#39;/sw-precache.js&#39;</code>)</td>
+<td>One consistent base path</td>
+<td>Works at a domain root. Under a sub-folder (for example <code>user.github.io/nexdrive/</code>) the app loads but offline mode breaks</td>
+</tr>
+<tr>
+<td>B15</td>
+<td><strong>Business rules implemented in the browser</strong> (pricing, overlap check, validation, referral eligibility, reward maths)</td>
+<td>The server is the authority; the UI only previews</td>
+<td>Fine for a demo; must be duplicated or moved once the API exists (the handover says the server must recalculate)</td>
+</tr>
+<tr>
+<td>B16</td>
+<td><strong>Demo-only code mixed into the app</strong>: the workflow panel (<code>FLOWS</code>, <code>App.flow()</code>), sample-details buttons, fixed OTP, <code>REF_CODES</code>, &quot;demo: qualify&quot; buttons</td>
+<td>Behind a build flag or in a separate dev-only module</td>
+<td>Hidden by <code>showDemoPanel: false</code>, but it ships to production</td>
+</tr>
+<tr>
+<td>B17</td>
+<td><strong>Front-end data shapes differ from the database</strong> (string IDs, pounds as floats, hours as decimals, display statuses stored as data)</td>
+<td>Front end mirrors the API contract</td>
+<td>A mapping layer is needed later (<a href="database.html#7-front-end-model-vs-database-model">database.md §7</a>)</td>
+</tr>
+<tr>
+<td>B18</td>
+<td><strong>Repository mixes several things</strong> (app, marketing page, DB spec, handover docs, Apache/Nginx configs) in one folder, with <code>index.html</code> at the root next to docs</td>
+<td>Separate folders/packages (<code>apps/web</code>, <code>apps/marketing</code>, <code>db/</code>)</td>
+<td>Easy to confuse what is served</td>
+</tr>
+<tr>
+<td>B19</td>
+<td><strong>The Express server uses CommonJS (<code>require</code>)</strong> while the app uses ES modules (<code>import</code>), and the package is <code>&quot;type&quot;: &quot;commonjs&quot;</code>, so the Vite config needed the <code>.mjs</code> extension</td>
+<td>One module system throughout</td>
+<td>Cosmetic</td>
+</tr>
+</tbody></table>
+</div>
+
+    <footer class="foot">Generated from the Markdown source in <code>docs/internal/</code>. To update, edit the <code>.md</code> file and run <code>npm run build</code> in <code>docs/internal/tools</code>.</footer>
+  </main>
+</div>
+<div class="zoom" hidden><button class="zoom-close" aria-label="Close">Close ✕</button><div class="zoom-body"></div></div>
+<script>
+// Click a diagram to see it full size; click again, press Esc or use Close to return.
+(function () {
+  var zoom = document.querySelector('.zoom'), body = zoom.querySelector('.zoom-body');
+  function close() { zoom.hidden = true; body.innerHTML = ''; document.body.style.overflow = ''; }
+  document.querySelectorAll('figure.diagram').forEach(function (fig) {
+    fig.addEventListener('click', function () {
+      var svg = fig.querySelector('svg').cloneNode(true);
+      // keep the id: Mermaid's embedded styles are scoped to it
+      svg.style.width = svg.style.maxWidth; svg.style.minWidth = '0'; svg.style.maxWidth = 'none';
+      body.appendChild(svg); zoom.hidden = false; document.body.style.overflow = 'hidden';
+    });
+  });
+  zoom.addEventListener('click', function (e) { if (e.target === zoom || e.target.classList.contains('zoom-close')) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !zoom.hidden) close(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "nexdrive-internal-docs-tools",
+  "private": true,
+  "description": "Generates the HTML versions of docs/internal/*.md. Not part of the app.",
+  "type": "module",
+  "scripts": {
+    "build": "node build-html.mjs"
+  },
+  "dependencies": {
+    "marked": "^15.0.0",
+    "mermaid": "^11.4.0",
+    "puppeteer-core": "^24.0.0"
+  }
+}
