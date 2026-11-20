@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generateReferralCode, referralLink, referralReward } from './utils';
+import { generateReferralCode, referralLink, referralReward } from './referrals';
 
 describe('referralReward', () => {
   it('pays 20% of the referred plan total', () => {

@@ -83,10 +83,11 @@ Who renders whom. Only `App` holds state. Every other box is a stateless functio
 flowchart TD
   MAIN["main.tsx<br/>createRoot + StrictMode"] --> APP
 
-  APP["App (app/App.jsx)<br/>class component<br/>STATE + ACTIONS"]
+  APP["App (app/App.jsx)<br/>function component<br/>subscribes to the store"]
   VM["buildViewModel(app)<br/>app/viewModel.js<br/>state → display values 'v'"]
-  APP -- "render() calls" --> VM
-  APP -- "render() returns AppView, passing v" --> VIEW
+  STORE["App store (Zustand)<br/>app/store + feature slices<br/>STATE + ACTIONS"] -- "useStore()" --> APP
+  APP -- "each render calls" --> VM
+  APP -- "returns AppView, passing v" --> VIEW
 
   VIEW["AppView<br/>phone frame + layout"]
 
@@ -130,10 +131,10 @@ sequenceDiagram
   U->>S: click "Confirm"
   S->>A: onClick = v.cm.confirm → app.confirmBooking()
   A->>A: bfModel(): price, sessions, clashes
-  A->>R: setState({ bookings, notifs, sheet: {type:'message'} })
-  Note over R: batched, applied after the handler returns
-  R->>A: render()
-  A->>V: buildViewModel(this)
+  A->>R: get().setState({ bookings, notifs, sheet: {type:'message'} })
+  Note over R: the store notifies App, React batches the re-render
+  R->>A: re-render App
+  A->>V: buildViewModel(app)
   V-->>A: v (v.sh.message = true, v.msg = preview)
   A-->>R: AppView element (with v)
   R->>AV: re-render with new v

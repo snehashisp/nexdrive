@@ -38,13 +38,15 @@ nexdrive/
 ├── src/                  ← THE APP (React + TypeScript/JSX). Everything here gets compiled and bundled
 │   ├── main.tsx            Entry point: mounts <App/> into the page
 │   ├── app/                Application shell: wires the features together
-│   │   ├── App.jsx           The single stateful component: all data + all actions
+│   │   ├── App.jsx           Root component: subscribes to the store, builds the view model
+│   │   ├── store/            The app store (Zustand): createAppStore.js composes the slices;
+│   │   │                       appSlice.js (navigation, sheets, toasts, splash, clock); initialState.js
 │   │   ├── viewModel.js      Turns App's state into display-ready values ("v")
 │   │   ├── AppView.jsx       Top-level layout: phone frame, current screen, nav, sheets
 │   │   ├── constants.js      Phone-frame sizes
 │   │   └── components/       Shell pieces: bottom nav, status bar, splash, sheet overlay
 │   ├── features/           One folder per business area; each holds its screens and sheets
-│   │   │                     (components/) plus its own constants and helpers
+│   │   │                     (components/) and its store slice (stores/: that feature's actions)
 │   │   ├── onboarding/       Welcome → register → verify → details → plan
 │   │   ├── dashboard/        Home screen
 │   │   ├── calendar/         Day / week / month views
@@ -56,6 +58,7 @@ nexdrive/
 │   │   └── settings/         Account (More), profile, pricing, bank details, preferences, security
 │   ├── components/         Shared UI used across features: icons, toast
 │   ├── lib/                Pure helpers in TypeScript, with tests: dates, format, validation
+│   ├── domain/             Business rules shared by several features: lesson statuses, plans, referrals
 │   ├── demo/               Demo-only code: seed data, workflow panel, fake referral-code lookup
 │   └── styles/             base.css (font + design tokens), app.css, interactions.css
 │
@@ -98,7 +101,7 @@ nexdrive/
 | `npm test` | `vitest run` | Unit tests (`*.test.ts` next to the code they test) |
 | `npm run clean` | delete `dist/` | |
 
-Dependencies: `react`, `react-dom` (UI library), `qrcode-generator` (QR codes), `express` (web server), `vite` and `@vitejs/plugin-react` (build tool). Dev dependencies (needed only on a developer machine, not to build or run): TypeScript, ESLint, Prettier, Vitest.
+Dependencies: `react`, `react-dom` (UI library), `zustand` (app store), `qrcode-generator` (QR codes), `express` (web server), `vite` and `@vitejs/plugin-react` (build tool). Dev dependencies (needed only on a developer machine, not to build or run): TypeScript, ESLint, Prettier, Vitest.
 
 ### 4.2 JavaScript modules (`import` / `export`)
 
@@ -114,24 +117,25 @@ Dependencies: `react`, `react-dom` (UI library), `qrcode-generator` (QR codes), 
 > 2. It compares the new tree with the previous one (**reconciliation**).
 > 3. It applies only the differences to the real page (the **DOM**, the browser's live object model of the page).
 >
-> **State** is the data a component owns. A class component keeps it in `this.state` and changes it **only** through `this.setState({...})`. That call merges the change and schedules a re-render. It is **asynchronous**: right after you call it, `this.state` still holds the old values. React batches several `setState` calls from the same event into one re-render. `setState(update, callback)` runs `callback` once the new state is applied.
+> **State** is data that, when it changes, should redraw the page. A function component keeps local state with the `useState` hook; data shared by many components usually lives in a **store** outside React (here Zustand, section 4.8), which components subscribe to. Changing the state schedules a re-render; React batches several changes from the same event into one re-render.
 >
 > **Props** are inputs a parent passes to a child component, like function arguments: `<Home v={v} />` gives `Home` a prop called `v`.
 >
-> **Lifecycle (class components):** constructor → `render()` → `componentDidMount()` (once, after the first paint: start timers, add listeners) → [`setState` → `render()` → `componentDidUpdate()`]… → `componentWillUnmount()` (clean up).
+> **Hooks** are functions starting with `use` that a function component calls on every render: `useState` (local state), `useRef` (a mutable box, often a DOM element), `useEffect(fn, deps)` (run `fn` after the render whenever `deps` change; the function `fn` returns runs as clean-up, for example to remove listeners when the component goes away).
 >
 > **Events:** React attaches one listener at the root of the page and routes clicks to whichever element's `onClick` prop matches ("synthetic events"). Handlers are plain functions.
 >
 > **Lists** need a `key` on each item so React can match items between renders.
 >
-> **Refs** (`createRef()`) give direct access to a real DOM element when you must, here to scroll a container back to the top.
+> **Refs** (`useRef()`) give direct access to a real DOM element when you must, here to scroll a container back to the top.
 >
 > **StrictMode** (development only) deliberately renders twice and mounts → unmounts → mounts once, to expose code with hidden side effects. It does nothing in production.
 
 **In this repo:**
 
 - `src/main.tsx` does `createRoot(document.getElementById('root')).render(<StrictMode><App /></StrictMode>)`. That hands the empty `<div id="root">` from `index.html` to React.
-- There is **one** stateful component, `App` (`src/app/App.jsx`), a class component. Its `init()` returns the whole initial state. That is roughly 60 fields: which screen is open, the learners, the bookings, form drafts, toasts and so on. Every user action is a method on `App` that calls `this.setState`.
+- All app data lives in **one store** (`src/app/store/createAppStore.js`), roughly 60 fields: which screen is open, the learners, the bookings, form drafts, toasts and so on. `initialState(phase, data)` builds them. Every user action is a store action defined in its feature's **slice** (`src/features/<feature>/stores/<feature>Slice.js`).
+- `App` (`src/app/App.jsx`) is a function component. It creates the store once, subscribes to it with `useStore(store)`, starts listeners and timers in a `useEffect` (`mount()`), and resets the scroll position when the screen changes.
 - **All other components are stateless functions** that only display what they're given (section 6).
 
 ### 4.4 JSX
@@ -196,7 +200,8 @@ There are no API routes, no sessions and no security headers here (see gaps).
 
 ### 4.8 Small libraries
 
-- **qrcode-generator**: computes QR code modules. It is used by `src/features/referrals/components/QrCode.jsx` (on-screen SVG) and `App.qrPng()` (the downloadable PNG, drawn on a canvas).
+- **Zustand**: a small state-management library. `createStore((set, get) => ({ ...data, ...actions }))` makes a store object that lives outside React; `useStore(store)` (a hook) subscribes a component, which re-renders whenever the store changes. It is the app's single store (section 6.1).
+- **qrcode-generator**: computes QR code modules. It is used by `src/features/referrals/components/QrCode.jsx` (on-screen SVG) and the `qrPng()` store action in the referrals slice (the downloadable PNG, drawn on a canvas).
 
 ## 5. What happens when someone opens the app (production)
 
@@ -221,8 +226,8 @@ In **dev mode** (`npm run dev`) steps 1–2 are served by Vite instead: `index.h
 Three layers, each in its own place:
 
 ```text
-App (src/app/App.jsx)               state + actions        "what is true, and how it changes"
-   │  render()
+store (src/app/store + feature slices)  state + actions    "what is true, and how it changes"
+   │  App subscribes, then on each render
    ▼
 buildViewModel (src/app/viewModel.js)  state → display values  "what exactly to show: text, colours, handlers"
    │  returns one object, `v`
@@ -230,34 +235,34 @@ buildViewModel (src/app/viewModel.js)  state → display values  "what exactly t
 AppView + feature components (src/app, src/features)   JSX            "how it looks"
 ```
 
-### 6.1 `App`: state and actions
+### 6.1 The store: state and actions
 
-`init(phase, data)` returns the full state object. The main fields:
+`initialState(phase, data)` (`src/app/store/initialState.js`) returns the full data object. The main fields:
 
 | Field(s) | Meaning |
 | --- | --- |
 | `phase` | `'onboarding'` or `'app'` |
 | `ob` | Current onboarding step: `welcome`, `register`, `verify`, `details`, `plan`, `started` |
 | `tab` | Bottom-nav tab: `home`, `calendar`, `learners`, `more` |
-| `stack` | Screens opened on top of the tab, e.g. `[{name:'learner', params:{lid:'L1'}}, {name:'learnerForm'}]`. The last entry is visible; `back()` pops it. **This is the app's whole navigation system; there is no URL routing** |
+| `stack` | Screens opened on top of the tab, e.g. `[{name:'learner', params:{lid:'L1'}}, {name:'learnerForm'}]`. The last entry is visible; `pushScreen()` adds one and `back()` pops it. **This is the app's whole navigation system; there is no URL routing** |
 | `sheet` | The pop-up panel currently open, e.g. `{type:'conflict', cid:'b12'}`, or `null` |
 | `learners`, `bookings`, `notifs`, `refs`, `credit` | The data, as arrays of plain objects |
 | `inst`, `bank`, `sub`, `prefs` | The instructor's profile, bank details, subscription and preferences |
 | `draft`, `lf`, `profForm`, `priceForm`, `bankForm`, `pw`, `reg`, `det` | Form contents while being edited |
 | `toast` | A short message shown for 3 seconds |
 
-Action methods change state with `setState`. Examples:
+Actions live next to the data in the same store, grouped into one slice per feature. An action reads the current state with `get()` and changes it with `get().setState(update, callback)`, which works like the old React `setState` but applies the change immediately. A slice calls another feature's action through `get()` too (for example the bookings slice calls `get().showToast(...)`), so features never import each other. Examples:
 
 | Method | Does |
 | --- | --- |
-| `goTab(t)`, `push(name, params)`, `back()`, `sheet(type, params)` | Navigation |
-| `openBooking(lid, opts)`, `setDraft(patch)`, `pickSlot(t)`, `review()`, `confirmBooking()`, `openEdit(id)`, `saveEdit()`, `cancelLesson(id, reason)` | Booking flow |
+| `goTab(t)`, `pushScreen(name, params)`, `back()`, `openSheet(type, params)`, `showToast(text, kind)` | Navigation and feedback (`src/app/store/appSlice.js`) |
+| `openBooking(lid, opts)`, `setDraft(patch)`, `pickSlot(t)`, `review()`, `confirmBooking()`, `openEdit(id)`, `saveEdit()`, `cancelLesson(id, reason)` | Booking flow (`features/bookings/stores/bookingsSlice.js`) |
 | `bfModel()` | Pure calculation for the booking form: price, discount, sessions, clashes, validation errors |
 | `overlap(date, startMin, durMin, excludeIds)` | The double-booking check |
 | `openLearnerForm`, `saveLearner`, `deleteLearner` (archives) | Learners |
 | `sendMsg`, `skipMsg` | "Send" the booking message (simulated: waits 0.7s, shows a toast) |
 | `obNext`, `obBack`, `finishOb` | Onboarding steps |
-| `flow(key)` | Demo panel: reset the data and jump to a workflow |
+| `runFlow(key)` | Demo panel: reset the data and jump to a workflow (`src/demo/demoSlice.js`) |
 | `tick`, `schedulePush` | Clock tick and the simulated "lesson starts in 30 minutes" notification |
 
 ### 6.2 `buildViewModel`: state into display values
@@ -300,11 +305,11 @@ Tapping **Confirm** in the "Confirm booking" sheet:
 
 1. In `ConfirmBookingSheet.jsx`, the button has `onClick={cm.confirm}`.
 2. `cm.confirm` was created in `buildViewModel` as `() => app.confirmBooking()`.
-3. `App.confirmBooking()` reads `this.state`, recomputes the booking with `bfModel()`, builds the new booking objects and a "Booking created" notification, then calls `this.setState({ bookings: [...], notifs: [...], sheet: { type: 'message', kind: 'new', ids } })`.
-4. React re-runs `App.render()` → `buildViewModel` → `v.sh.message` is now true and `v.msg` holds the message preview.
+3. The store action `confirmBooking()` (bookings slice) reads the state with `get()`, recomputes the booking with `bfModel()`, builds the new booking objects and a "Booking created" notification, then calls `get().setState({ bookings: [...], notifs: [...], sheet: { type: 'message', kind: 'new', ids } })`.
+4. The store notifies `App`, React re-renders it → `buildViewModel` → `v.sh.message` is now true and `v.msg` holds the message preview.
 5. `AppView` → `SheetOverlay` → `MessageSheet` renders the preview. React updates only the parts of the page that changed.
 
-The same loop drives every interaction: **event → App method → setState → render → buildViewModel → JSX**. A sequence diagram is in [component-diagram.md](component-diagram.md#4-one-interaction-end-to-end).
+The same loop drives every interaction: **event → store action → setState → App re-renders → buildViewModel → JSX**. A sequence diagram is in [component-diagram.md](component-diagram.md#4-one-interaction-end-to-end).
 
 ## 7. Cross-cutting details
 
@@ -313,7 +318,7 @@ The same loop drives every interaction: **event → App method → setState → 
 | Where | What | Read by |
 | --- | --- | --- |
 | `public/js/config.js` → `window.NEXDRIVE_CONFIG` | `mode` (`demo`/`live`), `apiBaseUrl`, `referralBaseUrl`, `showDemoPanel`, `deviceFrame`, `launchAnimation` | `App.cfg()` at runtime |
-| `App.defaultProps` in `src/app/App.jsx` | Preview switches: device size, start screen, empty data, subscription state, offline | `App` |
+| `DEFAULT_PREVIEW` in `src/app/App.jsx` | Preview switches: device size, start screen, empty data, subscription state, offline | `App` |
 | `PORT`, `HOST` environment variables | Web server listen address | `server.js` |
 | `.env` (from `.env.example`) | **Backend** secrets (database, Stripe, Twilio…), for the planned API only | Nothing yet |
 
@@ -348,7 +353,7 @@ Implemented in `App`/`viewModel` for demo purposes. The plan is that the API and
 
 All of these are listed with their impact in [gaps-and-quirks.md](gaps-and-quirks.md#part-b-non-standard-patterns). They exist because the app was originally exported from a design tool and then converted mechanically to React, keeping its behaviour identical.
 
-1. **One big state component and a single `v` object** instead of many components with their own state and specific props.
+1. **A single `v` object** handed to every screen, instead of each screen reading the store for what it needs.
 2. **A 2,100-line view-model function.**
 3. **Run-time colours passed as values.** Most styling is in CSS Modules, but the view model still computes some colours (for example "selected" chip colours) and passes them to inline `style`.
 4. **Very short variable names** (`s`, `v`, `B`, `L`, `bf`, `bk2`) inherited from the original code, mostly inside `App` and the view model. The shared helpers in `src/lib/` and the feature constants have descriptive names.
@@ -361,7 +366,7 @@ All of these are listed with their impact in [gaps-and-quirks.md](gaps-and-quirk
 | --- | --- |
 | Change wording or layout of a screen | `src/features/<feature>/components/<Screen>.jsx` (sheets live in the same folder) |
 | Change what a button does | Find its `onClick={x.y}` → find `y:` under that screen's section in `src/app/viewModel.js` → follow to the `App` method |
-| Change a calculation shown on screen | `src/app/viewModel.js` (display) or `App.bfModel()` (booking maths) |
+| Change a calculation shown on screen | `src/app/viewModel.js` (display) or `bfModel()` in the bookings slice (booking maths) |
 | Add or change demo data | `src/demo/seeds.js` |
 | Plans and prices | `src/features/subscription/plans.js` |
 | Lesson status colours | `src/features/bookings/constants.js` |

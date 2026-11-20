@@ -86,7 +86,7 @@ On a desktop the app is drawn inside a phone frame. On a narrow window or a phon
 | `deviceFrame: false` | No phone frame on desktop; the app fills the browser |
 | `launchAnimation: false` | Skips the logo animation at start-up |
 
-More "preview" switches live at the top of `src/app/App.jsx` in `static defaultProps`: start on onboarding, empty data, subscription state (`trial`, `payment_failed`, `expired`), offline banner. Change one, save, and dev mode reloads.
+More "preview" switches live at the top of `src/app/App.jsx` in `DEFAULT_PREVIEW`: start on onboarding, empty data, subscription state (`trial`, `payment_failed`, `expired`), offline banner. Change one, save, and dev mode reloads.
 
 ### Chrome DevTools (F12)
 
@@ -105,7 +105,7 @@ Install the **React Developer Tools** Chrome extension. It adds a **Components**
 ## 6. Where to start reading code
 
 1. `src/main.jsx`: the entry point (about 20 lines).
-2. `src/app/App.jsx`: the state (`init()`) and the actions (methods such as `openBooking`, `confirmBooking`, `saveLearner`).
+2. `src/app/store/`: the store. `initialState.js` is the data; `createAppStore.js` lists the slices, and each feature's actions (such as `openBooking`, `confirmBooking`, `saveLearner`) are in `src/features/<feature>/stores/`.
 3. `src/app/viewModel.js` → `buildViewModel()`: turns the state into display values.
 4. `src/app/AppView.jsx`: picks which screen to show. Then any screen in `src/features/<feature>/components/`.
 

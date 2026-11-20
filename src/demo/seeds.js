@@ -1,5 +1,5 @@
-import { TEST_CENTRE } from '@/features/bookings/constants';
-import { compareBookings, withLiveStatus } from '@/features/bookings/utils';
+import { TEST_CENTRE } from '@/domain/bookings';
+import { compareBookings, withLiveStatus } from '@/domain/bookings';
 import {
   NOW,
   TODAY,

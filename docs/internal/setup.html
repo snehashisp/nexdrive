@@ -256,7 +256,7 @@ npm install                      # downloads React, Vite, Express … into node_
 </tr>
 </tbody></table>
 </div>
-<p>More &quot;preview&quot; switches live at the top of <code>src/app/App.jsx</code> in <code>static defaultProps</code>: start on onboarding, empty data, subscription state (<code>trial</code>, <code>payment_failed</code>, <code>expired</code>), offline banner. Change one, save, and dev mode reloads.</p>
+<p>More &quot;preview&quot; switches live at the top of <code>src/app/App.jsx</code> in <code>DEFAULT_PREVIEW</code>: start on onboarding, empty data, subscription state (<code>trial</code>, <code>payment_failed</code>, <code>expired</code>), offline banner. Change one, save, and dev mode reloads.</p>
 <h3 id="chrome-devtools-f12">Chrome DevTools (F12)<a class="anchor" href="#chrome-devtools-f12" aria-hidden="true">#</a></h3>
 <div class="table-wrap"><table>
 <thead>
@@ -299,7 +299,7 @@ npm install                      # downloads React, Vite, Express … into node_
 <h2 id="6-where-to-start-reading-code">6. Where to start reading code<a class="anchor" href="#6-where-to-start-reading-code" aria-hidden="true">#</a></h2>
 <ol>
 <li><code>src/main.jsx</code>: the entry point (about 20 lines).</li>
-<li><code>src/app/App.jsx</code>: the state (<code>init()</code>) and the actions (methods such as <code>openBooking</code>, <code>confirmBooking</code>, <code>saveLearner</code>).</li>
+<li><code>src/app/store/</code>: the store. <code>initialState.js</code> is the data; <code>createAppStore.js</code> lists the slices, and each feature&#39;s actions (such as <code>openBooking</code>, <code>confirmBooking</code>, <code>saveLearner</code>) are in <code>src/features/&lt;feature&gt;/stores/</code>.</li>
 <li><code>src/app/viewModel.js</code> → <code>buildViewModel()</code>: turns the state into display values.</li>
 <li><code>src/app/AppView.jsx</code>: picks which screen to show. Then any screen in <code>src/features/&lt;feature&gt;/components/</code>.</li>
 </ol>

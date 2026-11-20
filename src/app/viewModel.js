@@ -1,22 +1,16 @@
 import { DEVICE_SIZES } from './constants';
 import { FLOWS } from '@/demo/flows';
 import { REF_CODES } from '@/demo/referral-codes';
-import { FUTURE_STATUSES, STATUS_STYLES } from '@/features/bookings/constants';
-import { compareBookings } from '@/features/bookings/utils';
+import { FUTURE_STATUSES, STATUS_STYLES, compareBookings } from '@/domain/bookings';
 import {
-  REFERRAL,
   PENDING_REFERRAL_STATUSES,
-  REFERRAL_STEPS,
+  REFERRAL,
   REFERRAL_STATUS,
-} from '@/features/referrals/constants';
-import { referralLink, referralReward } from '@/features/referrals/utils';
-import {
-  PLANS,
-  planDiscountPercent,
-  planPeriodLabel,
-  planSaving,
-  planTermLabel,
-} from '@/features/subscription/plans';
+  REFERRAL_STEPS,
+  referralLink,
+  referralReward,
+} from '@/domain/referrals';
+import { PLANS, planDiscountPercent, planPeriodLabel, planSaving, planTermLabel } from '@/domain/plans';
 import { ERROR_COLOR, BORDER_COLOR, choiceColors, radioRing } from '@/lib/inline-styles';
 import {
   parseIsoDate,
@@ -64,7 +58,7 @@ function rvm(app, r) {
     st,
     reward: aw ? '+' + formatGBP(amt) : no ? '£0' : pl ? `${formatGBP(amt)} pending` : '—',
     amtC: aw ? '#166534' : '#6B6B7B',
-    open: () => app.sheet('referralDetail', { rid: r.id }),
+    open: () => app.openSheet('referralDetail', { rid: r.id }),
   };
 }
 
@@ -106,7 +100,7 @@ function bvm(app, b) {
     pct: Math.max(4, Math.min(100, Math.round(((NOW - sm) / (b.dur * 60)) * 100))),
     dayLabel:
       b.date === TODAY ? 'Today' : b.date === addDays(TODAY, 1) ? 'Tomorrow' : formatShortDate(b.date),
-    open: () => app.push('lesson', { bid: b.id }),
+    open: () => app.pushScreen('lesson', { bid: b.id }),
   };
 }
 
@@ -202,27 +196,27 @@ export function buildViewModel(app) {
     calendar: () => app.goTab('calendar'),
     learners: () => app.goTab('learners'),
     more: () => app.goTab('more'),
-    quick: () => app.sheet('quickAdd'),
+    quick: () => app.openSheet('quickAdd'),
     newBooking: () => app.openBooking(null),
     package: () => app.openBooking(null, { count: 5 }),
     addLearner: () => app.openLearnerForm(null, null),
-    notifications: () => app.push('notifications'),
-    referrals: () => app.push('referrals'),
-    referralShare: () => app.push('referralQr'),
-    credit: () => app.push('credit'),
-    bookings: () => app.push('bookings'),
-    subscription: () => app.push('subscription'),
+    notifications: () => app.pushScreen('notifications'),
+    referrals: () => app.pushScreen('referrals'),
+    referralShare: () => app.pushScreen('referralQr'),
+    credit: () => app.pushScreen('credit'),
+    bookings: () => app.pushScreen('bookings'),
+    subscription: () => app.pushScreen('subscription'),
     upgrade: () => {
       app.setState({
         upPick: PLANS.find((x) => x.months > plan.months)
           ? PLANS.find((x) => x.months > plan.months).key
           : plan.key,
       });
-      app.push('upgrade');
+      app.pushScreen('upgrade');
     },
     profile: () => {
       app.setState({ profForm: { ...s.inst, areas: s.inst.areas.join(', ') }, profTried: false });
-      app.push('profile');
+      app.pushScreen('profile');
     },
     pricing: () => {
       app.setState({
@@ -231,7 +225,7 @@ export function buildViewModel(app) {
           dur: s.inst.defaultDur,
         },
       });
-      app.push('pricing');
+      app.pushScreen('pricing');
     },
     bank: () => {
       app.setState({
@@ -239,16 +233,16 @@ export function buildViewModel(app) {
         bankTried: false,
         bankReveal: false,
       });
-      app.push('bank');
+      app.pushScreen('bank');
     },
-    prefs: () => app.push('prefs'),
+    prefs: () => app.pushScreen('prefs'),
     security: () => {
       app.setState({ pw: null, pwTried: false });
-      app.push('security');
+      app.pushScreen('security');
     },
     history: () => {
       app.setState({ bkSeg: 'history' });
-      app.push('bookings');
+      app.pushScreen('bookings');
     },
   };
   const v = {
@@ -271,7 +265,6 @@ export function buildViewModel(app) {
     showNav,
     nav,
     go,
-    scrollRef: app.scrollRef,
     back: () => app.back(),
     stop: (e) => e.stopPropagation(),
     closeSheet: () => app.setState({ sheet: null }),
@@ -280,7 +273,7 @@ export function buildViewModel(app) {
       title: f[1],
       steps: f[2],
       bg: s.flow === f[0] ? '#F3EEFF' : 'transparent',
-      go: () => app.flow(f[0]),
+      go: () => app.runFlow(f[0]),
     })),
     push: s.push && s.phase === 'app',
     pushTop: statusBar ? sbH + 4 : 8,
@@ -292,7 +285,7 @@ export function buildViewModel(app) {
     openPush: () => {
       const id = s.pushInfo && s.pushInfo.bid;
       app.setState({ push: false });
-      if (id) app.push('lesson', { bid: id });
+      if (id) app.pushScreen('lesson', { bid: id });
     },
     toastB: showNav ? (frameless ? 76 : 96) : padB + 84,
     toast: s.toast
@@ -376,7 +369,7 @@ export function buildViewModel(app) {
   v.fillOtp = () => app.setState({ otp: '482913', otpErr: '' });
   v.resendOtp = () => {
     app.setState({ resent: true });
-    app.toast('New code sent to ' + (s.reg.phone || 'your mobile'));
+    app.showToast('New code sent to ' + (s.reg.phone || 'your mobile'));
   };
   v.resendLabel = s.resent ? 'Code resent — resend again' : 'Resend code';
   const detE = s.detTried ? app.detErr(s.det) : {};
@@ -475,7 +468,7 @@ export function buildViewModel(app) {
   v.obCardB = v.obCardErr ? ERROR_COLOR : '#6B6B7B';
   v.addCard = () => {
     app.setState({ obCard: true });
-    app.toast('Card saved. You won’t be charged today.');
+    app.showToast('Card saved. You won’t be charged today.');
   };
   const first = (s.reg.name.trim() || 'Daniel').split(' ')[0];
   const tE = addDays(TODAY, 14),
@@ -592,7 +585,7 @@ export function buildViewModel(app) {
       };
     const nx =
       nextOne && mins <= 30 && s.reminder && s.prefs.reminder
-        ? { ...bvm(app, nextOne), mins, nav: () => app.sheet('maps', { bid: nextOne.id }) }
+        ? { ...bvm(app, nextOne), mins, nav: () => app.openSheet('maps', { bid: nextOne.id }) }
         : null;
     v.hm = {
       initials: initials(s.inst.name),
@@ -737,7 +730,7 @@ function msgVm(app, S) {
     send: () => app.sendMsg(),
     skip: () => app.skipMsg(),
     skipLabel: k === 'cancel' ? 'Don’t notify' : 'Don’t send',
-    copy: () => app.toast('Message copied — paste it into any app', 'neutral'),
+    copy: () => app.showToast('Message copied — paste it into any app', 'neutral'),
   };
 }
 
@@ -753,7 +746,7 @@ function vmRest(app, v, c) {
     copyLink: () => app.copy(link, 'Referral link copied'),
     whatsapp: () => {
       app.openExt('https://wa.me/?text=' + encodeURIComponent(msgTxt));
-      app.toast('Opening WhatsApp…', 'neutral');
+      app.showToast('Opening WhatsApp…', 'neutral');
     },
     email: () => {
       app.openExt(
@@ -762,7 +755,7 @@ function vmRest(app, v, c) {
           '&body=' +
           encodeURIComponent(msgTxt),
       );
-      app.toast('Opening your email app…', 'neutral');
+      app.showToast('Opening your email app…', 'neutral');
     },
   };
   if (is.referrals) {
@@ -817,7 +810,7 @@ function vmRest(app, v, c) {
         x: s.autoCredit ? 22 : 2,
         flip: () => {
           app.setState({ autoCredit: !s.autoCredit });
-          app.toast(
+          app.showToast(
             !s.autoCredit ? 'Credit will be applied to your next payment' : 'Credit will be kept for later',
             'neutral',
           );
@@ -905,7 +898,7 @@ function vmRest(app, v, c) {
       sub: nx
         ? `Next: ${nx.date === TODAY ? 'Today' : formatShortDate(nx.date)}, ${nx.start}`
         : 'No upcoming lessons',
-      open: () => app.sheet('learnerActions', { lid: l.id }),
+      open: () => app.openSheet('learnerActions', { lid: l.id }),
       pick: () => app.setState((st) => ({ draft: { ...st.draft, lid: l.id }, sheet: null })),
     };
   };
@@ -1054,7 +1047,7 @@ function vmRest(app, v, c) {
         sub: `Removed ${formatDate(l.archivedOn)} · ${B.filter((b) => b.lid === l.id).length} lesson records kept`,
         open: () => {
           app.setState({ hf: { status: 'all', learner: l.id, range: 'all' }, bkSeg: 'history' });
-          app.push('bookings');
+          app.pushScreen('bookings');
         },
       })),
     };
@@ -1120,11 +1113,11 @@ function vmRest(app, v, c) {
         cancel: () => app.learnerPick(L.id, 'cancel'),
         history: () => {
           app.setState({ hf: { status: 'all', learner: L.id, range: 'all' }, bkSeg: 'history' });
-          app.push('bookings');
+          app.pushScreen('bookings');
         },
         edit: () => app.openLearnerForm(L.id, null),
-        del: () => app.sheet('deleteLearner', { lid: L.id }),
-        call: () => app.toast(`Calling ${L.name} · ${L.phone}`, 'neutral'),
+        del: () => app.openSheet('deleteLearner', { lid: L.id }),
+        call: () => app.showToast(`Calling ${L.name} · ${L.phone}`, 'neutral'),
       };
     }
   }
@@ -1197,7 +1190,7 @@ function vmRest(app, v, c) {
         deco: past ? 'line-through' : 'none',
         cur: past ? 'not-allowed' : 'pointer',
         pick: past
-          ? () => app.toast('That time has passed — choose a later slot', 'warn')
+          ? () => app.showToast('That time has passed — choose a later slot', 'warn')
           : () => app.pickSlot(t),
       });
     }
@@ -1236,7 +1229,7 @@ function vmRest(app, v, c) {
       noLearner: !L,
       learnerErr: e.learner,
       learnerBd: e.learner ? ERROR_COLOR : '#CFCFD8',
-      pickLearner: () => app.sheet('pickLearner'),
+      pickLearner: () => app.openSheet('pickLearner'),
       blocked: m.blocked,
       missText: m.miss.join(', '),
       complete: () => app.openLearnerForm(d.lid, 'booking'),
@@ -1363,13 +1356,13 @@ function vmRest(app, v, c) {
                     ? `Starts in ${mins >= 60 ? Math.floor(mins / 60) + ' hr ' : ''}${mins % 60} min`
                     : `In ${daysBetween(TODAY, b.date)} day${daysBetween(TODAY, b.date) > 1 ? 's' : ''}`,
         rateRow: `${formatGBP(b.rate)}/hr × ${formatDurationShort(b.dur)}`,
-        call: () => app.toast(`Calling ${L.name} · ${L.phone}`, 'neutral'),
-        msg: () => app.sheet('message', { kind: 'resend', ids: [b.id] }),
+        call: () => app.showToast(`Calling ${L.name} · ${L.phone}`, 'neutral'),
+        msg: () => app.openSheet('message', { kind: 'resend', ids: [b.id] }),
         resched: () => app.openEdit(b.id),
-        cancel: () => app.sheet('cancelLesson', { bid: b.id, reason: 'Learner request' }),
-        nav: () => app.sheet('maps', { bid: b.id }),
+        cancel: () => app.openSheet('cancelLesson', { bid: b.id, reason: 'Learner request' }),
+        nav: () => app.openSheet('maps', { bid: b.id }),
         profile: () => {
-          if (!L.archived) app.push('learner', { lid: L.id });
+          if (!L.archived) app.pushScreen('learner', { lid: L.id });
         },
         profLabel: L.archived ? 'Removed learner · records kept' : 'View profile',
       };
@@ -1478,9 +1471,9 @@ function vmRest(app, v, c) {
         open: () => {
           app.setState({ notifs: s.notifs.map((x) => (x.id === n.id ? { ...x, unread: false } : x)) });
           const a = n.act || {};
-          if (a.lesson && app.booking(a.lesson)) app.push('lesson', { bid: a.lesson });
-          else if (a.learner && app.learner(a.learner)) app.push('learner', { lid: a.learner });
-          else if (a.screen) app.push(a.screen);
+          if (a.lesson && app.booking(a.lesson)) app.pushScreen('lesson', { bid: a.lesson });
+          else if (a.learner && app.learner(a.learner)) app.pushScreen('learner', { lid: a.learner });
+          else if (a.screen) app.pushScreen(a.screen);
         },
       })),
       has: list.length > 0,
@@ -1517,7 +1510,7 @@ function vmRest(app, v, c) {
       refSub: `${formatGBP(RC.bal)} credit · ${s.refCode}`,
       priceSub: `${formatGBP(s.inst.rates[0].rate)}/hr · ${formatDurationLong(s.inst.defaultDur)} default`,
       unread: unread ? `${unread} unread` : 'All caught up',
-      logout: () => app.sheet('logout'),
+      logout: () => app.openSheet('logout'),
     };
   }
   if (is.subscription || is.upgrade || is.upgradeDone) {
@@ -1632,16 +1625,16 @@ function vmRest(app, v, c) {
       cancelLabel: sub === 'trial' ? 'Cancel free trial' : 'Cancel subscription',
       fixPay: sub === 'payment_failed',
       renew: sub === 'expired',
-      fixPayGo: () => app.toast(`Card updated · ${formatGBP(plan.total)} payment taken`),
+      fixPayGo: () => app.showToast(`Card updated · ${formatGBP(plan.total)} payment taken`),
       renewGo: () => {
         app.setState({ upPick: plan.key });
-        app.push('upgrade');
+        app.pushScreen('upgrade');
       },
       resume: () => {
         app.setState({ sub: { ...s.sub, state: 'trial' } });
-        app.toast('Subscription resumed');
+        app.showToast('Subscription resumed');
       },
-      cancel: () => app.sheet('cancelSub'),
+      cancel: () => app.openSheet('cancelSub'),
       upgrade: go.upgrade,
       credit:
         RC.bal > 0 && sub !== 'expired'
@@ -1804,7 +1797,7 @@ function vmRest(app, v, c) {
       initials: initials(f.name),
       status: f.status === 'adi' ? 'Approved Driving Instructor' : 'Trainee instructor (PDI)',
       badge: f.status === 'adi' ? '#16A34A' : '#EC4899',
-      photo: () => app.toast('Choose a photo from your library', 'neutral'),
+      photo: () => app.showToast('Choose a photo from your library', 'neutral'),
       save: () => {
         if (!f.name.trim() || !isValidUkMobile(f.phone) || !isValidEmail(f.email))
           return app.setState({ profTried: true });
@@ -1819,7 +1812,7 @@ function vmRest(app, v, c) {
           },
         });
         app.back();
-        app.toast('Profile updated');
+        app.showToast('Profile updated');
       },
     };
   }
@@ -1851,7 +1844,7 @@ function vmRest(app, v, c) {
       })),
       preview: [1, 2, 3].map((x) => ({ k: formatDurationLong(x), v: formatGBP(std * x) })),
       save: () => {
-        if (bad) return app.toast('Enter a price above £0 for every rate', 'err');
+        if (bad) return app.showToast('Enter a price above £0 for every rate', 'err');
         app.setState({
           inst: {
             ...s.inst,
@@ -1860,7 +1853,7 @@ function vmRest(app, v, c) {
           },
         });
         app.back();
-        app.toast(`Prices saved · new bookings use ${formatGBP(std)}/hr`);
+        app.showToast(`Prices saved · new bookings use ${formatGBP(std)}/hr`);
       },
     };
   }
@@ -1915,7 +1908,7 @@ function vmRest(app, v, c) {
           bankEdit: false,
           bankForm: { holder: s.inst.name, sort: '', acct: '', include: true },
         });
-        app.toast('Bank details removed', 'neutral');
+        app.showToast('Bank details removed', 'neutral');
       },
       save: () => {
         if (!f.holder.trim() || sc.length !== 6 || ac.length !== 8) return app.setState({ bankTried: true });
@@ -1929,7 +1922,7 @@ function vmRest(app, v, c) {
           bankEdit: false,
           bankReveal: false,
         });
-        app.toast('Bank details saved securely');
+        app.showToast('Bank details saved securely');
       },
     };
   }
@@ -1987,10 +1980,10 @@ function vmRest(app, v, c) {
         if (!f.cur || f.nw.length < 8 || !/\d/.test(f.nw) || f.nw !== f.conf)
           return app.setState({ pwTried: true });
         app.setState({ pw: null });
-        app.toast('Password changed');
+        app.showToast('Password changed');
       },
-      logout: () => app.sheet('logout'),
-      verified: () => app.toast('Already verified', 'neutral'),
+      logout: () => app.openSheet('logout'),
+      verified: () => app.showToast('Already verified', 'neutral'),
     };
   }
 
@@ -2002,15 +1995,15 @@ function vmRest(app, v, c) {
       const up = B.filter((b) => b.lid === L.id && ['upcoming', 'rescheduled'].includes(b.status));
       v.la = {
         ...lvm(L),
-        view: () => app.push('learner', { lid: L.id }),
+        view: () => app.pushScreen('learner', { lid: L.id }),
         schedule: () => app.openBooking(L.id),
         resched: () => app.learnerPick(L.id, 'reschedule'),
         cancel: () => app.learnerPick(L.id, 'cancel'),
         call: () => {
           app.setState({ sheet: null });
-          app.toast(`Calling ${L.name} · ${L.phone}`, 'neutral');
+          app.showToast(`Calling ${L.name} · ${L.phone}`, 'neutral');
         },
-        del: () => app.sheet('deleteLearner', { lid: L.id }),
+        del: () => app.openSheet('deleteLearner', { lid: L.id }),
         upText: up.length ? `${up.length} upcoming lesson${up.length > 1 ? 's' : ''}` : 'No upcoming lessons',
         delNote: up.length
           ? `${up.length} upcoming lesson${up.length > 1 ? 's' : ''} will also be cancelled.`
@@ -2045,7 +2038,7 @@ function vmRest(app, v, c) {
         pick: () =>
           S.mode === 'reschedule'
             ? app.openEdit(b.id)
-            : app.sheet('cancelLesson', { bid: b.id, reason: 'Learner request' }),
+            : app.openSheet('cancelLesson', { bid: b.id, reason: 'Learner request' }),
       })),
     };
   }
@@ -2067,7 +2060,7 @@ function vmRest(app, v, c) {
           if (S.idx > 0) app.setDraft({ shifts: { ...d.shifts, [S.idx]: (d.shifts[S.idx] || 0) + 1 } });
           else app.setDraft({ start: '' });
         },
-        view: () => app.push('lesson', { bid: c.id }),
+        view: () => app.pushScreen('lesson', { bid: c.id }),
         cancel: () =>
           app.setState((st) => ({
             sheet: null,
@@ -2151,7 +2144,7 @@ function vmRest(app, v, c) {
           } catch {
             // Best effort: not available in every browser or context.
           }
-          app.toast('Address copied');
+          app.showToast('Address copied');
         },
         steps: [
           ['NexDrive', 'Lesson selected'],
@@ -2176,7 +2169,7 @@ function vmRest(app, v, c) {
           : 'Your plan stays active until the end of your current term, then won’t renew. You won’t be charged again after that.',
       confirm: () => {
         app.setState({ sub: { ...s.sub, state: 'cancelled' }, sheet: null });
-        app.toast(
+        app.showToast(
           sub === 'trial' ? 'Free trial cancelled · no charge' : 'Subscription will not renew',
           'neutral',
         );
@@ -2197,7 +2190,7 @@ function vmRest(app, v, c) {
     v.ex = {
       renew: () => {
         app.setState({ sheet: null, upPick: plan.key });
-        app.push('upgrade');
+        app.pushScreen('upgrade');
       },
     };
 }

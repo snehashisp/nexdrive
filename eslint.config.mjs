@@ -8,8 +8,9 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-// Import boundaries (bulletproof-react): shared code -> features -> app, never the other way round,
-// and features never import from each other.
+// Import boundaries (bulletproof-react): shared code (components, lib, domain) -> features -> app, never
+// the other way round, and features never import from each other. Patterns are gitignore-style: `x/*/**`
+// (not `x/*`) so that a feature's own folder can be re-allowed with `!`.
 const features = fs.readdirSync('src/features');
 const restrict = (...group) => [
   'error',
@@ -34,13 +35,13 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/components/**', 'src/lib/**'],
-    rules: { 'no-restricted-imports': restrict('@/app/*', '@/demo/*', '@/features/*') },
+    files: ['src/components/**', 'src/lib/**', 'src/domain/**'],
+    rules: { 'no-restricted-imports': restrict('@/app/**', '@/demo/**', '@/features/**') },
   },
   ...features.map((f) => ({
     files: [`src/features/${f}/**`],
     rules: {
-      'no-restricted-imports': restrict('@/app/*', '@/demo/*', '@/features/*', `!@/features/${f}/**`),
+      'no-restricted-imports': restrict('@/app/**', '@/demo/**', '@/features/*/**', `!@/features/${f}/**`),
     },
   })),
   {

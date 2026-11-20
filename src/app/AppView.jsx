@@ -36,7 +36,8 @@ import TrialStarted from '@/features/onboarding/components/TrialStarted';
 import VerifyPhone from '@/features/onboarding/components/VerifyPhone';
 import Welcome from '@/features/onboarding/components/Welcome';
 
-export default function AppView({ v }) {
+// scrollRef is attached to the scrolling screen area so App can reset it when the screen changes.
+export default function AppView({ v, scrollRef }) {
   const {
     fr,
     ics,
@@ -47,7 +48,6 @@ export default function AppView({ v }) {
     panel,
     push,
     scrBg,
-    scrollRef,
     sheetOpen,
     showNav,
     splash,

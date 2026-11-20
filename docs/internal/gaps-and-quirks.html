@@ -293,7 +293,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <td>B1</td>
 <td><strong>One stateful class component (<code>App</code>, ~1,100 lines) holds every piece of state and every action</strong></td>
 <td>Function components with hooks (<code>useState</code>, <code>useReducer</code>); state split by feature, or a store (Zustand, Redux Toolkit); context for shared data</td>
-<td>Hard to test pieces in isolation; every change re-renders the whole app</td>
+<td>Hard to test pieces in isolation; every change re-renders the whole app. Fixed: state and actions now live in a Zustand store, with actions split into one slice per feature</td>
 </tr>
 <tr>
 <td>B2</td>
@@ -305,7 +305,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <td>B3</td>
 <td><strong>Class component, not hooks</strong></td>
 <td>Hooks are the norm since 2019. Classes still work but are legacy style</td>
-<td>Most current docs and examples won&#39;t match</td>
+<td>Most current docs and examples won&#39;t match. Fixed: <code>App</code> is a function component using hooks</td>
 </tr>
 <tr>
 <td>B4</td>
@@ -347,7 +347,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <td>B10</td>
 <td><strong><code>setState</code> is sometimes followed by code that reads <code>this.state</code> in the same handler.</strong> It was safe under the old runtime, where updates were synchronous. React applies updates later. One case was fixed during the conversion (demo flow &quot;booking clash&quot;); the rest were checked and are safe today</td>
 <td>Read the new values from the update callback (<code>setState(update, callback)</code>) or compute them first</td>
-<td>A trap for future edits: <code>this.state</code> is stale right after <code>setState</code></td>
+<td>A trap for future edits: <code>this.state</code> is stale right after <code>setState</code>. No longer applies: the store applies updates immediately, so <code>get()</code> right after <code>setState</code> sees the new values</td>
 </tr>
 <tr>
 <td>B11</td>
