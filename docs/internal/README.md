@@ -1,6 +1,6 @@
 # NexDrive internal developer docs
 
-Internal notes for engineers joining the project. They describe the code **as it is** (November 2026, branch `react-vite-jsx`), including the parts that are unfinished or unusual.
+Internal notes for engineers joining the project. They describe the code **as it is** (November 2026, branch `refactor/vite-react-ts`, which builds on `react-vite-jsx`), including the parts that are unfinished or unusual.
 
 | Read | When |
 | --- | --- |

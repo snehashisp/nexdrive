@@ -98,7 +98,7 @@ More "preview" switches live at the top of `src/app/App.tsx` in `DEFAULT_PREVIEW
 | **Application → Manifest** | The install metadata (`manifest.webmanifest`) |
 | **Application → Service workers** | Production mode only. Tick **Offline**, reload, and the app still opens. **Unregister** clears it if you get stale files |
 | **Application → Cache storage** | The files the service worker saved for offline use |
-| **Sources** | In dev mode, your `src/*.jsx` files appear as written, and you can set breakpoints in them |
+| **Sources** | In dev mode, your `src/**/*.tsx` files appear as written, and you can set breakpoints in them |
 
 Install the **React Developer Tools** Chrome extension. It adds a **Components** tab: select `App` to watch its `state` object change as you click around. That state is the single source of truth for everything on screen.
 

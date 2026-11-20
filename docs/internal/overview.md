@@ -414,7 +414,7 @@ All of these are listed with their impact in [gaps-and-quirks.md](gaps-and-quirk
 | Referral rules and statuses | `src/domain/referrals.ts` |
 | Demo workflows | `src/demo/flows.ts` |
 | Date / money / validation helpers | `src/lib/` |
-| A component's look | Its `.module.css` file next to the `.jsx` |
+| A component's look | Its `.module.css` file next to the `.tsx` |
 | Brand colours | `src/styles/tokens.css` (and `docs/brand/tokens.json`) |
 | Hover/focus colours | `src/styles/interactions.css` |
 | Offline behaviour | `public/sw.js`, `build.js` |

@@ -30,7 +30,7 @@ Complete schema, but nothing connects to it, and the front-end data shapes diffe
 
 ### A3. The React conversion is not merged (High)
 
-The React + Vite version is on branch `react-vite-jsx` and is **not committed or merged** at the time of writing.
+The React + Vite version is on branch `react-vite-jsx` (committed), and the reorganisation described in these docs (feature folders, store, view hooks, TypeScript, URLs) is on `refactor/vite-react-ts`, which builds on it. Neither is merged into `main` at the time of writing.
 
 #### The version on `main` does not render
 
@@ -104,7 +104,7 @@ Most of these come from how the app was made. It was exported from a design tool
 | B5 | **Hover/focus/pressed styles via `!important` utility classes** (`interactions.css`), needed because inline styles beat normal CSS | Normal CSS rules, possible once styles move out of inline objects | Fragile ordering; `!important` spreads. Still needed for elements that keep a run-time inline colour; can go once the view model stops passing colours |
 | B6 | **Very short identifiers** (`s`, `p`, `v`, `B`, `L`, `d`, `m`, `hm`, `bf`, `bk2`, `sh`, `fS`, `fDM`, `bvm`, `rvm`) and dense one-line logic | Descriptive names | Slow to read; easy to misread. Partly fixed: the helpers in `src/lib/` and the feature constants now have descriptive names (`formatShortDate`, `timeToMinutes`, `formatGBP`, `isValidPostcode`…); the short names inside `App` and the view model remain |
 | B7 | **Navigation is a stack in state** (`tab` + `stack`), with no URLs | A router (React Router) with a URL per screen | No deep links, no browser back button, no bookmarkable screens; the server's SPA fallback has nothing to route. Fixed: every screen has a URL (`src/app/routing/`); deep links, bookmarks and the browser back/forward buttons work. The URL follows the store rather than driving it |
-| B8 | **A module-level mutable clock**: `export let TODAY, NOW`, reassigned by `syncClock()`, plus `sd()` shifting all demo dates relative to 7 Oct 2026 | Pass "now" in explicitly, or use a date library and a clock abstraction | Hidden global state; tests need clock mocking |
+| B8 | **A module-level mutable clock**: `export let TODAY, NOW`, reassigned by `syncClock()`, plus `sd()` shifting all demo dates relative to 7 Oct 2026 | Pass "now" in explicitly, or use a date library and a clock abstraction | Hidden global state; tests need clock mocking. Still applies; the helper is now `shiftDemoDate()` in `src/lib/dates.ts` |
 | B9 | **Hand-rolled date/time helpers on `'YYYY-MM-DD'` strings and minutes** | A time-zone-aware library (Luxon, date-fns-tz) | BST/GMT and time-zone issues once real data arrives (A5) |
 | B10 | **`setState` is sometimes followed by code that reads `this.state` in the same handler.** It was safe under the old runtime, where updates were synchronous. React applies updates later. One case was fixed during the conversion (demo flow "booking clash"); the rest were checked and are safe today | Read the new values from the update callback (`setState(update, callback)`) or compute them first | A trap for future edits: `this.state` is stale right after `setState`. No longer applies: the store applies updates immediately, so `get()` right after `setState` sees the new values |
 | B11 | **Runtime config through a global** (`window.NEXDRIVE_CONFIG` from a separately loaded `js/config.js`) | `import.meta.env` / `.env` files baked in at build time | Deliberate (edit per environment without rebuilding), but differs from Vite convention |

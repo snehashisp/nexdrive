@@ -210,7 +210,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <h3 id="a2-database-designed-but-unused-high">A2. Database designed but unused (High)<a class="anchor" href="#a2-database-designed-but-unused-high" aria-hidden="true">#</a></h3>
 <p>Complete schema, but nothing connects to it, and the front-end data shapes differ from it (IDs, money units, statuses, times). See <a href="database.html#7-front-end-model-vs-database-model">database.md §7</a>.</p>
 <h3 id="a3-the-react-conversion-is-not-merged-high">A3. The React conversion is not merged (High)<a class="anchor" href="#a3-the-react-conversion-is-not-merged-high" aria-hidden="true">#</a></h3>
-<p>The React + Vite version is on branch <code>react-vite-jsx</code> and is <strong>not committed or merged</strong> at the time of writing.</p>
+<p>The React + Vite version is on branch <code>react-vite-jsx</code> (committed), and the reorganisation described in these docs (feature folders, store, view hooks, TypeScript, URLs) is on <code>refactor/vite-react-ts</code>, which builds on it. Neither is merged into <code>main</code> at the time of writing.</p>
 <h4 id="the-version-on-main-does-not-render">The version on <code>main</code> does not render<a class="anchor" href="#the-version-on-main-does-not-render" aria-hidden="true">#</a></h4>
 <p>On <code>main</code>, the page shows a fragment of script text instead of the app. Commit <code>36668b6</code> added a comment containing the text <code>&lt;x-dc&gt;</code> inside a <code>&lt;script&gt;</code> in <code>&lt;head&gt;</code>. The old runtime re-downloads the page as raw text and takes the <strong>first</strong> <code>&lt;x-dc&gt;</code> it finds, which is the one in the comment, and re-renders from there. The React version does not have this problem (the runtime is gone). If <code>main</code> must keep working before the merge, remove those characters from the comment.</p>
 <h3 id="a4-hosting-and-security-gaps-high--medium">A4. Hosting and security gaps (High / Medium)<a class="anchor" href="#a4-hosting-and-security-gaps-high--medium" aria-hidden="true">#</a></h3>
@@ -342,7 +342,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <td>B8</td>
 <td><strong>A module-level mutable clock</strong>: <code>export let TODAY, NOW</code>, reassigned by <code>syncClock()</code>, plus <code>sd()</code> shifting all demo dates relative to 7 Oct 2026</td>
 <td>Pass &quot;now&quot; in explicitly, or use a date library and a clock abstraction</td>
-<td>Hidden global state; tests need clock mocking</td>
+<td>Hidden global state; tests need clock mocking. Still applies; the helper is now <code>shiftDemoDate()</code> in <code>src/lib/dates.ts</code></td>
 </tr>
 <tr>
 <td>B9</td>
