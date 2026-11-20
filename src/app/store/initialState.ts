@@ -1,0 +1,85 @@
+import type { AppData, Phase } from '@/types/store';
+import { REFERRAL } from '@/domain/referrals';
+import { seedBookings, seedCredit, seedInst, seedLearners, seedNotifs, seedReferrals } from '@/demo/seeds';
+import { TODAY, shiftDemoDate, syncClock } from '@/lib/dates';
+
+// The app's data state when it starts (or is reset by a demo workflow, onboarding or log-out).
+// phase: 'app' | 'onboarding'. data: 'populated' (demo seed data) | 'empty' (a brand-new account).
+// Actions live in the slices; this is only data.
+export function initialState(phase: Phase, data: string): AppData {
+  syncClock();
+  const full = data !== 'empty';
+  return {
+    vw: typeof window !== 'undefined' ? window.innerWidth : 1280,
+    vh: typeof window !== 'undefined' ? window.innerHeight : 900,
+    phase,
+    ob: 'welcome',
+    flow: null,
+    reg: { name: '', phone: '', email: '', password: '', terms: false },
+    regTried: false,
+    otp: '',
+    otpErr: '',
+    resent: false,
+    det: { adi: '', status: 'adi', business: '', areas: 'SL1, SL2, SL3', rate: '40', dur: 1 },
+    detTried: false,
+    obPlan: '12m',
+    obCard: false,
+    obCardTried: false,
+    tab: 'home',
+    stack: [],
+    learners: full ? seedLearners() : [],
+    bookings: full ? seedBookings() : [],
+    notifs: full ? seedNotifs() : [],
+    inst: seedInst(),
+    bank: full ? { holder: 'Daniel Wilson', sort: '20-45-77', acct: '73015521', include: true } : null,
+    sub: {
+      plan: '1m',
+      state: 'active',
+      trialEnd: shiftDemoDate('2026-10-10'),
+      start: shiftDemoDate('2025-10-26'),
+      card: 'Visa •••• 4242',
+    },
+    sheet: null,
+    toast: null,
+    push: false,
+    reminder: full,
+    calView: 'day',
+    calDate: TODAY,
+    lSearch: '',
+    lFilter: 'all',
+    lf: null,
+    lfTried: false,
+    lfRet: null,
+    draft: null,
+    bkSeg: 'upcoming',
+    hf: { status: 'all', learner: 'all', range: 'all' },
+    profSeg: 'upcoming',
+    notifCat: 'all',
+    upPick: '12m',
+    ref: { code: '', status: null, via: null },
+    refCode: REFERRAL.code,
+    refs: full ? seedReferrals() : [],
+    credit: full ? seedCredit() : [],
+    autoCredit: false,
+    useCredit: true,
+    crFilter: 'all',
+    upDone: null,
+    prefs: {
+      reminder: true,
+      mins: '30',
+      askSend: true,
+      channel: 'SMS',
+      bookingAlerts: true,
+      billing: true,
+      learnerAlerts: true,
+    },
+    bankForm: null,
+    bankTried: false,
+    bankReveal: false,
+    priceForm: null,
+    profForm: null,
+    profTried: false,
+    pw: null,
+    pwTried: false,
+  };
+}

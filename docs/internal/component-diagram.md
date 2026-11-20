@@ -83,7 +83,7 @@ Who renders whom. The data lives in the store, which `App` provides through cont
 flowchart TD
   MAIN["main.tsx<br/>createRoot + StrictMode"] --> APP
 
-  APP["App (app/App.jsx)<br/>creates the store,<br/>provides AppStoreContext"]
+  APP["App (app/App.tsx)<br/>creates the store,<br/>provides AppStoreContext"]
   STORE["App store (Zustand)<br/>app/store + feature slices<br/>STATE + ACTIONS"]
   APP -- "creates" --> STORE
   APP --> VIEW
@@ -114,7 +114,7 @@ flowchart TD
   HOOKS -.-> ICON["Icon / iconSet()<br/>ic, ics, icl"]
 ```
 
-Footer components live in the same file as their screen (for example `LearnerFormFooter` is exported from `features/learners/components/LearnerForm.jsx`).
+Footer components live in the same file as their screen (for example `LearnerFormFooter` is exported from `features/learners/components/LearnerForm.tsx`).
 
 ## 4. One interaction, end to end
 
@@ -148,7 +148,7 @@ flowchart LR
   MAIN --> CSS[styles/*.css]
 
   subgraph APPL[app/]
-    APP[App.jsx] --> VIEW[AppView.jsx]
+    APP[App.tsx] --> VIEW[AppView.tsx]
     APP --> STOREM[store/<br/>createAppStore, appSlice,<br/>initialState]
     VIEW --> SHV[hooks/useShellView]
     VIEW --> SHELL[components/<br/>BottomNav, StatusBar,<br/>Splash, SheetOverlay]
@@ -160,7 +160,7 @@ flowchart LR
   end
 
   subgraph DEMO[demo/]
-    SEEDS[seeds.js, flows.js, referral-codes.js,<br/>demoSlice.js, DemoPanel.jsx]
+    SEEDS[seeds.ts, flows.ts, referral-codes.ts,<br/>demoSlice.ts, DemoPanel.tsx]
   end
 
   subgraph SHARED[shared]

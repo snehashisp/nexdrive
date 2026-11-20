@@ -133,7 +133,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <div class="layout">
   <nav class="sidebar">
     <div class="toc-title">Pages</div><a class="page" href="index.html">Start here</a><a class="page" href="setup.html">Setup</a><a class="page current" href="overview.html">How it works</a><a class="page" href="component-diagram.html">Component diagrams</a><a class="page" href="database.html">Database</a><a class="page" href="gaps-and-quirks.html">Gaps & quirks</a>
-    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#1-the-product-in-one-paragraph">1. The product in one paragraph</a><a class="toc d2" href="#2-what-exists-today-and-what-doesnt">2. What exists today and what doesn&#39;t</a><a class="toc d2" href="#3-repository-map">3. Repository map</a><a class="toc d2" href="#4-tools-and-frameworks-one-at-a-time">4. Tools and frameworks, one at a time</a><a class="toc d3" href="#41-npm-and-packagejson">4.1 npm and package.json</a><a class="toc d3" href="#42-javascript-modules-import--export">4.2 JavaScript modules (import / export)</a><a class="toc d3" href="#43-react">4.3 React</a><a class="toc d3" href="#44-jsx">4.4 JSX</a><a class="toc d3" href="#45-vite-build-tool-and-development-server">4.5 Vite (build tool and development server)</a><a class="toc d3" href="#46-nodejs-and-express-the-web-server">4.6 Node.js and Express (the web server)</a><a class="toc d3" href="#47-service-worker-and-pwa">4.7 Service worker and PWA</a><a class="toc d3" href="#48-small-libraries">4.8 Small libraries</a><a class="toc d2" href="#5-what-happens-when-someone-opens-the-app-production">5. What happens when someone opens the app (production)</a><a class="toc d2" href="#6-how-the-app-is-structured-inside">6. How the app is structured inside</a><a class="toc d3" href="#61-the-store-state-and-actions">6.1 The store: state and actions</a><a class="toc d3" href="#62-view-hooks-state-into-display-values">6.2 View hooks: state into display values</a><a class="toc d3" href="#63-the-views-appview-screens-sheets">6.3 The views: AppView, screens, sheets</a><a class="toc d3" href="#64-one-click-end-to-end">6.4 One click, end to end</a><a class="toc d2" href="#7-cross-cutting-details">7. Cross-cutting details</a><a class="toc d3" href="#71-configuration">7.1 Configuration</a><a class="toc d3" href="#72-styling">7.2 Styling</a><a class="toc d3" href="#73-dates-and-time">7.3 Dates and time</a><a class="toc d3" href="#74-business-rules-in-the-front-end">7.4 Business rules in the front end</a><a class="toc d2" href="#8-things-that-look-odd-at-first">8. Things that look odd at first</a><a class="toc d2" href="#9-where-to-look-for">9. Where to look for…</a>
+    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#1-the-product-in-one-paragraph">1. The product in one paragraph</a><a class="toc d2" href="#2-what-exists-today-and-what-doesnt">2. What exists today and what doesn&#39;t</a><a class="toc d2" href="#3-repository-map">3. Repository map</a><a class="toc d2" href="#4-tools-and-frameworks-one-at-a-time">4. Tools and frameworks, one at a time</a><a class="toc d3" href="#41-npm-and-packagejson">4.1 npm and package.json</a><a class="toc d3" href="#42-javascript-modules-import--export">4.2 JavaScript modules (import / export)</a><a class="toc d3" href="#43-react">4.3 React</a><a class="toc d3" href="#44-jsx">4.4 JSX</a><a class="toc d3" href="#45-vite-build-tool-and-development-server">4.5 Vite (build tool and development server)</a><a class="toc d3" href="#46-nodejs-and-express-the-web-server">4.6 Node.js and Express (the web server)</a><a class="toc d3" href="#47-service-worker-and-pwa">4.7 Service worker and PWA</a><a class="toc d3" href="#48-small-libraries">4.8 Small libraries</a><a class="toc d3" href="#49-typescript">4.9 TypeScript</a><a class="toc d2" href="#5-what-happens-when-someone-opens-the-app-production">5. What happens when someone opens the app (production)</a><a class="toc d2" href="#6-how-the-app-is-structured-inside">6. How the app is structured inside</a><a class="toc d3" href="#61-the-store-state-and-actions">6.1 The store: state and actions</a><a class="toc d3" href="#62-view-hooks-state-into-display-values">6.2 View hooks: state into display values</a><a class="toc d3" href="#63-the-views-appview-screens-sheets">6.3 The views: AppView, screens, sheets</a><a class="toc d3" href="#64-one-click-end-to-end">6.4 One click, end to end</a><a class="toc d2" href="#7-cross-cutting-details">7. Cross-cutting details</a><a class="toc d3" href="#71-configuration">7.1 Configuration</a><a class="toc d3" href="#72-styling">7.2 Styling</a><a class="toc d3" href="#73-dates-and-time">7.3 Dates and time</a><a class="toc d3" href="#74-business-rules-in-the-front-end">7.4 Business rules in the front end</a><a class="toc d2" href="#8-things-that-look-odd-at-first">8. Things that look odd at first</a><a class="toc d2" href="#9-where-to-look-for">9. Where to look for…</a>
   </nav>
   <main class="content">
 <h1 id="how-the-nexdrive-codebase-works">How the NexDrive codebase works</h1>
@@ -181,15 +181,14 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 ├── build.js              Post-build step: writes the offline precache list into dist/
 ├── server.js             Express web server: serves dist/ (used in production and by `npm start`)
 │
-├── src/                  ← THE APP (React + TypeScript/JSX). Everything here gets compiled and bundled
+├── src/                  ← THE APP (React + TypeScript). Everything here gets compiled and bundled
 │   ├── main.tsx            Entry point: mounts &lt;App/&gt; into the page
 │   ├── app/                Application shell: wires the features together
-│   │   ├── App.jsx           Root component: creates the store and provides it to the tree
-│   │   ├── store/            The app store (Zustand): createAppStore.js composes the slices;
-│   │   │                       appSlice.js (navigation, sheets, toasts, splash, clock); initialState.js
+│   │   ├── App.tsx           Root component: creates the store and provides it to the tree
+│   │   ├── store/            The app store (Zustand): createAppStore.ts composes the slices;
+│   │   │                       appSlice.ts (navigation, sheets, toasts, splash, clock); initialState.ts
 │   │   ├── hooks/            useShellView: values for the frame, status bar, nav, toast, sheets
-│   │   ├── AppView.jsx       Top-level layout: phone frame, current screen, nav, sheets
-│   │   ├── constants.js      Phone-frame sizes
+│   │   ├── AppView.tsx       Top-level layout: phone frame, current screen, nav, sheets
 │   │   └── components/       Shell pieces: bottom nav, status bar, splash, sheet overlay
 │   ├── features/           One folder per business area; each holds its screens and sheets
 │   │   │                     (components/), one view hook per screen/sheet (hooks/) and its
@@ -208,6 +207,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 │   │                         useStoreFacade, viewHelpers (lesson card, referral row)
 │   ├── stores/             AppStoreContext: how components reach the store
 │   ├── config/             Phone-frame sizes
+│   ├── types/              Domain models (Learner, Booking…), the store's type (AppStore), globals
 │   ├── lib/                Pure helpers in TypeScript, with tests: dates, format, validation
 │   ├── domain/             Business rules shared by several features: lesson statuses, plans, referrals
 │   ├── demo/               Demo-only code: seed data, workflow panel, fake referral-code lookup
@@ -292,7 +292,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 </div>
 <p>Dependencies: <code>react</code>, <code>react-dom</code> (UI library), <code>zustand</code> (app store), <code>qrcode-generator</code> (QR codes), <code>express</code> (web server), <code>vite</code> and <code>@vitejs/plugin-react</code> (build tool). Dev dependencies (needed only on a developer machine, not to build or run): TypeScript, ESLint, Prettier, Vitest.</p>
 <h3 id="42-javascript-modules-import--export">4.2 JavaScript modules (<code>import</code> / <code>export</code>)<a class="anchor" href="#42-javascript-modules-import--export" aria-hidden="true">#</a></h3>
-<aside class="callout explain"><p><strong>How it works.</strong> Each <code>.js</code>/<code>.jsx</code> file is a <strong>module</strong> with its own scope. A file makes things public with <code>export</code> and another file pulls them in with <code>import { name } from &#39;./file&#39;</code>. A path starting with <code>./</code> or <code>../</code> is another file in the project. A bare name such as <code>&#39;react&#39;</code> means a package in <code>node_modules/</code>. Imports are <strong>live bindings</strong>: if the exporting module reassigns an exported <code>let</code> variable, importers see the new value.</p>
+<aside class="callout explain"><p><strong>How it works.</strong> Each <code>.ts</code>/<code>.tsx</code> (or <code>.js</code>) file is a <strong>module</strong> with its own scope. A file makes things public with <code>export</code> and another file pulls them in with <code>import { name } from &#39;./file&#39;</code>. A path starting with <code>./</code> or <code>../</code> is another file in the project. A bare name such as <code>&#39;react&#39;</code> means a package in <code>node_modules/</code>. Imports are <strong>live bindings</strong>: if the exporting module reassigns an exported <code>let</code> variable, importers see the new value.</p>
 </aside>
 <p><strong>In this repo:</strong> <code>src/lib/dates.ts</code> exports <code>let TODAY, NOW</code> (the current date and minute of the day) and a <code>syncClock()</code> function that updates them. Every other module imports them and always sees the current value (section 8.6).</p>
 <h3 id="43-react">4.3 React<a class="anchor" href="#43-react" aria-hidden="true">#</a></h3>
@@ -315,8 +315,8 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <p><strong>In this repo:</strong></p>
 <ul>
 <li><code>src/main.tsx</code> does <code>createRoot(document.getElementById(&#39;root&#39;)).render(&lt;StrictMode&gt;&lt;App /&gt;&lt;/StrictMode&gt;)</code>. That hands the empty <code>&lt;div id=&quot;root&quot;&gt;</code> from <code>index.html</code> to React.</li>
-<li>All app data lives in <strong>one store</strong> (<code>src/app/store/createAppStore.js</code>), roughly 60 fields: which screen is open, the learners, the bookings, form drafts, toasts and so on. <code>initialState(phase, data)</code> builds them. Every user action is a store action defined in its feature&#39;s <strong>slice</strong> (<code>src/features/&lt;feature&gt;/stores/&lt;feature&gt;Slice.js</code>).</li>
-<li><code>App</code> (<code>src/app/App.jsx</code>) is a function component. It creates the store once, subscribes to it with <code>useStore(store)</code>, starts listeners and timers in a <code>useEffect</code> (<code>mount()</code>), and resets the scroll position when the screen changes.</li>
+<li>All app data lives in <strong>one store</strong> (<code>src/app/store/createAppStore.ts</code>), roughly 60 fields: which screen is open, the learners, the bookings, form drafts, toasts and so on. <code>initialState(phase, data)</code> builds them. Every user action is a store action defined in its feature&#39;s <strong>slice</strong> (<code>src/features/&lt;feature&gt;/stores/&lt;feature&gt;Slice.ts</code>).</li>
+<li><code>App</code> (<code>src/app/App.tsx</code>) is a function component. It creates the store once, provides it to the tree through <code>AppStoreContext</code>, starts listeners and timers in a <code>useEffect</code> (<code>mount()</code>), and resets the scroll position when the screen changes.</li>
 <li><strong>All other components are stateless functions</strong> that only display what they&#39;re given (section 6).</li>
 </ul>
 <h3 id="44-jsx">4.4 JSX<a class="anchor" href="#44-jsx" aria-hidden="true">#</a></h3>
@@ -326,7 +326,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 jsx('button', { onClick: save, style: { color: 'red' }, children: ['Save ', name] })</code></pre>
 <p>The differences from HTML: <code>{ … }</code> embeds any JavaScript expression; <code>className</code> instead of <code>class</code>; <code>style</code> takes an object with camelCase keys (<code>fontSize</code>, not <code>font-size</code>); event props are camelCase (<code>onClick</code>). A component name starts with a capital letter (<code>&lt;Home /&gt;</code>), and lowercase names are HTML tags. Conditional UI is written as <code>{cond &amp;&amp; &lt;X/&gt;}</code> or <code>{cond ? &lt;X/&gt; : null}</code>, and lists as <code>{items.map((it, i) =&gt; &lt;Row key={i} … /&gt;)}</code>. Text is escaped automatically, so user input can&#39;t inject HTML.</p>
 </aside>
-<p><strong>In this repo:</strong> the components under <code>src/app</code>, <code>src/features</code>, <code>src/components</code> and <code>src/demo</code> are JSX (<code>.jsx</code>), while <code>main.tsx</code> and <code>src/lib/</code> are already TypeScript. Components move to <code>.tsx</code> as each feature is converted. Styling is almost entirely inline <code>style={{ … }}</code> objects (section 8.3).</p>
+<p><strong>In this repo:</strong> every source file is TypeScript: <code>.tsx</code> for files containing JSX (components), <code>.ts</code> for the rest. See section 4.9. Styling is almost entirely inline <code>style={{ … }}</code> objects (section 8.3).</p>
 <h3 id="45-vite-build-tool-and-development-server">4.5 Vite (build tool and development server)<a class="anchor" href="#45-vite-build-tool-and-development-server" aria-hidden="true">#</a></h3>
 <aside class="callout explain"><p><strong>How it works.</strong> Vite has two modes.</p>
 <ul>
@@ -340,7 +340,7 @@ jsx('button', { onClick: save, style: { color: 'red' }, children: ['Save ', name
 <li><code>base: &#39;./&#39;</code>: links in the built page are relative, so the app also works from a sub-folder.</li>
 <li><code>build.assetsDir: &#39;bundle&#39;</code>: compiled JS/CSS land in <code>dist/bundle/</code>, kept apart from <code>public/assets/</code>.</li>
 <li><code>server.port: 3300</code>.</li>
-<li>CSS files are imported from <code>main.jsx</code> (<code>import &#39;./styles/base.css&#39;</code>). Vite bundles them into one CSS file.</li>
+<li>CSS files are imported from <code>main.tsx</code> (<code>import &#39;./styles/base.css&#39;</code>). Vite bundles them into one CSS file.</li>
 </ul>
 <h3 id="46-nodejs-and-express-the-web-server">4.6 Node.js and Express (the web server)<a class="anchor" href="#46-nodejs-and-express-the-web-server" aria-hidden="true">#</a></h3>
 <aside class="callout explain"><p><strong>How it works.</strong> Node.js runs JavaScript on the server with an event loop (single thread, non-blocking I/O, similar in spirit to Python&#39;s asyncio). <strong>Express</strong> is a minimal HTTP framework. You build a pipeline of <strong>middleware</strong> functions <code>(req, res, next) =&gt; …</code>. Each one either sends a response or calls <code>next()</code> to pass the request on, like servlet filters or WSGI middleware. <code>express.static(dir)</code> is ready-made middleware that maps a URL path to a file under <code>dir</code>, and sets ETags and content types.</p>
@@ -376,7 +376,16 @@ jsx('button', { onClick: save, style: { color: 'red' }, children: ['Save ', name
 <h3 id="48-small-libraries">4.8 Small libraries<a class="anchor" href="#48-small-libraries" aria-hidden="true">#</a></h3>
 <ul>
 <li><strong>Zustand</strong>: a small state-management library. <code>createStore((set, get) =&gt; ({ ...data, ...actions }))</code> makes a store object that lives outside React; <code>useStore(store)</code> (a hook) subscribes a component, which re-renders whenever the store changes. It is the app&#39;s single store (section 6.1).</li>
-<li><strong>qrcode-generator</strong>: computes QR code modules. It is used by <code>src/features/referrals/components/QrCode.jsx</code> (on-screen SVG) and the <code>qrPng()</code> store action in the referrals slice (the downloadable PNG, drawn on a canvas).</li>
+<li><strong>qrcode-generator</strong>: computes QR code modules. It is used by <code>src/features/referrals/components/QrCode.tsx</code> (on-screen SVG) and the <code>qrPng()</code> store action in the referrals slice (the downloadable PNG, drawn on a canvas).</li>
+</ul>
+<h3 id="49-typescript">4.9 TypeScript<a class="anchor" href="#49-typescript" aria-hidden="true">#</a></h3>
+<aside class="callout explain"><p><strong>How it works.</strong> TypeScript is JavaScript plus type annotations (<code>function addDays(s: IsoDate, n: number): IsoDate</code>). <code>tsc</code> checks them and reports mistakes such as a misspelt field or a wrong argument; it changes nothing at run time. Vite simply strips the types when it builds, so a type error does not stop <code>npm run dev</code>. Run <code>npm run typecheck</code> (part of <code>npm run check</code>) to see them.</p>
+</aside>
+<p><strong>In this repo:</strong></p>
+<ul>
+<li><code>src/types/models.ts</code> describes the domain data: <code>Learner</code>, <code>Booking</code>, <code>AppNotification</code>, <code>Referral</code>, <code>CreditTransaction</code>, <code>Instructor</code>, <code>Subscription</code>, <code>BookingDraft</code>… These are the shapes the front end uses today; <a href="database.html#7-front-end-model-vs-database-model">database.md §7</a> maps them to the database.</li>
+<li><code>src/types/store.ts</code> describes the store: <code>AppData</code> (every field), one interface per slice listing its actions (<code>BookingsActions</code>, <code>LearnersActions</code>…) and <code>AppStore</code>, the combination. Each slice is declared as <code>SliceCreator&lt;BookingsActions&gt;</code>, so its actions must match, and <code>get()</code> inside a slice knows every field and action of the whole store.</li>
+<li><code>tsconfig.json</code> uses <code>strict</code> mode <strong>except</strong> <code>noImplicitAny</code> and <code>strictNullChecks</code>, which are off for now (see <a href="gaps-and-quirks.html">Gaps & quirks</a>). The view hooks&#39; screen-specific values (<code>v.hm</code>, <code>v.bf</code>…) are typed loosely (<code>View</code> in <code>src/hooks/useViewContext.ts</code>).</li>
 </ul>
 <h2 id="5-what-happens-when-someone-opens-the-app-production">5. What happens when someone opens the app (production)<a class="anchor" href="#5-what-happens-when-someone-opens-the-app-production" aria-hidden="true">#</a></h2>
 <ol>
@@ -387,7 +396,7 @@ jsx('button', { onClick: save, style: { color: 'red' }, children: ['Save ', name
 </ul>
 </li>
 <li>The bundle runs <code>main.tsx</code>, which mounts <code>&lt;App/&gt;</code> into <code>&lt;div id=&quot;root&quot;&gt;</code>.</li>
-<li><code>App</code> creates the store; its initial data comes from the demo <strong>seed</strong> data (<code>src/demo/seeds.js</code>).</li>
+<li><code>App</code> creates the store; its initial data comes from the demo <strong>seed</strong> data (<code>src/demo/seeds.ts</code>).</li>
 <li><code>App</code> renders <code>&lt;AppView&gt;</code> inside the store&#39;s context provider. <code>AppView</code> and each visible screen call their view hooks. React creates the page.</li>
 <li>The store&#39;s <code>mount()</code> action, run from a <code>useEffect</code> in <code>App</code>:<ul>
 <li>listens for window resizes (the phone frame scales to fit)</li>
@@ -409,7 +418,7 @@ view hooks (features/*/hooks, app/hooks)  state → display values  &quot;what e
    ▼
 AppView + feature components (src/app, src/features)   JSX            &quot;how it looks&quot;</code></pre>
 <h3 id="61-the-store-state-and-actions">6.1 The store: state and actions<a class="anchor" href="#61-the-store-state-and-actions" aria-hidden="true">#</a></h3>
-<p><code>initialState(phase, data)</code> (<code>src/app/store/initialState.js</code>) returns the full data object. The main fields:</p>
+<p><code>initialState(phase, data)</code> (<code>src/app/store/initialState.ts</code>) returns the full data object. The main fields:</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -465,11 +474,11 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 </thead>
 <tbody><tr>
 <td><code>goTab(t)</code>, <code>pushScreen(name, params)</code>, <code>back()</code>, <code>openSheet(type, params)</code>, <code>showToast(text, kind)</code></td>
-<td>Navigation and feedback (<code>src/app/store/appSlice.js</code>)</td>
+<td>Navigation and feedback (<code>src/app/store/appSlice.ts</code>)</td>
 </tr>
 <tr>
 <td><code>openBooking(lid, opts)</code>, <code>setDraft(patch)</code>, <code>pickSlot(t)</code>, <code>review()</code>, <code>confirmBooking()</code>, <code>openEdit(id)</code>, <code>saveEdit()</code>, <code>cancelLesson(id, reason)</code></td>
-<td>Booking flow (<code>features/bookings/stores/bookingsSlice.js</code>)</td>
+<td>Booking flow (<code>features/bookings/stores/bookingsSlice.ts</code>)</td>
 </tr>
 <tr>
 <td><code>bfModel()</code></td>
@@ -493,7 +502,7 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 </tr>
 <tr>
 <td><code>runFlow(key)</code></td>
-<td>Demo panel: reset the data and jump to a workflow (<code>src/demo/demoSlice.js</code>)</td>
+<td>Demo panel: reset the data and jump to a workflow (<code>src/demo/demoSlice.ts</code>)</td>
 </tr>
 <tr>
 <td><code>tick</code>, <code>schedulePush</code></td>
@@ -502,7 +511,7 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 </tbody></table>
 </div>
 <h3 id="62-view-hooks-state-into-display-values">6.2 View hooks: state into display values<a class="anchor" href="#62-view-hooks-state-into-display-values" aria-hidden="true">#</a></h3>
-<p>Each screen and sheet has a <strong>view hook</strong> next to it, in its feature&#39;s <code>hooks/</code> folder (<code>features/dashboard/hooks/useHomeView.js</code>, <code>features/bookings/hooks/useConflictView.js</code>…). The component calls it on every render and gets one object, conventionally called <code>v</code>, holding everything that screen needs already worked out:</p>
+<p>Each screen and sheet has a <strong>view hook</strong> next to it, in its feature&#39;s <code>hooks/</code> folder (<code>features/dashboard/hooks/useHomeView.ts</code>, <code>features/bookings/hooks/useConflictView.ts</code>…). The component calls it on every render and gets one object, conventionally called <code>v</code>, holding everything that screen needs already worked out:</p>
 <ul>
 <li><strong>Formatted text:</strong> <code>&quot;£80&quot;</code>, <code>&quot;Tue 4 Nov&quot;</code>, <code>&quot;3 lessons · 4 hours · £160&quot;</code>.</li>
 <li><strong>Colours that depend on state:</strong> for example, the highlighted tab or a selected option.</li>
@@ -510,11 +519,11 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <li><strong>Event handlers:</strong> small arrow functions such as <code>() =&gt; store.openBooking(null)</code>, which call store actions.</li>
 <li><strong>Common values</strong> (<code>v.ic</code>, <code>v.back</code>, <code>v.go</code>, <code>v.padB</code>, <code>v.closeSheet</code>…) that most screens need.</li>
 </ul>
-<p>Every view hook starts from <code>useViewContext()</code> (<code>src/hooks/</code>). It subscribes to the store (through <code>useStoreFacade()</code>) and works out what all screens share: which screen is visible (<code>is.home</code>…), layout sizes, icons, navigation handlers (<code>go</code>), upcoming lessons, credit totals and the <code>common</code> values. Helpers used by several features are in <code>src/hooks/viewHelpers.js</code>: <code>bookingCardView(store, booking)</code> (a lesson card) and <code>referralRowView(store, referral)</code>.</p>
+<p>Every view hook starts from <code>useViewContext()</code> (<code>src/hooks/</code>). It subscribes to the store (through <code>useStoreFacade()</code>) and works out what all screens share: which screen is visible (<code>is.home</code>…), layout sizes, icons, navigation handlers (<code>go</code>), upcoming lessons, credit totals and the <code>common</code> values. Helpers used by several features are in <code>src/hooks/viewHelpers.ts</code>: <code>bookingCardView(store, booking)</code> (a lesson card) and <code>referralRowView(store, referral)</code>.</p>
 <p>The app shell has its own hook, <code>useShellView()</code> (<code>src/app/hooks/</code>), for the phone frame, status bar, bottom nav, toast, sheet overlay, splash and which screen and footer to show.</p>
 <h3 id="63-the-views-appview-screens-sheets">6.3 The views: <code>AppView</code>, screens, sheets<a class="anchor" href="#63-the-views-appview-screens-sheets" aria-hidden="true">#</a></h3>
 <ul>
-<li><p><code>AppView.jsx</code> draws the frame:</p>
+<li><p><code>AppView.tsx</code> draws the frame:</p>
 <ul>
 <li>the demo panel, the phone frame, the status bar and the offline banner</li>
 <li>the scrolling area, which shows exactly one screen chosen by <code>is.*</code></li>
@@ -533,13 +542,13 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 </li>
 <li><p>They hold no state and contain almost no logic. They only place the values from their view hook into markup.</p>
 </li>
-<li><p>Icons come in <code>v</code> as ready-made elements: <code>ic</code> (20px), <code>ics</code> (16px), <code>icl</code> (24px), built by <code>iconSet(size)</code> in <code>components/Icon.jsx</code>. <code>{ic.bell}</code> draws the bell icon.</p>
+<li><p>Icons come in <code>v</code> as ready-made elements: <code>ic</code> (20px), <code>ics</code> (16px), <code>icl</code> (24px), built by <code>iconSet(size)</code> in <code>components/Icon.tsx</code>. <code>{ic.bell}</code> draws the bell icon.</p>
 </li>
 </ul>
 <h3 id="64-one-click-end-to-end">6.4 One click, end to end<a class="anchor" href="#64-one-click-end-to-end" aria-hidden="true">#</a></h3>
 <p>Tapping <strong>Confirm</strong> in the &quot;Confirm booking&quot; sheet:</p>
 <ol>
-<li>In <code>ConfirmBookingSheet.jsx</code>, the button has <code>onClick={cm.confirm}</code>.</li>
+<li>In <code>ConfirmBookingSheet.tsx</code>, the button has <code>onClick={cm.confirm}</code>.</li>
 <li><code>cm.confirm</code> was created in the sheet&#39;s view hook <code>useConfirmBookingView()</code> as <code>() =&gt; store.confirmBooking()</code>.</li>
 <li>The store action <code>confirmBooking()</code> (bookings slice) reads the state with <code>get()</code>, recomputes the booking with <code>bfModel()</code>, builds the new booking objects and a &quot;Booking created&quot; notification, then calls <code>get().setState({ bookings: [...], notifs: [...], sheet: { type: &#39;message&#39;, kind: &#39;new&#39;, ids } })</code>.</li>
 <li>The store notifies every subscribed component. <code>SheetOverlay</code> (through <code>useShellView</code>) now sees the <code>message</code> sheet, and <code>MessageSheet</code> calls <code>useMessageView()</code>, which builds the message preview.</li>
@@ -562,7 +571,7 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <td><code>App.cfg()</code> at runtime</td>
 </tr>
 <tr>
-<td><code>DEFAULT_PREVIEW</code> in <code>src/app/App.jsx</code></td>
+<td><code>DEFAULT_PREVIEW</code> in <code>src/app/App.tsx</code></td>
 <td>Preview switches: device size, start screen, empty data, subscription state, offline</td>
 <td><code>App</code></td>
 </tr>
@@ -581,7 +590,7 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <p><code>mode: &#39;live&#39;</code> and <code>apiBaseUrl</code> exist but nothing uses them yet.</p>
 <h3 id="72-styling">7.2 Styling<a class="anchor" href="#72-styling" aria-hidden="true">#</a></h3>
 <ul>
-<li><strong>Each component has a CSS Module</strong> next to it (<code>Pricing.jsx</code> + <code>Pricing.module.css</code>). The component imports it as <code>styles</code> and uses <code>className={styles.header}</code>. Vite renames the classes at build time, so names never clash between components.</li>
+<li><strong>Each component has a CSS Module</strong> next to it (<code>Pricing.tsx</code> + <code>Pricing.module.css</code>). The component imports it as <code>styles</code> and uses <code>className={styles.header}</code>. Vite renames the classes at build time, so names never clash between components.</li>
 <li><strong>Colours come from design tokens</strong>: <code>src/styles/tokens.css</code> defines them as CSS variables (<code>--nd-ink</code>, <code>--nd-violet</code>, <code>--nd-error</code>, status colours…), mirroring <code>docs/brand/tokens.json</code>. Module CSS uses <code>var(--nd-…)</code>, never a literal brand hex.</li>
 <li><strong>Inline <code>style</code> remains only for values computed at run time</strong> (for example a border colour that turns red when a field is invalid, or a phone-frame size). About 270 such declarations are left, against 7,200 moved into modules.</li>
 <li><code>src/styles/base.css</code> holds the self-hosted font and a small reset; <code>src/styles/app.css</code> holds body defaults and every <code>@keyframes</code> animation. Their element rules are wrapped in <code>:where(…)</code>, which gives them zero specificity, so any component class overrides them.</li>
@@ -623,11 +632,11 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 </thead>
 <tbody><tr>
 <td>Change wording or layout of a screen</td>
-<td><code>src/features/&lt;feature&gt;/components/&lt;Screen&gt;.jsx</code> (sheets live in the same folder)</td>
+<td><code>src/features/&lt;feature&gt;/components/&lt;Screen&gt;.tsx</code> (sheets live in the same folder)</td>
 </tr>
 <tr>
 <td>Change what a button does</td>
-<td>Find its <code>onClick={x.y}</code> → find <code>y:</code> in the screen&#39;s view hook (<code>features/&lt;feature&gt;/hooks/use&lt;Screen&gt;View.js</code>) → follow to the store action in <code>features/&lt;feature&gt;/stores/</code></td>
+<td>Find its <code>onClick={x.y}</code> → find <code>y:</code> in the screen&#39;s view hook (<code>features/&lt;feature&gt;/hooks/use&lt;Screen&gt;View.ts</code>) → follow to the store action in <code>features/&lt;feature&gt;/stores/</code></td>
 </tr>
 <tr>
 <td>Change a calculation shown on screen</td>
@@ -635,23 +644,23 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 </tr>
 <tr>
 <td>Add or change demo data</td>
-<td><code>src/demo/seeds.js</code></td>
+<td><code>src/demo/seeds.ts</code></td>
 </tr>
 <tr>
 <td>Plans and prices</td>
-<td><code>src/features/subscription/plans.js</code></td>
+<td><code>src/domain/plans.ts</code></td>
 </tr>
 <tr>
 <td>Lesson status colours</td>
-<td><code>src/features/bookings/constants.js</code></td>
+<td><code>src/domain/bookings.ts</code></td>
 </tr>
 <tr>
 <td>Referral rules and statuses</td>
-<td><code>src/features/referrals/constants.js</code>, <code>utils.js</code></td>
+<td><code>src/domain/referrals.ts</code></td>
 </tr>
 <tr>
 <td>Demo workflows</td>
-<td><code>src/demo/flows.js</code></td>
+<td><code>src/demo/flows.ts</code></td>
 </tr>
 <tr>
 <td>Date / money / validation helpers</td>

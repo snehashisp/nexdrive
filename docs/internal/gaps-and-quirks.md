@@ -16,12 +16,12 @@ Severity: **High** = blocks real users or is a security risk · **Medium** = wil
 | Persistence | All data lives in browser memory and resets on reload | [database.md](database.md) |
 | Authentication | "I already have an account" loads the demo account with no password. Passwords typed during sign-up are never stored or checked | API §1 |
 | Phone verification | Fixed code `482913` | `App.obNext()` |
-| Payments (Stripe) | "Add card" just shows "Card saved"; upgrades and credit are simulated | `useOnboardingView.js` (`addCard`), `useSubscriptionView.js` (`up.confirm`) |
+| Payments (Stripe) | "Add card" just shows "Card saved"; upgrades and credit are simulated | `useOnboardingView.ts` (`addCard`), `useSubscriptionView.ts` (`up.confirm`) |
 | SMS / WhatsApp / e-mail | "Send message" waits 0.7s and shows a toast | `App.sendMsg()` |
 | Push notifications | An in-app banner pretends to be a push, triggered by a timer | `App.schedulePush()` |
-| Profile photo upload | Toast only | `useProfileView.js` (`pf.photo`) |
+| Profile photo upload | Toast only | `useProfileView.ts` (`pf.photo`) |
 | Background jobs (Redis/BullMQ) | Lesson status changes are computed in the browser every 15s | `App.tick()`, `liveStatus()` |
-| Referral validation | Codes are checked against a hard-coded demo table | `REF_CODES` in `src/demo/referral-codes.js` |
+| Referral validation | Codes are checked against a hard-coded demo table | `REF_CODES` in `src/demo/referral-codes.ts` |
 | `mode: 'live'` | The setting exists in `config.js` but no code reads it; there is no `api.js` client | `public/js/config.js` |
 
 ### A2. Database designed but unused (High)
@@ -53,6 +53,15 @@ On `main`, the page shows a fragment of script text instead of the app. Commit `
 
 The offline banner exists (preview prop `offline`), but there is no queue of changes made offline. Offline support is read-only caching of the app files.
 
+### A7a. TypeScript is not fully strict yet (Medium)
+
+All source files are TypeScript and the domain data and store are typed (`src/types/`), but two strict checks are still off in `tsconfig.json`:
+
+- `noImplicitAny`: many function parameters (mostly in store actions and view hooks) have no type annotation, so they are `any`.
+- `strictNullChecks`: code that looks a learner or booking up by id assumes it exists. Turning this on reports about 150 places that need a guard or an assertion.
+
+Also, each view hook returns a loosely typed object (`View`): the screen-specific values (`v.hm`, `v.bf`…) are `any` in the components. Next steps: give each view hook a precise return type, then turn on `noImplicitAny`, then `strictNullChecks`.
+
 ### A7. Few tests, no CI (Medium)
 
 TypeScript, ESLint (including import boundaries between features), Prettier and Vitest are set up; `npm run check` runs them all. Unit tests cover only the shared helpers in `src/lib/` and the referral and plan rules. Screens and `App` actions have no tests, there are no end-to-end tests, and there is no CI pipeline. The test plan in `DEVELOPER_HANDOVER.md` A6 is not implemented.
@@ -77,7 +86,7 @@ TypeScript, ESLint (including import boundaries between features), Prettier and 
 ### A9. Placeholder business values (Medium)
 
 - Subscription prices are marked "placeholder, confirm before launch" in `seed.sql`.
-- The same prices are hard-coded in three places: `database/seed.sql`, `src/features/subscription/plans.js` (`PLANS`), and `product/index.html`. They must be changed together.
+- The same prices are hard-coded in three places: `database/seed.sql`, `src/domain/plans.ts` (`PLANS`), and `product/index.html`. They must be changed together.
 - The demo referral code `NEXMARK14` would fail the database's code format check (it needs two digits from 20 to 99).
 
 ---

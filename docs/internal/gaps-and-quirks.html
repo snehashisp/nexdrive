@@ -133,7 +133,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <div class="layout">
   <nav class="sidebar">
     <div class="toc-title">Pages</div><a class="page" href="index.html">Start here</a><a class="page" href="setup.html">Setup</a><a class="page" href="overview.html">How it works</a><a class="page" href="component-diagram.html">Component diagrams</a><a class="page" href="database.html">Database</a><a class="page current" href="gaps-and-quirks.html">Gaps & quirks</a>
-    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#part-a-incomplete">Part A: Incomplete</a><a class="toc d3" href="#a1-no-backend-at-all-high">A1. No backend at all (High)</a><a class="toc d3" href="#a2-database-designed-but-unused-high">A2. Database designed but unused (High)</a><a class="toc d3" href="#a3-the-react-conversion-is-not-merged-high">A3. The React conversion is not merged (High)</a><a class="toc d3" href="#a4-hosting-and-security-gaps-high--medium">A4. Hosting and security gaps (High / Medium)</a><a class="toc d3" href="#a5-time-zone-medium">A5. Time zone (Medium)</a><a class="toc d3" href="#a6-offline-writes-medium">A6. Offline writes (Medium)</a><a class="toc d3" href="#a7-few-tests-no-ci-medium">A7. Few tests, no CI (Medium)</a><a class="toc d3" href="#a8-broken-or-outdated-pieces-of-the-repository-medium--low">A8. Broken or outdated pieces of the repository (Medium / Low)</a><a class="toc d3" href="#a9-placeholder-business-values-medium">A9. Placeholder business values (Medium)</a><a class="toc d2" href="#part-b-non-standard-patterns">Part B: Non-standard patterns</a>
+    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#part-a-incomplete">Part A: Incomplete</a><a class="toc d3" href="#a1-no-backend-at-all-high">A1. No backend at all (High)</a><a class="toc d3" href="#a2-database-designed-but-unused-high">A2. Database designed but unused (High)</a><a class="toc d3" href="#a3-the-react-conversion-is-not-merged-high">A3. The React conversion is not merged (High)</a><a class="toc d3" href="#a4-hosting-and-security-gaps-high--medium">A4. Hosting and security gaps (High / Medium)</a><a class="toc d3" href="#a5-time-zone-medium">A5. Time zone (Medium)</a><a class="toc d3" href="#a6-offline-writes-medium">A6. Offline writes (Medium)</a><a class="toc d3" href="#a7a-typescript-is-not-fully-strict-yet-medium">A7a. TypeScript is not fully strict yet (Medium)</a><a class="toc d3" href="#a7-few-tests-no-ci-medium">A7. Few tests, no CI (Medium)</a><a class="toc d3" href="#a8-broken-or-outdated-pieces-of-the-repository-medium--low">A8. Broken or outdated pieces of the repository (Medium / Low)</a><a class="toc d3" href="#a9-placeholder-business-values-medium">A9. Placeholder business values (Medium)</a><a class="toc d2" href="#part-b-non-standard-patterns">Part B: Non-standard patterns</a>
   </nav>
   <main class="content">
 <h1 id="incomplete-parts-and-non-standard-patterns">Incomplete parts and non-standard patterns</h1>
@@ -173,7 +173,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <tr>
 <td>Payments (Stripe)</td>
 <td>&quot;Add card&quot; just shows &quot;Card saved&quot;; upgrades and credit are simulated</td>
-<td><code>useOnboardingView.js</code> (<code>addCard</code>), <code>useSubscriptionView.js</code> (<code>up.confirm</code>)</td>
+<td><code>useOnboardingView.ts</code> (<code>addCard</code>), <code>useSubscriptionView.ts</code> (<code>up.confirm</code>)</td>
 </tr>
 <tr>
 <td>SMS / WhatsApp / e-mail</td>
@@ -188,7 +188,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <tr>
 <td>Profile photo upload</td>
 <td>Toast only</td>
-<td><code>useProfileView.js</code> (<code>pf.photo</code>)</td>
+<td><code>useProfileView.ts</code> (<code>pf.photo</code>)</td>
 </tr>
 <tr>
 <td>Background jobs (Redis/BullMQ)</td>
@@ -198,7 +198,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <tr>
 <td>Referral validation</td>
 <td>Codes are checked against a hard-coded demo table</td>
-<td><code>REF_CODES</code> in <code>src/demo/referral-codes.js</code></td>
+<td><code>REF_CODES</code> in <code>src/demo/referral-codes.ts</code></td>
 </tr>
 <tr>
 <td><code>mode: &#39;live&#39;</code></td>
@@ -226,6 +226,13 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <p><code>TODAY</code> and <code>NOW</code> come from the <strong>device clock</strong> in whatever time zone the device is set to. The spec says Europe/London with BST/GMT handling (handover §5 step 4).</p>
 <h3 id="a6-offline-writes-medium">A6. Offline writes (Medium)<a class="anchor" href="#a6-offline-writes-medium" aria-hidden="true">#</a></h3>
 <p>The offline banner exists (preview prop <code>offline</code>), but there is no queue of changes made offline. Offline support is read-only caching of the app files.</p>
+<h3 id="a7a-typescript-is-not-fully-strict-yet-medium">A7a. TypeScript is not fully strict yet (Medium)<a class="anchor" href="#a7a-typescript-is-not-fully-strict-yet-medium" aria-hidden="true">#</a></h3>
+<p>All source files are TypeScript and the domain data and store are typed (<code>src/types/</code>), but two strict checks are still off in <code>tsconfig.json</code>:</p>
+<ul>
+<li><code>noImplicitAny</code>: many function parameters (mostly in store actions and view hooks) have no type annotation, so they are <code>any</code>.</li>
+<li><code>strictNullChecks</code>: code that looks a learner or booking up by id assumes it exists. Turning this on reports about 150 places that need a guard or an assertion.</li>
+</ul>
+<p>Also, each view hook returns a loosely typed object (<code>View</code>): the screen-specific values (<code>v.hm</code>, <code>v.bf</code>…) are <code>any</code> in the components. Next steps: give each view hook a precise return type, then turn on <code>noImplicitAny</code>, then <code>strictNullChecks</code>.</p>
 <h3 id="a7-few-tests-no-ci-medium">A7. Few tests, no CI (Medium)<a class="anchor" href="#a7-few-tests-no-ci-medium" aria-hidden="true">#</a></h3>
 <p>TypeScript, ESLint (including import boundaries between features), Prettier and Vitest are set up; <code>npm run check</code> runs them all. Unit tests cover only the shared helpers in <code>src/lib/</code> and the referral and plan rules. Screens and <code>App</code> actions have no tests, there are no end-to-end tests, and there is no CI pipeline. The test plan in <code>DEVELOPER_HANDOVER.md</code> A6 is not implemented.</p>
 <h3 id="a8-broken-or-outdated-pieces-of-the-repository-medium--low">A8. Broken or outdated pieces of the repository (Medium / Low)<a class="anchor" href="#a8-broken-or-outdated-pieces-of-the-repository-medium--low" aria-hidden="true">#</a></h3>
@@ -274,7 +281,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <h3 id="a9-placeholder-business-values-medium">A9. Placeholder business values (Medium)<a class="anchor" href="#a9-placeholder-business-values-medium" aria-hidden="true">#</a></h3>
 <ul>
 <li>Subscription prices are marked &quot;placeholder, confirm before launch&quot; in <code>seed.sql</code>.</li>
-<li>The same prices are hard-coded in three places: <code>database/seed.sql</code>, <code>src/features/subscription/plans.js</code> (<code>PLANS</code>), and <code>product/index.html</code>. They must be changed together.</li>
+<li>The same prices are hard-coded in three places: <code>database/seed.sql</code>, <code>src/domain/plans.ts</code> (<code>PLANS</code>), and <code>product/index.html</code>. They must be changed together.</li>
 <li>The demo referral code <code>NEXMARK14</code> would fail the database&#39;s code format check (it needs two digits from 20 to 99).</li>
 </ul>
 <hr>

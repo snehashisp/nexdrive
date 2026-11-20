@@ -35,11 +35,6 @@ export default tseslint.config(
     },
   },
   {
-    // TypeScript checks undefined names in .ts/.tsx; plain JS files need ESLint to do it.
-    files: ['src/**/*.{js,jsx}'],
-    rules: { 'no-undef': 'error' },
-  },
-  {
     files: ['src/components/**', 'src/lib/**', 'src/domain/**'],
     rules: { 'no-restricted-imports': restrict('@/app/**', '@/demo/**', '@/features/**') },
   },

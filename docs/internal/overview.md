@@ -35,15 +35,14 @@ nexdrive/
 ├── build.js              Post-build step: writes the offline precache list into dist/
 ├── server.js             Express web server: serves dist/ (used in production and by `npm start`)
 │
-├── src/                  ← THE APP (React + TypeScript/JSX). Everything here gets compiled and bundled
+├── src/                  ← THE APP (React + TypeScript). Everything here gets compiled and bundled
 │   ├── main.tsx            Entry point: mounts <App/> into the page
 │   ├── app/                Application shell: wires the features together
-│   │   ├── App.jsx           Root component: creates the store and provides it to the tree
-│   │   ├── store/            The app store (Zustand): createAppStore.js composes the slices;
-│   │   │                       appSlice.js (navigation, sheets, toasts, splash, clock); initialState.js
+│   │   ├── App.tsx           Root component: creates the store and provides it to the tree
+│   │   ├── store/            The app store (Zustand): createAppStore.ts composes the slices;
+│   │   │                       appSlice.ts (navigation, sheets, toasts, splash, clock); initialState.ts
 │   │   ├── hooks/            useShellView: values for the frame, status bar, nav, toast, sheets
-│   │   ├── AppView.jsx       Top-level layout: phone frame, current screen, nav, sheets
-│   │   ├── constants.js      Phone-frame sizes
+│   │   ├── AppView.tsx       Top-level layout: phone frame, current screen, nav, sheets
 │   │   └── components/       Shell pieces: bottom nav, status bar, splash, sheet overlay
 │   ├── features/           One folder per business area; each holds its screens and sheets
 │   │   │                     (components/), one view hook per screen/sheet (hooks/) and its
@@ -62,6 +61,7 @@ nexdrive/
 │   │                         useStoreFacade, viewHelpers (lesson card, referral row)
 │   ├── stores/             AppStoreContext: how components reach the store
 │   ├── config/             Phone-frame sizes
+│   ├── types/              Domain models (Learner, Booking…), the store's type (AppStore), globals
 │   ├── lib/                Pure helpers in TypeScript, with tests: dates, format, validation
 │   ├── domain/             Business rules shared by several features: lesson statuses, plans, referrals
 │   ├── demo/               Demo-only code: seed data, workflow panel, fake referral-code lookup
@@ -110,7 +110,7 @@ Dependencies: `react`, `react-dom` (UI library), `zustand` (app store), `qrcode-
 
 ### 4.2 JavaScript modules (`import` / `export`)
 
-> **How it works.** Each `.js`/`.jsx` file is a **module** with its own scope. A file makes things public with `export` and another file pulls them in with `import { name } from './file'`. A path starting with `./` or `../` is another file in the project. A bare name such as `'react'` means a package in `node_modules/`. Imports are **live bindings**: if the exporting module reassigns an exported `let` variable, importers see the new value.
+> **How it works.** Each `.ts`/`.tsx` (or `.js`) file is a **module** with its own scope. A file makes things public with `export` and another file pulls them in with `import { name } from './file'`. A path starting with `./` or `../` is another file in the project. A bare name such as `'react'` means a package in `node_modules/`. Imports are **live bindings**: if the exporting module reassigns an exported `let` variable, importers see the new value.
 
 **In this repo:** `src/lib/dates.ts` exports `let TODAY, NOW` (the current date and minute of the day) and a `syncClock()` function that updates them. Every other module imports them and always sees the current value (section 8.6).
 
@@ -143,8 +143,8 @@ Dependencies: `react`, `react-dom` (UI library), `zustand` (app store), `qrcode-
 **In this repo:**
 
 - `src/main.tsx` does `createRoot(document.getElementById('root')).render(<StrictMode><App /></StrictMode>)`. That hands the empty `<div id="root">` from `index.html` to React.
-- All app data lives in **one store** (`src/app/store/createAppStore.js`), roughly 60 fields: which screen is open, the learners, the bookings, form drafts, toasts and so on. `initialState(phase, data)` builds them. Every user action is a store action defined in its feature's **slice** (`src/features/<feature>/stores/<feature>Slice.js`).
-- `App` (`src/app/App.jsx`) is a function component. It creates the store once, subscribes to it with `useStore(store)`, starts listeners and timers in a `useEffect` (`mount()`), and resets the scroll position when the screen changes.
+- All app data lives in **one store** (`src/app/store/createAppStore.ts`), roughly 60 fields: which screen is open, the learners, the bookings, form drafts, toasts and so on. `initialState(phase, data)` builds them. Every user action is a store action defined in its feature's **slice** (`src/features/<feature>/stores/<feature>Slice.ts`).
+- `App` (`src/app/App.tsx`) is a function component. It creates the store once, provides it to the tree through `AppStoreContext`, starts listeners and timers in a `useEffect` (`mount()`), and resets the scroll position when the screen changes.
 - **All other components are stateless functions** that only display what they're given (section 6).
 
 ### 4.4 JSX
@@ -159,7 +159,7 @@ Dependencies: `react`, `react-dom` (UI library), `zustand` (app store), `qrcode-
 >
 > The differences from HTML: `{ … }` embeds any JavaScript expression; `className` instead of `class`; `style` takes an object with camelCase keys (`fontSize`, not `font-size`); event props are camelCase (`onClick`). A component name starts with a capital letter (`<Home />`), and lowercase names are HTML tags. Conditional UI is written as `{cond && <X/>}` or `{cond ? <X/> : null}`, and lists as `{items.map((it, i) => <Row key={i} … />)}`. Text is escaped automatically, so user input can't inject HTML.
 
-**In this repo:** the components under `src/app`, `src/features`, `src/components` and `src/demo` are JSX (`.jsx`), while `main.tsx` and `src/lib/` are already TypeScript. Components move to `.tsx` as each feature is converted. Styling is almost entirely inline `style={{ … }}` objects (section 8.3).
+**In this repo:** every source file is TypeScript: `.tsx` for files containing JSX (components), `.ts` for the rest. See section 4.9. Styling is almost entirely inline `style={{ … }}` objects (section 8.3).
 
 ### 4.5 Vite (build tool and development server)
 
@@ -175,7 +175,7 @@ Dependencies: `react`, `react-dom` (UI library), `zustand` (app store), `qrcode-
 - `base: './'`: links in the built page are relative, so the app also works from a sub-folder.
 - `build.assetsDir: 'bundle'`: compiled JS/CSS land in `dist/bundle/`, kept apart from `public/assets/`.
 - `server.port: 3300`.
-- CSS files are imported from `main.jsx` (`import './styles/base.css'`). Vite bundles them into one CSS file.
+- CSS files are imported from `main.tsx` (`import './styles/base.css'`). Vite bundles them into one CSS file.
 
 ### 4.6 Node.js and Express (the web server)
 
@@ -210,7 +210,17 @@ There are no API routes, no sessions and no security headers here (see gaps).
 ### 4.8 Small libraries
 
 - **Zustand**: a small state-management library. `createStore((set, get) => ({ ...data, ...actions }))` makes a store object that lives outside React; `useStore(store)` (a hook) subscribes a component, which re-renders whenever the store changes. It is the app's single store (section 6.1).
-- **qrcode-generator**: computes QR code modules. It is used by `src/features/referrals/components/QrCode.jsx` (on-screen SVG) and the `qrPng()` store action in the referrals slice (the downloadable PNG, drawn on a canvas).
+- **qrcode-generator**: computes QR code modules. It is used by `src/features/referrals/components/QrCode.tsx` (on-screen SVG) and the `qrPng()` store action in the referrals slice (the downloadable PNG, drawn on a canvas).
+
+### 4.9 TypeScript
+
+> **How it works.** TypeScript is JavaScript plus type annotations (`function addDays(s: IsoDate, n: number): IsoDate`). `tsc` checks them and reports mistakes such as a misspelt field or a wrong argument; it changes nothing at run time. Vite simply strips the types when it builds, so a type error does not stop `npm run dev`. Run `npm run typecheck` (part of `npm run check`) to see them.
+
+**In this repo:**
+
+- `src/types/models.ts` describes the domain data: `Learner`, `Booking`, `AppNotification`, `Referral`, `CreditTransaction`, `Instructor`, `Subscription`, `BookingDraft`… These are the shapes the front end uses today; [database.md §7](database.md#7-front-end-model-vs-database-model) maps them to the database.
+- `src/types/store.ts` describes the store: `AppData` (every field), one interface per slice listing its actions (`BookingsActions`, `LearnersActions`…) and `AppStore`, the combination. Each slice is declared as `SliceCreator<BookingsActions>`, so its actions must match, and `get()` inside a slice knows every field and action of the whole store.
+- `tsconfig.json` uses `strict` mode **except** `noImplicitAny` and `strictNullChecks`, which are off for now (see [gaps-and-quirks.md](gaps-and-quirks.md)). The view hooks' screen-specific values (`v.hm`, `v.bf`…) are typed loosely (`View` in `src/hooks/useViewContext.ts`).
 
 ## 5. What happens when someone opens the app (production)
 
@@ -219,7 +229,7 @@ There are no API routes, no sessions and no security headers here (see gaps).
    - `js/config.js`: a classic script that sets `window.NEXDRIVE_CONFIG` (runtime settings). It is deliberately **not** bundled, so each environment can edit it without rebuilding.
    - `bundle/index-<hash>.css` and `bundle/index-<hash>.js`: the compiled app, with React included.
 3. The bundle runs `main.tsx`, which mounts `<App/>` into `<div id="root">`.
-4. `App` creates the store; its initial data comes from the demo **seed** data (`src/demo/seeds.js`).
+4. `App` creates the store; its initial data comes from the demo **seed** data (`src/demo/seeds.ts`).
 5. `App` renders `<AppView>` inside the store's context provider. `AppView` and each visible screen call their view hooks. React creates the page.
 6. The store's `mount()` action, run from a `useEffect` in `App`:
    - listens for window resizes (the phone frame scales to fit)
@@ -246,7 +256,7 @@ AppView + feature components (src/app, src/features)   JSX            "how it lo
 
 ### 6.1 The store: state and actions
 
-`initialState(phase, data)` (`src/app/store/initialState.js`) returns the full data object. The main fields:
+`initialState(phase, data)` (`src/app/store/initialState.ts`) returns the full data object. The main fields:
 
 | Field(s) | Meaning |
 | --- | --- |
@@ -264,19 +274,19 @@ Actions live next to the data in the same store, grouped into one slice per feat
 
 | Method | Does |
 | --- | --- |
-| `goTab(t)`, `pushScreen(name, params)`, `back()`, `openSheet(type, params)`, `showToast(text, kind)` | Navigation and feedback (`src/app/store/appSlice.js`) |
-| `openBooking(lid, opts)`, `setDraft(patch)`, `pickSlot(t)`, `review()`, `confirmBooking()`, `openEdit(id)`, `saveEdit()`, `cancelLesson(id, reason)` | Booking flow (`features/bookings/stores/bookingsSlice.js`) |
+| `goTab(t)`, `pushScreen(name, params)`, `back()`, `openSheet(type, params)`, `showToast(text, kind)` | Navigation and feedback (`src/app/store/appSlice.ts`) |
+| `openBooking(lid, opts)`, `setDraft(patch)`, `pickSlot(t)`, `review()`, `confirmBooking()`, `openEdit(id)`, `saveEdit()`, `cancelLesson(id, reason)` | Booking flow (`features/bookings/stores/bookingsSlice.ts`) |
 | `bfModel()` | Pure calculation for the booking form: price, discount, sessions, clashes, validation errors |
 | `overlap(date, startMin, durMin, excludeIds)` | The double-booking check |
 | `openLearnerForm`, `saveLearner`, `deleteLearner` (archives) | Learners |
 | `sendMsg`, `skipMsg` | "Send" the booking message (simulated: waits 0.7s, shows a toast) |
 | `obNext`, `obBack`, `finishOb` | Onboarding steps |
-| `runFlow(key)` | Demo panel: reset the data and jump to a workflow (`src/demo/demoSlice.js`) |
+| `runFlow(key)` | Demo panel: reset the data and jump to a workflow (`src/demo/demoSlice.ts`) |
 | `tick`, `schedulePush` | Clock tick and the simulated "lesson starts in 30 minutes" notification |
 
 ### 6.2 View hooks: state into display values
 
-Each screen and sheet has a **view hook** next to it, in its feature's `hooks/` folder (`features/dashboard/hooks/useHomeView.js`, `features/bookings/hooks/useConflictView.js`…). The component calls it on every render and gets one object, conventionally called `v`, holding everything that screen needs already worked out:
+Each screen and sheet has a **view hook** next to it, in its feature's `hooks/` folder (`features/dashboard/hooks/useHomeView.ts`, `features/bookings/hooks/useConflictView.ts`…). The component calls it on every render and gets one object, conventionally called `v`, holding everything that screen needs already worked out:
 
 - **Formatted text:** `"£80"`, `"Tue 4 Nov"`, `"3 lessons · 4 hours · £160"`.
 - **Colours that depend on state:** for example, the highlighted tab or a selected option.
@@ -284,13 +294,13 @@ Each screen and sheet has a **view hook** next to it, in its feature's `hooks/` 
 - **Event handlers:** small arrow functions such as `() => store.openBooking(null)`, which call store actions.
 - **Common values** (`v.ic`, `v.back`, `v.go`, `v.padB`, `v.closeSheet`…) that most screens need.
 
-Every view hook starts from `useViewContext()` (`src/hooks/`). It subscribes to the store (through `useStoreFacade()`) and works out what all screens share: which screen is visible (`is.home`…), layout sizes, icons, navigation handlers (`go`), upcoming lessons, credit totals and the `common` values. Helpers used by several features are in `src/hooks/viewHelpers.js`: `bookingCardView(store, booking)` (a lesson card) and `referralRowView(store, referral)`.
+Every view hook starts from `useViewContext()` (`src/hooks/`). It subscribes to the store (through `useStoreFacade()`) and works out what all screens share: which screen is visible (`is.home`…), layout sizes, icons, navigation handlers (`go`), upcoming lessons, credit totals and the `common` values. Helpers used by several features are in `src/hooks/viewHelpers.ts`: `bookingCardView(store, booking)` (a lesson card) and `referralRowView(store, referral)`.
 
 The app shell has its own hook, `useShellView()` (`src/app/hooks/`), for the phone frame, status bar, bottom nav, toast, sheet overlay, splash and which screen and footer to show.
 
 ### 6.3 The views: `AppView`, screens, sheets
 
-- `AppView.jsx` draws the frame:
+- `AppView.tsx` draws the frame:
   - the demo panel, the phone frame, the status bar and the offline banner
   - the scrolling area, which shows exactly one screen chosen by `is.*`
   - the per-screen footer buttons, the bottom nav, the in-app push banner and the toast
@@ -308,13 +318,13 @@ The app shell has its own hook, `useShellView()` (`src/app/hooks/`), for the pho
   ```
 
 - They hold no state and contain almost no logic. They only place the values from their view hook into markup.
-- Icons come in `v` as ready-made elements: `ic` (20px), `ics` (16px), `icl` (24px), built by `iconSet(size)` in `components/Icon.jsx`. `{ic.bell}` draws the bell icon.
+- Icons come in `v` as ready-made elements: `ic` (20px), `ics` (16px), `icl` (24px), built by `iconSet(size)` in `components/Icon.tsx`. `{ic.bell}` draws the bell icon.
 
 ### 6.4 One click, end to end
 
 Tapping **Confirm** in the "Confirm booking" sheet:
 
-1. In `ConfirmBookingSheet.jsx`, the button has `onClick={cm.confirm}`.
+1. In `ConfirmBookingSheet.tsx`, the button has `onClick={cm.confirm}`.
 2. `cm.confirm` was created in the sheet's view hook `useConfirmBookingView()` as `() => store.confirmBooking()`.
 3. The store action `confirmBooking()` (bookings slice) reads the state with `get()`, recomputes the booking with `bfModel()`, builds the new booking objects and a "Booking created" notification, then calls `get().setState({ bookings: [...], notifs: [...], sheet: { type: 'message', kind: 'new', ids } })`.
 4. The store notifies every subscribed component. `SheetOverlay` (through `useShellView`) now sees the `message` sheet, and `MessageSheet` calls `useMessageView()`, which builds the message preview.
@@ -329,7 +339,7 @@ The same loop drives every interaction: **event → store action → setState �
 | Where | What | Read by |
 | --- | --- | --- |
 | `public/js/config.js` → `window.NEXDRIVE_CONFIG` | `mode` (`demo`/`live`), `apiBaseUrl`, `referralBaseUrl`, `showDemoPanel`, `deviceFrame`, `launchAnimation` | `App.cfg()` at runtime |
-| `DEFAULT_PREVIEW` in `src/app/App.jsx` | Preview switches: device size, start screen, empty data, subscription state, offline | `App` |
+| `DEFAULT_PREVIEW` in `src/app/App.tsx` | Preview switches: device size, start screen, empty data, subscription state, offline | `App` |
 | `PORT`, `HOST` environment variables | Web server listen address | `server.js` |
 | `.env` (from `.env.example`) | **Backend** secrets (database, Stripe, Twilio…), for the planned API only | Nothing yet |
 
@@ -337,7 +347,7 @@ The same loop drives every interaction: **event → store action → setState �
 
 ### 7.2 Styling
 
-- **Each component has a CSS Module** next to it (`Pricing.jsx` + `Pricing.module.css`). The component imports it as `styles` and uses `className={styles.header}`. Vite renames the classes at build time, so names never clash between components.
+- **Each component has a CSS Module** next to it (`Pricing.tsx` + `Pricing.module.css`). The component imports it as `styles` and uses `className={styles.header}`. Vite renames the classes at build time, so names never clash between components.
 - **Colours come from design tokens**: `src/styles/tokens.css` defines them as CSS variables (`--nd-ink`, `--nd-violet`, `--nd-error`, status colours…), mirroring `docs/brand/tokens.json`. Module CSS uses `var(--nd-…)`, never a literal brand hex.
 - **Inline `style` remains only for values computed at run time** (for example a border colour that turns red when a field is invalid, or a phone-frame size). About 270 such declarations are left, against 7,200 moved into modules.
 - `src/styles/base.css` holds the self-hosted font and a small reset; `src/styles/app.css` holds body defaults and every `@keyframes` animation. Their element rules are wrapped in `:where(…)`, which gives them zero specificity, so any component class overrides them.
@@ -375,14 +385,14 @@ All of these are listed with their impact in [gaps-and-quirks.md](gaps-and-quirk
 
 | Task | File |
 | --- | --- |
-| Change wording or layout of a screen | `src/features/<feature>/components/<Screen>.jsx` (sheets live in the same folder) |
-| Change what a button does | Find its `onClick={x.y}` → find `y:` in the screen's view hook (`features/<feature>/hooks/use<Screen>View.js`) → follow to the store action in `features/<feature>/stores/` |
+| Change wording or layout of a screen | `src/features/<feature>/components/<Screen>.tsx` (sheets live in the same folder) |
+| Change what a button does | Find its `onClick={x.y}` → find `y:` in the screen's view hook (`features/<feature>/hooks/use<Screen>View.ts`) → follow to the store action in `features/<feature>/stores/` |
 | Change a calculation shown on screen | The screen's view hook (display) or `bfModel()` in the bookings slice (booking maths) |
-| Add or change demo data | `src/demo/seeds.js` |
-| Plans and prices | `src/features/subscription/plans.js` |
-| Lesson status colours | `src/features/bookings/constants.js` |
-| Referral rules and statuses | `src/features/referrals/constants.js`, `utils.js` |
-| Demo workflows | `src/demo/flows.js` |
+| Add or change demo data | `src/demo/seeds.ts` |
+| Plans and prices | `src/domain/plans.ts` |
+| Lesson status colours | `src/domain/bookings.ts` |
+| Referral rules and statuses | `src/domain/referrals.ts` |
+| Demo workflows | `src/demo/flows.ts` |
 | Date / money / validation helpers | `src/lib/` |
 | A component's look | Its `.module.css` file next to the `.jsx` |
 | Brand colours | `src/styles/tokens.css` (and `docs/brand/tokens.json`) |

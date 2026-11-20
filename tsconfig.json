@@ -14,10 +14,11 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "noEmit": true,
-    // Existing .js/.jsx files keep compiling while they are converted feature by feature;
-    // they are not type-checked until renamed to .ts/.tsx.
-    "allowJs": true,
-    "checkJs": false,
+    // Temporary, while the code converted from JavaScript gets explicit parameter types and null
+    // handling (TypeScript's recommended migration path: convert first, then turn these on one at a
+    // time). Everything else in "strict" is on. See docs/internal/gaps-and-quirks.md.
+    "noImplicitAny": false,
+    "strictNullChecks": false,
     "paths": { "@/*": ["./src/*"] }
   },
   "include": ["src", "vite.config.mts"]
