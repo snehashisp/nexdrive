@@ -41,6 +41,8 @@ npm run dev
 
 Open **http://nexdrive.localhost:3300** in Chrome. This runs Vite's development server. When you save a file under `src/`, the page updates within a second without a reload. The service worker (offline support) is turned off in this mode on purpose.
 
+Before committing, run `npm run check`. It type-checks, lints, checks formatting and runs the unit tests; `npm run format` fixes formatting.
+
 ### Option B: production mode (what the hosting runs)
 
 ```bash
@@ -55,7 +57,7 @@ Stop either mode with **Ctrl+C** in the terminal.
 
 Any name ending in `.localhost` points at your own machine; Chrome and Edge resolve it with no setup. It keeps NexDrive separate from anything else you run on `localhost:3000`. If it doesn't resolve (some command-line tools such as `curl` on Windows don't support it), use **http://127.0.0.1:3300**; it is the same server.
 
-To use a different port: `PORT=4000 npm start` (macOS/Linux/Git Bash) or `$env:PORT=4000; npm start` (PowerShell). For dev mode, change `server.port` in `vite.config.mjs`.
+To use a different port: `PORT=4000 npm start` (macOS/Linux/Git Bash) or `$env:PORT=4000; npm start` (PowerShell). For dev mode, change `server.port` in `vite.config.mts`.
 
 ## 5. Explore the app in Chrome
 
@@ -84,7 +86,7 @@ On a desktop the app is drawn inside a phone frame. On a narrow window or a phon
 | `deviceFrame: false` | No phone frame on desktop; the app fills the browser |
 | `launchAnimation: false` | Skips the logo animation at start-up |
 
-More "preview" switches live at the top of `src/App.jsx` in `static defaultProps`: start on onboarding, empty data, subscription state (`trial`, `payment_failed`, `expired`), offline banner. Change one, save, and dev mode reloads.
+More "preview" switches live at the top of `src/app/App.jsx` in `static defaultProps`: start on onboarding, empty data, subscription state (`trial`, `payment_failed`, `expired`), offline banner. Change one, save, and dev mode reloads.
 
 ### Chrome DevTools (F12)
 
@@ -103,9 +105,9 @@ Install the **React Developer Tools** Chrome extension. It adds a **Components**
 ## 6. Where to start reading code
 
 1. `src/main.jsx`: the entry point (about 20 lines).
-2. `src/App.jsx`: the state (`init()`) and the actions (methods such as `openBooking`, `confirmBooking`, `saveLearner`).
-3. `src/viewModel.js` → `buildViewModel()`: turns the state into display values.
-4. `src/AppView.jsx`: picks which screen to show. Then any screen in `src/screens/`.
+2. `src/app/App.jsx`: the state (`init()`) and the actions (methods such as `openBooking`, `confirmBooking`, `saveLearner`).
+3. `src/app/viewModel.js` → `buildViewModel()`: turns the state into display values.
+4. `src/app/AppView.jsx`: picks which screen to show. Then any screen in `src/features/<feature>/components/`.
 
 [overview.md](overview.md) explains each step.
 

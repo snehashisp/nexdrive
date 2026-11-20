@@ -195,13 +195,14 @@ npm install                      # downloads React, Vite, Express … into node_
 <h3 id="option-a-development-mode-when-changing-code">Option A: development mode (when changing code)<a class="anchor" href="#option-a-development-mode-when-changing-code" aria-hidden="true">#</a></h3>
 <pre class="code"><code data-lang="bash">npm run dev</code></pre>
 <p>Open <strong><a href="http://nexdrive.localhost:3300" target="_blank" rel="noopener">http://nexdrive.localhost:3300</a></strong> in Chrome. This runs Vite&#39;s development server. When you save a file under <code>src/</code>, the page updates within a second without a reload. The service worker (offline support) is turned off in this mode on purpose.</p>
+<p>Before committing, run <code>npm run check</code>. It type-checks, lints, checks formatting and runs the unit tests; <code>npm run format</code> fixes formatting.</p>
 <h3 id="option-b-production-mode-what-the-hosting-runs">Option B: production mode (what the hosting runs)<a class="anchor" href="#option-b-production-mode-what-the-hosting-runs" aria-hidden="true">#</a></h3>
 <pre class="code"><code data-lang="bash">npm start</code></pre>
 <p>This first runs <code>npm run build</code>, which creates the optimised app in <code>dist/</code>. It then starts <code>server.js</code>, the Express web server, which serves <code>dist/</code> at <strong><a href="http://nexdrive.localhost:3300" target="_blank" rel="noopener">http://nexdrive.localhost:3300</a></strong>. Use this mode to test install-to-home-screen, offline mode and caching.</p>
 <p>Stop either mode with <strong>Ctrl+C</strong> in the terminal.</p>
 <h3 id="why-nexdrivelocalhost">Why <code>nexdrive.localhost</code>?<a class="anchor" href="#why-nexdrivelocalhost" aria-hidden="true">#</a></h3>
 <p>Any name ending in <code>.localhost</code> points at your own machine; Chrome and Edge resolve it with no setup. It keeps NexDrive separate from anything else you run on <code>localhost:3000</code>. If it doesn&#39;t resolve (some command-line tools such as <code>curl</code> on Windows don&#39;t support it), use <strong><a href="http://127.0.0.1:3300" target="_blank" rel="noopener">http://127.0.0.1:3300</a></strong>; it is the same server.</p>
-<p>To use a different port: <code>PORT=4000 npm start</code> (macOS/Linux/Git Bash) or <code>$env:PORT=4000; npm start</code> (PowerShell). For dev mode, change <code>server.port</code> in <code>vite.config.mjs</code>.</p>
+<p>To use a different port: <code>PORT=4000 npm start</code> (macOS/Linux/Git Bash) or <code>$env:PORT=4000; npm start</code> (PowerShell). For dev mode, change <code>server.port</code> in <code>vite.config.mts</code>.</p>
 <h2 id="5-explore-the-app-in-chrome">5. Explore the app in Chrome<a class="anchor" href="#5-explore-the-app-in-chrome" aria-hidden="true">#</a></h2>
 <h3 id="the-demo-panel">The demo panel<a class="anchor" href="#the-demo-panel" aria-hidden="true">#</a></h3>
 <p>On a window at least 1060px wide, a panel on the left lists <strong>workflows</strong> (onboarding, booking, multiple lessons, calendar, navigation, subscription, referrals, edge cases, empty state). Clicking one resets the demo data and jumps straight to that workflow&#39;s starting point. This is the fastest way to see every screen.</p>
@@ -255,7 +256,7 @@ npm install                      # downloads React, Vite, Express … into node_
 </tr>
 </tbody></table>
 </div>
-<p>More &quot;preview&quot; switches live at the top of <code>src/App.jsx</code> in <code>static defaultProps</code>: start on onboarding, empty data, subscription state (<code>trial</code>, <code>payment_failed</code>, <code>expired</code>), offline banner. Change one, save, and dev mode reloads.</p>
+<p>More &quot;preview&quot; switches live at the top of <code>src/app/App.jsx</code> in <code>static defaultProps</code>: start on onboarding, empty data, subscription state (<code>trial</code>, <code>payment_failed</code>, <code>expired</code>), offline banner. Change one, save, and dev mode reloads.</p>
 <h3 id="chrome-devtools-f12">Chrome DevTools (F12)<a class="anchor" href="#chrome-devtools-f12" aria-hidden="true">#</a></h3>
 <div class="table-wrap"><table>
 <thead>
@@ -298,9 +299,9 @@ npm install                      # downloads React, Vite, Express … into node_
 <h2 id="6-where-to-start-reading-code">6. Where to start reading code<a class="anchor" href="#6-where-to-start-reading-code" aria-hidden="true">#</a></h2>
 <ol>
 <li><code>src/main.jsx</code>: the entry point (about 20 lines).</li>
-<li><code>src/App.jsx</code>: the state (<code>init()</code>) and the actions (methods such as <code>openBooking</code>, <code>confirmBooking</code>, <code>saveLearner</code>).</li>
-<li><code>src/viewModel.js</code> → <code>buildViewModel()</code>: turns the state into display values.</li>
-<li><code>src/AppView.jsx</code>: picks which screen to show. Then any screen in <code>src/screens/</code>.</li>
+<li><code>src/app/App.jsx</code>: the state (<code>init()</code>) and the actions (methods such as <code>openBooking</code>, <code>confirmBooking</code>, <code>saveLearner</code>).</li>
+<li><code>src/app/viewModel.js</code> → <code>buildViewModel()</code>: turns the state into display values.</li>
+<li><code>src/app/AppView.jsx</code>: picks which screen to show. Then any screen in <code>src/features/&lt;feature&gt;/components/</code>.</li>
 </ol>
 <p><a href="overview.html">How it works</a> explains each step.</p>
 <h2 id="7-optional-load-the-planned-database-locally">7. Optional: load the planned database locally<a class="anchor" href="#7-optional-load-the-planned-database-locally" aria-hidden="true">#</a></h2>

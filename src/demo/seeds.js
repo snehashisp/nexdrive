@@ -1,57 +1,68 @@
-import { TEST, cmpB, liveStatus } from './constants';
-import { NOW, TODAY, durL, fDM, fS, hm, relDay, sd, tm } from '../lib/dates';
+import { TEST_CENTRE } from '@/features/bookings/constants';
+import { compareBookings, withLiveStatus } from '@/features/bookings/utils';
+import {
+  NOW,
+  TODAY,
+  formatDurationLong,
+  formatDayMonth,
+  formatShortDate,
+  minutesToTime,
+  relativeDay,
+  shiftDemoDate,
+  timeToMinutes,
+} from '@/lib/dates';
 
 export function seedReferrals() {
   return [
     {
       id: 'R1',
       name: 'Sarah Smith',
-      joined: sd('2026-07-02'),
+      joined: shiftDemoDate('2026-07-02'),
       plan: '12m',
       status: 'awarded',
-      awardedOn: sd('2026-08-30'),
+      awardedOn: shiftDemoDate('2026-08-30'),
     },
     {
       id: 'R2',
       name: 'John Brown',
-      joined: sd('2026-07-20'),
+      joined: shiftDemoDate('2026-07-20'),
       plan: '24m',
       status: 'awarded',
-      awardedOn: sd('2026-09-17'),
+      awardedOn: shiftDemoDate('2026-09-17'),
     },
     {
       id: 'R3',
       name: 'Aisha Khan',
-      joined: sd('2026-07-27'),
+      joined: shiftDemoDate('2026-07-27'),
       plan: '1m',
       status: 'awarded',
-      awardedOn: sd('2026-09-24'),
+      awardedOn: shiftDemoDate('2026-09-24'),
     },
     {
       id: 'R4',
       name: 'Hannah Lee',
-      joined: sd('2026-08-02'),
+      joined: shiftDemoDate('2026-08-02'),
       plan: '12m',
       status: 'awarded',
-      awardedOn: sd('2026-09-30'),
+      awardedOn: shiftDemoDate('2026-09-30'),
     },
     {
       id: 'R5',
       name: 'Oliver Grant',
-      joined: sd('2026-08-20'),
+      joined: shiftDemoDate('2026-08-20'),
       plan: '12m',
       status: 'not_qualified',
       reason: 'Cancelled during their free trial, so no reward was earned.',
     },
-    { id: 'R6', name: 'Emma Wright', joined: sd('2026-09-28'), plan: '12m', status: 'trial' },
-    { id: 'R7', name: 'Liam Carter', joined: sd('2026-10-05'), plan: null, status: 'registered' },
+    { id: 'R6', name: 'Emma Wright', joined: shiftDemoDate('2026-09-28'), plan: '12m', status: 'trial' },
+    { id: 'R7', name: 'Liam Carter', joined: shiftDemoDate('2026-10-05'), plan: null, status: 'registered' },
   ];
 }
 export function seedCredit() {
   return [
     {
       id: 'T1',
-      date: sd('2026-08-30'),
+      date: shiftDemoDate('2026-08-30'),
       type: 'referral',
       desc: 'Referral reward — Sarah Smith',
       ref: 'R1',
@@ -59,7 +70,7 @@ export function seedCredit() {
     },
     {
       id: 'T2',
-      date: sd('2026-09-17'),
+      date: shiftDemoDate('2026-09-17'),
       type: 'referral',
       desc: 'Referral reward — John Brown',
       ref: 'R2',
@@ -67,7 +78,7 @@ export function seedCredit() {
     },
     {
       id: 'T3',
-      date: sd('2026-09-24'),
+      date: shiftDemoDate('2026-09-24'),
       type: 'referral',
       desc: 'Referral reward — Aisha Khan',
       ref: 'R3',
@@ -75,14 +86,14 @@ export function seedCredit() {
     },
     {
       id: 'T4',
-      date: sd('2026-09-26'),
+      date: shiftDemoDate('2026-09-26'),
       type: 'redeemed',
       desc: 'Applied to Monthly subscription payment',
       amt: -25,
     },
     {
       id: 'T5',
-      date: sd('2026-09-30'),
+      date: shiftDemoDate('2026-09-30'),
       type: 'referral',
       desc: 'Referral reward — Hannah Lee',
       ref: 'R4',
@@ -101,8 +112,8 @@ export function seedLearners() {
       postcode: 'SL1 3NY',
       licence: 'SMITH801157J99AB',
       theory: '30418722',
-      notes: `Practical test booked for ${fS(sd('2026-11-03'))}. Working on roundabouts and bay parking.`,
-      since: sd('2026-07-14'),
+      notes: `Practical test booked for ${formatShortDate(shiftDemoDate('2026-11-03'))}. Working on roundabouts and bay parking.`,
+      since: shiftDemoDate('2026-07-14'),
     },
     {
       id: 'L2',
@@ -114,7 +125,7 @@ export function seedLearners() {
       licence: 'PATEL856204PR1CD',
       theory: '51102938',
       notes: '',
-      since: sd('2026-08-02'),
+      since: shiftDemoDate('2026-08-02'),
     },
     {
       id: 'L3',
@@ -125,8 +136,8 @@ export function seedLearners() {
       postcode: 'SL1 4UT',
       licence: 'HUGHE703128OJ9KL',
       theory: '',
-      notes: `Theory test booked for ${fDM(sd('2026-10-19'))}.`,
-      since: sd('2026-09-01'),
+      notes: `Theory test booked for ${formatDayMonth(shiftDemoDate('2026-10-19'))}.`,
+      since: shiftDemoDate('2026-09-01'),
     },
     {
       id: 'L4',
@@ -138,7 +149,7 @@ export function seedLearners() {
       licence: '',
       theory: '',
       notes: '',
-      since: sd('2026-10-05'),
+      since: shiftDemoDate('2026-10-05'),
     },
     {
       id: 'L5',
@@ -150,7 +161,7 @@ export function seedLearners() {
       licence: 'ALI99804215M99QZ',
       theory: '40937716',
       notes: '',
-      since: sd('2026-06-20'),
+      since: shiftDemoDate('2026-06-20'),
     },
     {
       id: 'L6',
@@ -162,7 +173,7 @@ export function seedLearners() {
       licence: 'TURNE861309SE2TR',
       theory: '62210487',
       notes: '',
-      since: sd('2026-08-18'),
+      since: shiftDemoDate('2026-08-18'),
     },
     {
       id: 'L7',
@@ -173,10 +184,10 @@ export function seedLearners() {
       postcode: 'SL4 5BU',
       licence: 'WRIGH704223EW9AB',
       theory: '38820154',
-      notes: `Passed practical test on ${fDM(sd('2026-10-03'))}.`,
-      since: sd('2026-04-11'),
+      notes: `Passed practical test on ${formatDayMonth(shiftDemoDate('2026-10-03'))}.`,
+      since: shiftDemoDate('2026-04-11'),
       archived: true,
-      archivedOn: sd('2026-10-04'),
+      archivedOn: shiftDemoDate('2026-10-04'),
     },
   ];
 }
@@ -198,42 +209,51 @@ export function seedBookings() {
     ...x,
   });
   return [
-    B('b25', 'L7', sd('2026-09-21'), '09:00', 2, 'completed'),
-    B('b24', 'L1', sd('2026-09-23'), '10:00', 2, 'completed'),
-    B('b21', 'L7', sd('2026-09-28'), '16:00', 1, 'cancelled', { reason: 'Learner unwell' }),
-    B('b1', 'L1', sd('2026-09-30'), '10:00', 2, 'completed'),
-    B('b2', 'L2', sd('2026-10-02'), '15:00', 1, 'completed'),
-    B('b3', 'L7', sd('2026-10-03'), '09:00', 2, 'completed', { loc: TEST.loc, pc: TEST.pc }),
-    B('b4', 'L1', sd('2026-10-05'), '10:00', 2, 'completed'),
-    B('b5', 'L6', sd('2026-10-05'), '16:00', 1, 'cancelled', { reason: 'Learner request' }),
-    B('b6', 'L3', sd('2026-10-06'), '11:00', 1.5, 'completed'),
-    B('b7', 'L5', sd('2026-10-06'), '14:00', 1, 'completed'),
-    B('b8', 'L5', sd('2026-10-07'), '09:00', 1, 'completed'),
-    B('b9', 'L2', sd('2026-10-07'), '12:15', 1.5, 'ongoing'),
-    B('b10', 'L1', sd('2026-10-07'), '14:00', 2, 'upcoming'),
-    B('b11', 'L3', sd('2026-10-07'), '16:30', 1, 'upcoming'),
-    B('b12', 'L6', sd('2026-10-08'), '10:00', 2, 'rescheduled', {
-      prev: { date: sd('2026-10-07'), start: '10:00' },
+    B('b25', 'L7', shiftDemoDate('2026-09-21'), '09:00', 2, 'completed'),
+    B('b24', 'L1', shiftDemoDate('2026-09-23'), '10:00', 2, 'completed'),
+    B('b21', 'L7', shiftDemoDate('2026-09-28'), '16:00', 1, 'cancelled', { reason: 'Learner unwell' }),
+    B('b1', 'L1', shiftDemoDate('2026-09-30'), '10:00', 2, 'completed'),
+    B('b2', 'L2', shiftDemoDate('2026-10-02'), '15:00', 1, 'completed'),
+    B('b3', 'L7', shiftDemoDate('2026-10-03'), '09:00', 2, 'completed', {
+      loc: TEST_CENTRE.loc,
+      pc: TEST_CENTRE.pc,
     }),
-    B('b13', 'L5', sd('2026-10-08'), '15:00', 1, 'upcoming'),
-    B('b14', 'L1', sd('2026-10-09'), '09:30', 2, 'upcoming', { discount: 10, pkg: 'P1' }),
-    B('b15', 'L2', sd('2026-10-09'), '13:00', 1, 'upcoming'),
-    B('b16', 'L3', sd('2026-10-10'), '10:00', 2, 'upcoming', { loc: TEST.loc, pc: TEST.pc }),
-    B('b17', 'L1', sd('2026-10-12'), '14:00', 2, 'upcoming'),
-    B('b18', 'L6', sd('2026-10-14'), '11:00', 1, 'upcoming'),
-    B('b19', 'L1', sd('2026-10-16'), '09:30', 2, 'upcoming', { discount: 10, pkg: 'P1' }),
-    B('b20', 'L5', sd('2026-10-20'), '10:00', 1, 'upcoming'),
-    B('b22', 'L2', sd('2026-10-22'), '15:00', 1.5, 'upcoming'),
-    B('b23', 'L3', sd('2026-10-27'), '11:00', 2, 'upcoming'),
-  ].map(liveStatus);
+    B('b4', 'L1', shiftDemoDate('2026-10-05'), '10:00', 2, 'completed'),
+    B('b5', 'L6', shiftDemoDate('2026-10-05'), '16:00', 1, 'cancelled', { reason: 'Learner request' }),
+    B('b6', 'L3', shiftDemoDate('2026-10-06'), '11:00', 1.5, 'completed'),
+    B('b7', 'L5', shiftDemoDate('2026-10-06'), '14:00', 1, 'completed'),
+    B('b8', 'L5', shiftDemoDate('2026-10-07'), '09:00', 1, 'completed'),
+    B('b9', 'L2', shiftDemoDate('2026-10-07'), '12:15', 1.5, 'ongoing'),
+    B('b10', 'L1', shiftDemoDate('2026-10-07'), '14:00', 2, 'upcoming'),
+    B('b11', 'L3', shiftDemoDate('2026-10-07'), '16:30', 1, 'upcoming'),
+    B('b12', 'L6', shiftDemoDate('2026-10-08'), '10:00', 2, 'rescheduled', {
+      prev: { date: shiftDemoDate('2026-10-07'), start: '10:00' },
+    }),
+    B('b13', 'L5', shiftDemoDate('2026-10-08'), '15:00', 1, 'upcoming'),
+    B('b14', 'L1', shiftDemoDate('2026-10-09'), '09:30', 2, 'upcoming', { discount: 10, pkg: 'P1' }),
+    B('b15', 'L2', shiftDemoDate('2026-10-09'), '13:00', 1, 'upcoming'),
+    B('b16', 'L3', shiftDemoDate('2026-10-10'), '10:00', 2, 'upcoming', {
+      loc: TEST_CENTRE.loc,
+      pc: TEST_CENTRE.pc,
+    }),
+    B('b17', 'L1', shiftDemoDate('2026-10-12'), '14:00', 2, 'upcoming'),
+    B('b18', 'L6', shiftDemoDate('2026-10-14'), '11:00', 1, 'upcoming'),
+    B('b19', 'L1', shiftDemoDate('2026-10-16'), '09:30', 2, 'upcoming', { discount: 10, pkg: 'P1' }),
+    B('b20', 'L5', shiftDemoDate('2026-10-20'), '10:00', 1, 'upcoming'),
+    B('b22', 'L2', shiftDemoDate('2026-10-22'), '15:00', 1.5, 'upcoming'),
+    B('b23', 'L3', shiftDemoDate('2026-10-27'), '11:00', 2, 'upcoming'),
+  ].map(withLiveStatus);
 }
 export function seedNotifs() {
   const L = {};
   seedLearners().forEach((l) => (L[l.id] = l));
   const nx = seedBookings()
-    .filter((b) => b.date === TODAY && ['upcoming', 'rescheduled'].includes(b.status) && tm(b.start) > NOW)
-    .sort(cmpB)[0];
-  const mins = nx ? tm(nx.start) - NOW : 999;
+    .filter(
+      (b) =>
+        b.date === TODAY && ['upcoming', 'rescheduled'].includes(b.status) && timeToMinutes(b.start) > NOW,
+    )
+    .sort(compareBookings)[0];
+  const mins = nx ? timeToMinutes(nx.start) - NOW : 999;
   return [
     ...(nx && mins <= 30
       ? [
@@ -242,8 +262,8 @@ export function seedNotifs() {
             cat: 'lessons',
             icon: 'clock',
             title: `Your next lesson starts in ${mins} minute${mins === 1 ? '' : 's'}`,
-            body: `${L[nx.lid].name} · ${nx.start} · ${durL(nx.dur)} · ${nx.pc}`,
-            time: hm(Math.max(0, tm(nx.start) - 30)),
+            body: `${L[nx.lid].name} · ${nx.start} · ${formatDurationLong(nx.dur)} · ${nx.pc}`,
+            time: minutesToTime(Math.max(0, timeToMinutes(nx.start) - 30)),
             unread: true,
             act: { lesson: nx.id },
           },
@@ -274,7 +294,7 @@ export function seedNotifs() {
       cat: 'lessons',
       icon: 'repeat',
       title: 'Booking changed',
-      body: `Sophie Turner moved from ${fS(sd('2026-10-07'))} 10:00 to ${fS(sd('2026-10-08'))} 10:00.`,
+      body: `Sophie Turner moved from ${formatShortDate(shiftDemoDate('2026-10-07'))} 10:00 to ${formatShortDate(shiftDemoDate('2026-10-08'))} 10:00.`,
       time: 'Yesterday',
       act: { lesson: 'b12' },
     },
@@ -284,7 +304,7 @@ export function seedNotifs() {
       icon: 'calendarPlus',
       title: 'Booking created',
       body: '2 lessons for James Smith · £140 after £20 discount.',
-      time: relDay(sd('2026-10-05')),
+      time: relativeDay(shiftDemoDate('2026-10-05')),
       act: { lesson: 'b14' },
     },
     {
@@ -292,8 +312,8 @@ export function seedNotifs() {
       cat: 'lessons',
       icon: 'calendarX',
       title: 'Booking cancelled',
-      body: `Sophie Turner · ${fS(sd('2026-10-05'))}, 16:00 · Learner request`,
-      time: relDay(sd('2026-10-05')),
+      body: `Sophie Turner · ${formatShortDate(shiftDemoDate('2026-10-05'))}, 16:00 · Learner request`,
+      time: relativeDay(shiftDemoDate('2026-10-05')),
       act: { lesson: 'b5' },
     },
     {
@@ -302,7 +322,7 @@ export function seedNotifs() {
       icon: 'gift',
       title: '£48 added to your NexDrive Credit',
       body: 'Great news! Hannah has joined NexDrive using your referral code. £48 has been added to your NexDrive Credit.',
-      time: relDay(sd('2026-09-30')),
+      time: relativeDay(shiftDemoDate('2026-09-30')),
       act: { screen: 'credit' },
     },
     {
@@ -311,7 +331,7 @@ export function seedNotifs() {
       icon: 'gift',
       title: 'NexDrive Credit applied',
       body: '£25 of your NexDrive Credit has been applied to your subscription.',
-      time: relDay(sd('2026-09-26')),
+      time: relativeDay(shiftDemoDate('2026-09-26')),
       act: { screen: 'credit' },
     },
   ];

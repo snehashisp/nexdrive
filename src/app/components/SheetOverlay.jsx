@@ -1,17 +1,17 @@
-import CancelLessonSheet from '../sheets/CancelLessonSheet';
-import CancelSubscriptionSheet from '../sheets/CancelSubscriptionSheet';
-import ConfirmBookingSheet from '../sheets/ConfirmBookingSheet';
-import ConflictSheet from '../sheets/ConflictSheet';
-import DeleteLearnerSheet from '../sheets/DeleteLearnerSheet';
-import ExpiredSheet from '../sheets/ExpiredSheet';
-import LearnerActionsSheet from '../sheets/LearnerActionsSheet';
-import LogoutSheet from '../sheets/LogoutSheet';
-import MapsSheet from '../sheets/MapsSheet';
-import MessageSheet from '../sheets/MessageSheet';
-import PickBookingSheet from '../sheets/PickBookingSheet';
-import PickLearnerSheet from '../sheets/PickLearnerSheet';
-import QuickAddSheet from '../sheets/QuickAddSheet';
-import ReferralDetailSheet from '../sheets/ReferralDetailSheet';
+import CancelLessonSheet from '@/features/bookings/components/CancelLessonSheet';
+import CancelSubscriptionSheet from '@/features/subscription/components/CancelSubscriptionSheet';
+import ConfirmBookingSheet from '@/features/bookings/components/ConfirmBookingSheet';
+import ConflictSheet from '@/features/bookings/components/ConflictSheet';
+import DeleteLearnerSheet from '@/features/learners/components/DeleteLearnerSheet';
+import ExpiredSheet from '@/features/subscription/components/ExpiredSheet';
+import LearnerActionsSheet from '@/features/learners/components/LearnerActionsSheet';
+import LogoutSheet from '@/features/settings/components/LogoutSheet';
+import MapsSheet from '@/features/bookings/components/MapsSheet';
+import MessageSheet from '@/features/bookings/components/MessageSheet';
+import PickBookingSheet from '@/features/bookings/components/PickBookingSheet';
+import PickLearnerSheet from '@/features/learners/components/PickLearnerSheet';
+import QuickAddSheet from '@/features/bookings/components/QuickAddSheet';
+import ReferralDetailSheet from '@/features/referrals/components/ReferralDetailSheet';
 
 export default function SheetOverlay({ v }) {
   const { closeSheet, padB, sh, stop } = v;

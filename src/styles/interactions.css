@@ -3,20 +3,51 @@
    ordinary class rules. These rules use !important so the state colour can win while the state lasts.
    Order matters: "active" (pressed) comes last so it wins over "hover" on the same button. */
 
-.hover-bg-mist:hover { background: #F7F7F9 !important; }
-.hover-bg-violet-50:hover { background: #F7F5FF !important; }
-.hover-bg-violet-100:hover { background: #EDE9FE !important; }
-.hover-bg-violet-500:hover { background: #8B5CF6 !important; }
-.hover-bg-violet-700:hover { background: #6D28D9 !important; }
-.hover-bg-ink-2:hover { background: #1A1A24 !important; }
-.hover-bg-error:hover { background: #FEF2F2 !important; }
-.hover-bg-red-800:hover { background: #991B1B !important; }
-.hover-text-white:hover { color: #FFFFFF !important; }
-.hover-border-ink:hover { border-color: #0A0A0F !important; }
-.hover-border-white:hover { border-color: #FFFFFF !important; }
-.hover-ink:hover { border-color: #0A0A0F !important; color: #0A0A0F !important; }
+.hover-bg-mist:hover {
+  background: #f7f7f9 !important;
+}
+.hover-bg-violet-50:hover {
+  background: #f7f5ff !important;
+}
+.hover-bg-violet-100:hover {
+  background: #ede9fe !important;
+}
+.hover-bg-violet-500:hover {
+  background: #8b5cf6 !important;
+}
+.hover-bg-violet-700:hover {
+  background: #6d28d9 !important;
+}
+.hover-bg-ink-2:hover {
+  background: #1a1a24 !important;
+}
+.hover-bg-error:hover {
+  background: #fef2f2 !important;
+}
+.hover-bg-red-800:hover {
+  background: #991b1b !important;
+}
+.hover-text-white:hover {
+  color: #ffffff !important;
+}
+.hover-border-ink:hover {
+  border-color: #0a0a0f !important;
+}
+.hover-border-white:hover {
+  border-color: #ffffff !important;
+}
+.hover-ink:hover {
+  border-color: #0a0a0f !important;
+  color: #0a0a0f !important;
+}
 
-.focus-border-violet:focus { border-color: #7C3AED !important; }
+.focus-border-violet:focus {
+  border-color: #7c3aed !important;
+}
 
-.active-bg-violet-700:active { background: #6D28D9 !important; }
-.active-bg-violet-800:active { background: #5B21B6 !important; }
+.active-bg-violet-700:active {
+  background: #6d28d9 !important;
+}
+.active-bg-violet-800:active {
+  background: #5b21b6 !important;
+}

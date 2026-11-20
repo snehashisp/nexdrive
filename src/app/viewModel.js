@@ -1,71 +1,68 @@
+import { DEVICE_SIZES } from './constants';
+import { FLOWS } from '@/demo/flows';
+import { REF_CODES } from '@/demo/referral-codes';
+import { FUTURE_STATUSES, STATUS_STYLES } from '@/features/bookings/constants';
+import { compareBookings } from '@/features/bookings/utils';
 import {
-  DEV,
-  ERR,
-  FLOWS,
-  FUT,
-  OKB,
+  REFERRAL,
+  PENDING_REFERRAL_STATUSES,
+  REFERRAL_STEPS,
+  REFERRAL_STATUS,
+} from '@/features/referrals/constants';
+import { referralLink, referralReward } from '@/features/referrals/utils';
+import {
   PLANS,
-  REF,
-  REF_CODES,
-  REF_PENDING,
-  REF_STEPS,
-  RS,
-  ST,
-  cmpB,
-  opt,
-  planPct,
-  planPer,
-  planSave,
-  planTerm,
-  refLink,
-  refReward,
-  ring,
-} from './data/constants';
+  planDiscountPercent,
+  planPeriodLabel,
+  planSaving,
+  planTermLabel,
+} from '@/features/subscription/plans';
+import { ERROR_COLOR, BORDER_COLOR, choiceColors, radioRing } from '@/lib/inline-styles';
 import {
-  D,
-  DW,
-  MO,
-  MOL,
+  parseIsoDate,
+  WEEKDAYS_SHORT,
+  MONTHS_SHORT,
+  MONTHS_LONG,
   NOW,
   TODAY,
   addDays,
   addMonths,
-  dayDiff,
-  durL,
-  durS,
-  fD,
-  fDM,
-  fDML,
-  fF,
-  fL,
-  fS,
-  fSY,
-  hm,
-  iso,
-  nowHM,
-  ord,
+  daysBetween,
+  formatDurationLong,
+  formatDurationShort,
+  formatDate,
+  formatDayMonth,
+  formatDayMonthLong,
+  formatFullDate,
+  formatLongDate,
+  formatShortDate,
+  formatShortDateYear,
+  minutesToTime,
+  toIsoDate,
+  currentTimeHHMM,
+  ordinal,
   pad,
-  sd,
-  tm,
-} from './lib/dates';
-import { fLic, gbp, ini } from './lib/format';
-import { vEmail, vLic, vPc, vPhone } from './lib/validation';
-import { iconSet } from './components/Icon';
+  shiftDemoDate,
+  timeToMinutes,
+} from '@/lib/dates';
+import { formatLicence, formatGBP, initials } from '@/lib/format';
+import { isValidEmail, isValidLicence, isValidPostcode, isValidUkMobile } from '@/lib/validation';
+import { iconSet } from '@/components/iconSet';
 
 function rvm(app, r) {
   const pl = PLANS.find((p) => p.key === r.plan);
-  const amt = refReward(pl);
-  const st = RS[r.status];
+  const amt = referralReward(pl);
+  const st = REFERRAL_STATUS[r.status];
   const aw = r.status === 'awarded',
     no = st.step < 0;
   return {
     id: r.id,
     name: r.name,
     plan: pl ? pl.name + ' plan' : 'Choosing a plan',
-    value: pl ? gbp(pl.total) : '—',
-    date: fD(r.joined),
+    value: pl ? formatGBP(pl.total) : '—',
+    date: formatDate(r.joined),
     st,
-    reward: aw ? '+' + gbp(amt) : no ? '£0' : pl ? `${gbp(amt)} pending` : '—',
+    reward: aw ? '+' + formatGBP(amt) : no ? '£0' : pl ? `${formatGBP(amt)} pending` : '—',
     amtC: aw ? '#166534' : '#6B6B7B',
     open: () => app.sheet('referralDetail', { rid: r.id }),
   };
@@ -73,41 +70,42 @@ function rvm(app, r) {
 
 function bvm(app, b) {
   const L = app.learner(b.lid) || { name: 'Unknown learner' };
-  const st = ST[b.status];
+  const st = STATUS_STYLES[b.status];
   const price = b.rate * b.dur,
     fin = Math.max(0, price - b.discount);
-  const sm = tm(b.start),
+  const sm = timeToMinutes(b.start),
     em = sm + Math.round(b.dur * 60);
   return {
     id: b.id,
     lid: b.lid,
     name: L.name,
     first: L.name.split(' ')[0],
-    initials: ini(L.name),
+    initials: initials(L.name),
     archived: !!L.archived,
-    date: fS(b.date),
-    dateLong: fL(b.date),
-    dateFull: fF(b.date),
+    date: formatShortDate(b.date),
+    dateLong: formatLongDate(b.date),
+    dateFull: formatFullDate(b.date),
     start: b.start,
-    end: hm(em),
-    range: `${b.start}–${hm(em)}`,
-    dur: durL(b.dur),
-    durS: durS(b.dur),
+    end: minutesToTime(em),
+    range: `${b.start}–${minutesToTime(em)}`,
+    dur: formatDurationLong(b.dur),
+    durS: formatDurationShort(b.dur),
     loc: b.loc,
     pc: b.pc,
-    price: gbp(price),
-    rate: `${gbp(b.rate)}/hr × ${durS(b.dur)}`,
+    price: formatGBP(price),
+    rate: `${formatGBP(b.rate)}/hr × ${formatDurationShort(b.dur)}`,
     hasDisc: b.discount > 0,
-    disc: '−' + gbp(b.discount),
-    fin: gbp(fin),
+    disc: '−' + formatGBP(b.discount),
+    fin: formatGBP(fin),
     st,
     cancelled: b.status === 'cancelled',
     deco: b.status === 'cancelled' ? 'line-through' : 'none',
-    prev: b.prev ? `${fS(b.prev.date)}, ${b.prev.start}` : '',
+    prev: b.prev ? `${formatShortDate(b.prev.date)}, ${b.prev.start}` : '',
     reason: b.reason || '',
     pkg: !!b.pkg,
     pct: Math.max(4, Math.min(100, Math.round(((NOW - sm) / (b.dur * 60)) * 100))),
-    dayLabel: b.date === TODAY ? 'Today' : b.date === addDays(TODAY, 1) ? 'Tomorrow' : fS(b.date),
+    dayLabel:
+      b.date === TODAY ? 'Today' : b.date === addDays(TODAY, 1) ? 'Tomorrow' : formatShortDate(b.date),
     open: () => app.push('lesson', { bid: b.id }),
   };
 }
@@ -118,8 +116,8 @@ export function buildViewModel(app) {
   const ic = iconSet(20),
     ics = iconSet(16),
     icl = iconSet(24);
-  const devKey = DEV[p.device] ? p.device : 'phone';
-  const dev = DEV[devKey];
+  const devKey = DEVICE_SIZES[p.device] ? p.device : 'phone';
+  const dev = DEVICE_SIZES[devKey];
   const tablet = devKey === 'tablet';
   const cfg = app.cfg();
   const frameless = s.vw < 560 || cfg.deviceFrame === false;
@@ -288,9 +286,9 @@ export function buildViewModel(app) {
     pushTop: statusBar ? sbH + 4 : 8,
     pushText: s.pushInfo ? s.pushInfo.text : '',
     pushTitle: s.pushInfo ? s.pushInfo.title : '',
-    clockTime: nowHM(),
-    pwChanged: fD(sd('2026-09-26')),
-    clockLabel: `${fF(TODAY)}, ${nowHM()}`,
+    clockTime: currentTimeHHMM(),
+    pwChanged: formatDate(shiftDemoDate('2026-09-26')),
+    clockLabel: `${formatFullDate(TODAY)}, ${currentTimeHHMM()}`,
     openPush: () => {
       const id = s.pushInfo && s.pushInfo.bid;
       app.setState({ push: false });
@@ -306,7 +304,9 @@ export function buildViewModel(app) {
       : null,
     sheetOpen: !!s.sheet,
     replaySplash: () => app.startSplash(),
-    splash: s.splash ? { run: app.splashRun, fadingOut: !!s.splashOut, onSkip: () => app.skipSplash() } : null,
+    splash: s.splash
+      ? { run: app.splashRun, fadingOut: !!s.splashOut, onSkip: () => app.skipSplash() }
+      : null,
   };
   if (s.splash) {
     v.sbBg = '#0A0A0F';
@@ -322,10 +322,10 @@ export function buildViewModel(app) {
   v.reg = s.reg;
   v.regE = regE;
   v.regB = {
-    name: regE.name ? ERR : OKB,
-    phone: regE.phone ? ERR : OKB,
-    email: regE.email ? ERR : OKB,
-    password: s.regTried && app.regErr(s.reg).password ? ERR : OKB,
+    name: regE.name ? ERROR_COLOR : BORDER_COLOR,
+    phone: regE.phone ? ERROR_COLOR : BORDER_COLOR,
+    email: regE.email ? ERROR_COLOR : BORDER_COLOR,
+    password: s.regTried && app.regErr(s.reg).password ? ERROR_COLOR : BORDER_COLOR,
   };
   v.hReg = {
     name: app.setIn('reg', 'name'),
@@ -335,7 +335,7 @@ export function buildViewModel(app) {
     terms: app.setIn('reg', 'terms'),
   };
   const pw = s.reg.password;
-  const rc = (ok) => (ok ? '#166534' : s.regTried ? ERR : '#6B6B7B');
+  const rc = (ok) => (ok ? '#166534' : s.regTried ? ERROR_COLOR : '#6B6B7B');
   v.pwRules = [
     { t: '8+ characters', c: rc(pw.length >= 8) },
     { t: 'A letter', c: rc(/[a-z]/i.test(pw)) },
@@ -371,7 +371,7 @@ export function buildViewModel(app) {
   };
   v.otp = s.otp;
   v.otpErr = s.otpErr;
-  v.otpB = s.otpErr ? ERR : OKB;
+  v.otpB = s.otpErr ? ERROR_COLOR : BORDER_COLOR;
   v.hOtp = (e) => app.setState({ otp: e.target.value.replace(/\D/g, '').slice(0, 6), otpErr: '' });
   v.fillOtp = () => app.setState({ otp: '482913', otpErr: '' });
   v.resendOtp = () => {
@@ -382,7 +382,11 @@ export function buildViewModel(app) {
   const detE = s.detTried ? app.detErr(s.det) : {};
   v.det = s.det;
   v.detE = detE;
-  v.detB = { adi: detE.adi ? ERR : OKB, areas: detE.areas ? ERR : OKB, rate: detE.rate ? ERR : OKB };
+  v.detB = {
+    adi: detE.adi ? ERROR_COLOR : BORDER_COLOR,
+    areas: detE.areas ? ERROR_COLOR : BORDER_COLOR,
+    rate: detE.rate ? ERROR_COLOR : BORDER_COLOR,
+  };
   v.hDet = {
     adi: (e) => app.setState({ det: { ...s.det, adi: e.target.value.replace(/\D/g, '').slice(0, 6) } }),
     business: app.setIn('det', 'business'),
@@ -396,8 +400,8 @@ export function buildViewModel(app) {
     t: o[1],
     d: o[2],
     badge: o[3],
-    bd: s.det.status === o[0] ? '#7C3AED' : OKB,
-    ring: ring(s.det.status === o[0]),
+    bd: s.det.status === o[0] ? '#7C3AED' : BORDER_COLOR,
+    ring: radioRing(s.det.status === o[0]),
     pick: () => app.setState({ det: { ...s.det, status: o[0] } }),
   }));
   v.detDur = [
@@ -405,7 +409,7 @@ export function buildViewModel(app) {
     [1.5, '1.5h'],
     [2, '2h'],
   ].map((o) => {
-    const c = opt(s.det.dur === o[0]);
+    const c = choiceColors(s.det.dur === o[0]);
     return { t: o[1], bg: c.bg, fg: c.fg, pick: () => app.setState({ det: { ...s.det, dur: o[0] } }) };
   });
   const obp = PLANS.find((x) => x.key === s.obPlan);
@@ -422,7 +426,7 @@ export function buildViewModel(app) {
     code: s.ref.code,
     ok: refOk,
     err: REFMSG[rst] || '',
-    bd: refOk ? '#16A34A' : REFMSG[rst] ? ERR : OKB,
+    bd: refOk ? '#16A34A' : REFMSG[rst] ? ERROR_COLOR : BORDER_COLOR,
     showApply: !refOk,
     by: rcd ? rcd.owner : '',
     h: (e) =>
@@ -454,21 +458,21 @@ export function buildViewModel(app) {
     const sel = pl.key === s.obPlan;
     return {
       name: pl.name,
-      term: planTerm(pl),
-      price: gbp(pl.total),
-      per: planPer(pl),
+      term: planTermLabel(pl),
+      price: formatGBP(pl.total),
+      per: planPeriodLabel(pl),
       ref: refOk,
-      save: planSave(pl) ? `Save ${gbp(planSave(pl))}` : '',
+      save: planSaving(pl) ? `Save ${formatGBP(planSaving(pl))}` : '',
       bg: sel ? '#F7F5FF' : '#FFFFFF',
       bd: sel ? '2px solid #7C3AED' : '1.5px solid #CFCFD8',
-      ring: ring(sel),
+      ring: radioRing(sel),
       pick: () => app.setState({ obPlan: pl.key }),
     };
   });
   v.obCard = s.obCard;
   v.obNoCard = !s.obCard;
   v.obCardErr = s.obCardTried && !s.obCard;
-  v.obCardB = v.obCardErr ? ERR : '#6B6B7B';
+  v.obCardB = v.obCardErr ? ERROR_COLOR : '#6B6B7B';
   v.addCard = () => {
     app.setState({ obCard: true });
     app.toast('Card saved. You won’t be charged today.');
@@ -477,40 +481,48 @@ export function buildViewModel(app) {
   const tE = addDays(TODAY, 14),
     fE = addMonths(tE, 1),
     fpD = refOk ? fE : tE;
-  const ofp = fDM(fpD);
+  const ofp = formatDayMonth(fpD);
   v.obSum = {
     first,
-    until: fDML(fpD),
-    ref: refOk ? { code: s.ref.code, first: fSY(fE) } : null,
+    until: formatDayMonthLong(fpD),
+    ref: refOk ? { code: s.ref.code, first: formatShortDateYear(fE) } : null,
     tl: refOk
       ? [
           { d: 'Today', t: 'Your 14-day free trial starts. £0 due today.', c: '#6D28D9' },
-          { d: fDM(tE), t: 'Trial ends and your free referral month begins.', c: '#6D28D9' },
-          { d: fDM(addDays(fE, -3)), t: 'We remind you 3 days before your first payment.', c: '#4A4A5A' },
+          { d: formatDayMonth(tE), t: 'Trial ends and your free referral month begins.', c: '#6D28D9' },
           {
-            d: fDM(fE),
-            t: `First payment of ${gbp(obp.total)} for your ${obp.name.toLowerCase()} plan, unless you cancel.`,
+            d: formatDayMonth(addDays(fE, -3)),
+            t: 'We remind you 3 days before your first payment.',
+            c: '#4A4A5A',
+          },
+          {
+            d: formatDayMonth(fE),
+            t: `First payment of ${formatGBP(obp.total)} for your ${obp.name.toLowerCase()} plan, unless you cancel.`,
             c: '#4A4A5A',
           },
         ]
       : [
           { d: 'Today', t: 'Trial starts. £0 due today.', c: '#6D28D9' },
-          { d: fDM(addDays(tE, -3)), t: 'We remind you 3 days before your trial ends.', c: '#4A4A5A' },
           {
-            d: fDM(tE),
-            t: `First payment of ${gbp(obp.total)} for your ${obp.name.toLowerCase()} plan, unless you cancel.`,
+            d: formatDayMonth(addDays(tE, -3)),
+            t: 'We remind you 3 days before your trial ends.',
+            c: '#4A4A5A',
+          },
+          {
+            d: formatDayMonth(tE),
+            t: `First payment of ${formatGBP(obp.total)} for your ${obp.name.toLowerCase()} plan, unless you cancel.`,
             c: '#4A4A5A',
           },
         ],
     renew:
       obp.months === 1
-        ? `After your ${refOk ? 'trial and free month' : 'trial'}, ${gbp(obp.total)} is taken every month on the ${ord(D(fpD).getUTCDate())} until you cancel.`
-        : `After your ${refOk ? 'trial and free month' : 'trial'}, ${gbp(obp.total)} is taken for your ${obp.months}-month term. At the end of the term it renews for another ${obp.months} months at the same price unless you cancel.`,
+        ? `After your ${refOk ? 'trial and free month' : 'trial'}, ${formatGBP(obp.total)} is taken every month on the ${ordinal(parseIsoDate(fpD).getUTCDate())} until you cancel.`
+        : `After your ${refOk ? 'trial and free month' : 'trial'}, ${formatGBP(obp.total)} is taken for your ${obp.months}-month term. At the end of the term it renews for another ${obp.months} months at the same price unless you cancel.`,
     rows: [
-      { k: 'Plan', v: `${obp.name} · ${gbp(obp.total)}` },
-      { k: 'Trial ends', v: fSY(tE) },
-      ...(refOk ? [{ k: 'Referral free month', v: `${fDM(tE)} – ${fD(fE)}` }] : []),
-      { k: 'First payment', v: `${gbp(obp.total)} on ${ofp}` },
+      { k: 'Plan', v: `${obp.name} · ${formatGBP(obp.total)}` },
+      { k: 'Trial ends', v: formatShortDateYear(tE) },
+      ...(refOk ? [{ k: 'Referral free month', v: `${formatDayMonth(tE)} – ${formatDate(fE)}` }] : []),
+      { k: 'First payment', v: `${formatGBP(obp.total)} on ${ofp}` },
       { k: 'Cancel', v: 'Any time in Account' },
     ],
   };
@@ -535,23 +547,23 @@ export function buildViewModel(app) {
   // ---------- common
   const B = s.bookings;
   const active = s.learners.filter((l) => !l.archived);
-  const fut = B.filter((b) => ['upcoming', 'rescheduled'].includes(b.status)).sort(cmpB);
+  const fut = B.filter((b) => ['upcoming', 'rescheduled'].includes(b.status)).sort(compareBookings);
   const unread = s.notifs.filter((n) => n.unread).length;
-  const trialDays = dayDiff(TODAY, s.sub.trialEnd);
+  const trialDays = daysBetween(TODAY, s.sub.trialEnd);
   const RC = {
     bal: s.credit.reduce((a, t) => a + t.amt, 0),
     earned: s.credit.filter((t) => t.amt > 0).reduce((a, t) => a + t.amt, 0),
     used: -s.credit.filter((t) => t.amt < 0).reduce((a, t) => a + t.amt, 0),
     ok: s.refs.filter((r) => r.status === 'awarded').length,
-    pend: s.refs.filter((r) => REF_PENDING.includes(r.status)).length,
+    pend: s.refs.filter((r) => PENDING_REFERRAL_STATUSES.includes(r.status)).length,
   };
 
   // ---------- home
   if (is.home) {
     const todayB = B.filter((b) => b.date === TODAY && b.status !== 'cancelled');
     const ongoing = B.find((b) => b.status === 'ongoing');
-    const nextOne = fut.find((b) => b.date === TODAY && tm(b.start) > NOW);
-    const mins = nextOne ? tm(nextOne.start) - NOW : 99;
+    const nextOne = fut.find((b) => b.date === TODAY && timeToMinutes(b.start) > NOW);
+    const mins = nextOne ? timeToMinutes(nextOne.start) - NOW : 99;
     const fin = (b) => Math.max(0, b.rate * b.dur - b.discount);
     const done = todayB.filter((b) => b.status === 'completed');
     const inc = active.filter((l) => app.missing(l).length).length;
@@ -573,7 +585,7 @@ export function buildViewModel(app) {
       };
     else if (sub === 'trial' && trialDays <= 3)
       banner = {
-        t: `Free trial ends in ${trialDays} days · ${fS(s.sub.trialEnd)}`,
+        t: `Free trial ends in ${trialDays} days · ${formatShortDate(s.sub.trialEnd)}`,
         bg: '#FFFBEB',
         fg: '#92400E',
         bd: '#FDE68A',
@@ -583,9 +595,9 @@ export function buildViewModel(app) {
         ? { ...bvm(app, nextOne), mins, nav: () => app.sheet('maps', { bid: nextOne.id }) }
         : null;
     v.hm = {
-      initials: ini(s.inst.name),
+      initials: initials(s.inst.name),
       unread: unread || '',
-      dateLabel: fL(TODAY).toUpperCase(),
+      dateLabel: formatLongDate(TODAY).toUpperCase(),
       greeting: `${NOW < 720 ? 'Good morning' : NOW < 1080 ? 'Good afternoon' : 'Good evening'}, ${s.inst.name.split(' ')[0]}`,
       banner,
       reminder: nx,
@@ -597,8 +609,8 @@ export function buildViewModel(app) {
       todaySub: todayB.length ? `${done.length} done · ${ongoing ? '1 now' : '0 now'}` : 'Nothing booked',
       weekN: wk.length,
       weekSub: `${wk.reduce((a, b) => a + b.dur, 0)} hours booked`,
-      earnDone: gbp(done.reduce((a, b) => a + fin(b), 0)),
-      earnSub: `of ${gbp(todayB.reduce((a, b) => a + fin(b), 0))} booked today`,
+      earnDone: formatGBP(done.reduce((a, b) => a + fin(b), 0)),
+      earnSub: `of ${formatGBP(todayB.reduce((a, b) => a + fin(b), 0))} booked today`,
       activeN: active.length,
       activeSub: inc ? `${inc} need${inc > 1 ? '' : 's'} details` : 'All profiles complete',
       activeSubC: inc ? '#92400E' : '#6B6B7B',
@@ -608,7 +620,7 @@ export function buildViewModel(app) {
   v.dismissReminder = () => app.setState({ reminder: false });
   if (v.hm)
     v.hm.ref = {
-      bal: gbp(RC.bal),
+      bal: formatGBP(RC.bal),
       sub: s.refs.length
         ? `${RC.ok} successful referral${RC.ok === 1 ? '' : 's'} · ${RC.pend} pending`
         : 'Invite an instructor and earn credit',
@@ -628,7 +640,7 @@ function msgVm(app, S) {
   const sum = bs.reduce((a, x) => a + x.rate * x.dur, 0);
   const disc = bs.reduce((a, x) => a + x.discount, 0);
   const tot = Math.max(0, sum - disc);
-  const end = hm(tm(b.start) + Math.round(b.dur * 60));
+  const end = minutesToTime(timeToMinutes(b.start) + Math.round(b.dur * 60));
   const k = S.kind;
   const title = {
     new: multi ? 'Send schedule to learner?' : 'Send lesson details to learner?',
@@ -651,21 +663,21 @@ function msgVm(app, S) {
     cancel: `Hi ${fn}, sorry — the lesson below has been cancelled.`,
   }[k];
   let rows = [
-    { k: 'Date', v: fF(b.date) },
+    { k: 'Date', v: formatFullDate(b.date) },
     { k: 'Time', v: `${b.start}–${end}` },
-    { k: 'Duration', v: durL(b.dur) },
+    { k: 'Duration', v: formatDurationLong(b.dur) },
     { k: 'Pickup', v: `${b.loc}, ${b.pc}` },
     { k: 'Instructor', v: s.inst.name },
   ];
   if (k === 'cancel')
     rows = [
-      { k: 'Date', v: fF(b.date) },
+      { k: 'Date', v: formatFullDate(b.date) },
       { k: 'Time', v: `${b.start}–${end}` },
       { k: 'Reason', v: S.reason || b.reason || '—' },
     ];
   if (multi)
     rows = [
-      { k: 'Duration', v: `${durL(b.dur)} each` },
+      { k: 'Duration', v: `${formatDurationLong(b.dur)} each` },
       { k: 'Pickup', v: `${b.loc}, ${b.pc}` },
       { k: 'Instructor', v: s.inst.name },
     ];
@@ -673,9 +685,9 @@ function msgVm(app, S) {
   const showPrev = k === 'update' && !!pv;
   const priceRows = (
     multi
-      ? [{ k: `${bs.length} × ${gbp(b.rate * b.dur)}`, v: gbp(sum) }]
-      : [{ k: 'Lesson price', v: gbp(sum) }]
-  ).concat(disc ? [{ k: 'Discount', v: '−' + gbp(disc) }] : []);
+      ? [{ k: `${bs.length} × ${formatGBP(b.rate * b.dur)}`, v: formatGBP(sum) }]
+      : [{ k: 'Lesson price', v: formatGBP(sum) }]
+  ).concat(disc ? [{ k: 'Discount', v: '−' + formatGBP(disc) }] : []);
   const amtCh = showPrev && Math.abs(pv.fin - tot) > 0.001;
   const bank = s.bank && s.bank.include && k !== 'cancel' ? s.bank : null;
   const ref = `${(L.name.split(' ').slice(-1)[0] || '').toUpperCase().slice(0, 6)}-${b.date.slice(8, 10)}${b.date.slice(5, 7)}`;
@@ -689,17 +701,17 @@ function msgVm(app, S) {
     sess: multi
       ? bs.map((x, i) => ({
           n: pad(i + 1),
-          t: fS(x.date),
-          tm: `${x.start}–${hm(tm(x.start) + Math.round(x.dur * 60))}`,
+          t: formatShortDate(x.date),
+          tm: `${x.start}–${minutesToTime(timeToMinutes(x.start) + Math.round(x.dur * 60))}`,
         }))
       : [],
     showPrev,
-    prevT: showPrev ? `${fS(pv.date)}, ${pv.start}` : '',
-    newT: showPrev ? `${fS(b.date)}, ${b.start}` : '',
+    prevT: showPrev ? `${formatShortDate(pv.date)}, ${pv.start}` : '',
+    newT: showPrev ? `${formatShortDate(b.date)}, ${b.start}` : '',
     hasPrice: k !== 'cancel',
     priceRows,
-    total: gbp(tot),
-    amtNote: amtCh ? `Updated from ${gbp(pv.fin)}` : '',
+    total: formatGBP(tot),
+    amtNote: amtCh ? `Updated from ${formatGBP(pv.fin)}` : '',
     bank: !!bank,
     bankRows: bank
       ? [
@@ -717,7 +729,7 @@ function msgVm(app, S) {
     sign: `${s.inst.name.split(' ')[0]} · ${s.inst.business || s.inst.name}`,
     chans: ['SMS', 'WhatsApp', 'Email'].map((m) => ({
       t: m,
-      ...opt(s.prefs.channel === m),
+      ...choiceColors(s.prefs.channel === m),
       pick: () => app.setState({ prefs: { ...s.prefs, channel: m } }),
     })),
     failed: !!S.failed,
@@ -730,9 +742,8 @@ function msgVm(app, S) {
 }
 
 function vmRest(app, v, c) {
-  const { s, p, ic, ics, icl, is, prm, B, active, fut, unread, trialDays, sub, plan, go, RC } = c;
-  const sh = v.sh;
-  const link = refLink(s.refCode, app.cfg().referralBaseUrl);
+  const { s, ic, ics, is, prm, B, active, unread, trialDays, sub, plan, go, RC } = c;
+  const link = referralLink(s.refCode, app.cfg().referralBaseUrl);
   const msgTxt = `I'm using NexDrive to manage my driving lessons, learners and bookings. If you're a driving instructor, you can try NexDrive free and get an additional month free after your 14-day trial when you sign up using my referral code.\n\nReferral code: ${s.refCode}\n\n${link}`;
   const share = {
     code: s.refCode,
@@ -758,14 +769,14 @@ function vmRest(app, v, c) {
     const rl = s.refs.slice().sort((a, b) => b.joined.localeCompare(a.joined));
     v.rf = {
       ...share,
-      bal: gbp(RC.bal),
+      bal: formatGBP(RC.bal),
       stats: [
         { k: 'Successful', v: RC.ok },
         { k: 'Pending', v: RC.pend },
         { k: 'Total referrals', v: s.refs.length },
-        { k: 'Total earned', v: gbp(RC.earned) },
-        { k: 'Credit used', v: gbp(RC.used) },
-        { k: 'Reward rate', v: REF.pct + '%' },
+        { k: 'Total earned', v: formatGBP(RC.earned) },
+        { k: 'Credit used', v: formatGBP(RC.used) },
+        { k: 'Reward rate', v: REFERRAL.pct + '%' },
       ],
       list: rl.map((r) => rvm(app, r)),
       has: rl.length > 0,
@@ -793,14 +804,14 @@ function vmRest(app, v, c) {
       .reverse()
       .filter((t) => s.crFilter === 'all' || (s.crFilter === 'earned' ? t.amt > 0 : t.amt < 0));
     const pend = s.refs
-      .filter((r) => REF_PENDING.includes(r.status) && r.plan)
-      .reduce((a, r) => a + refReward(PLANS.find((p) => p.key === r.plan)), 0);
+      .filter((r) => PENDING_REFERRAL_STATUSES.includes(r.status) && r.plan)
+      .reduce((a, r) => a + referralReward(PLANS.find((p) => p.key === r.plan)), 0);
     const cover = Math.min(RC.bal, plan.total);
     v.cr = {
-      bal: gbp(RC.bal),
-      earned: gbp(RC.earned),
-      used: gbp(RC.used),
-      pending: gbp(pend),
+      bal: formatGBP(RC.bal),
+      earned: formatGBP(RC.earned),
+      used: formatGBP(RC.used),
+      pending: formatGBP(pend),
       auto: {
         bg: s.autoCredit ? '#7C3AED' : '#CFCFD8',
         x: s.autoCredit ? 22 : 2,
@@ -814,22 +825,26 @@ function vmRest(app, v, c) {
       },
       nextText:
         sub === 'active'
-          ? `Next payment ${gbp(plan.total)} on ${fD(sd('2026-10-26'))}${RC.bal > 0 ? ` · ${gbp(cover)} would be covered` : ''}`
+          ? `Next payment ${formatGBP(plan.total)} on ${formatDate(shiftDemoDate('2026-10-26'))}${RC.bal > 0 ? ` · ${formatGBP(cover)} would be covered` : ''}`
           : 'Applied when your next payment is due',
       filters: [
         ['all', 'All'],
         ['earned', 'Earned'],
         ['used', 'Used'],
-      ].map((x) => ({ t: x[1], ...opt(s.crFilter === x[0]), pick: () => app.setState({ crFilter: x[0] }) })),
+      ].map((x) => ({
+        t: x[1],
+        ...choiceColors(s.crFilter === x[0]),
+        pick: () => app.setState({ crFilter: x[0] }),
+      })),
       tx: tx.map((t) => ({
-        date: fD(t.date),
+        date: formatDate(t.date),
         desc: t.desc,
         type: t.amt > 0 ? 'Referral credit' : 'Credit used',
         tb: t.amt > 0 ? '#DCFCE7' : '#F7F7F9',
         tf: t.amt > 0 ? '#166534' : '#4A4A5A',
-        amt: (t.amt > 0 ? '+' : '−') + gbp(Math.abs(t.amt)),
+        amt: (t.amt > 0 ? '+' : '−') + formatGBP(Math.abs(t.amt)),
         ac: t.amt > 0 ? '#166534' : '#0A0A0F',
-        bal: `Balance ${gbp(t.bal)}`,
+        bal: `Balance ${formatGBP(t.bal)}`,
       })),
       hasTx: tx.length > 0,
       noTx: !tx.length,
@@ -844,16 +859,18 @@ function vmRest(app, v, c) {
     const r = s.refs.find((x) => x.id === s.sheet.rid);
     if (r) {
       const b = rvm(app, r);
-      const step = RS[r.status].step;
+      const step = REFERRAL_STATUS[r.status].step;
       const pl = PLANS.find((x) => x.key === r.plan);
       const failAt = r.plan ? 3 : 2;
       v.rd = {
         ...b,
         failed: step < 0,
         reason: r.reason || '',
-        calc: pl ? `${gbp(pl.total)} × 20% = ${gbp(refReward(pl))}` : 'Worked out when they choose a plan',
-        awarded: r.awardedOn ? fD(r.awardedOn) : '',
-        steps: REF_STEPS.map((t, i) => {
+        calc: pl
+          ? `${formatGBP(pl.total)} × 20% = ${formatGBP(referralReward(pl))}`
+          : 'Worked out when they choose a plan',
+        awarded: r.awardedOn ? formatDate(r.awardedOn) : '',
+        steps: REFERRAL_STEPS.map((t, i) => {
           const done = step < 0 ? i < failAt : i <= step;
           const cur = step >= 0 && i === step + 1;
           const bad = step < 0 && i === failAt;
@@ -877,15 +894,17 @@ function vmRest(app, v, c) {
   const fin = (b) => Math.max(0, b.rate * b.dur - b.discount);
   const lvm = (l) => {
     const miss = app.missing(l);
-    const nx = B.filter((b) => b.lid === l.id && FUT.includes(b.status)).sort(cmpB)[0];
+    const nx = B.filter((b) => b.lid === l.id && FUTURE_STATUSES.includes(b.status)).sort(compareBookings)[0];
     return {
       id: l.id,
       name: l.name,
-      initials: ini(l.name),
+      initials: initials(l.name),
       phone: l.phone,
       pc: l.postcode || 'No postcode',
       incomplete: miss.length > 0,
-      sub: nx ? `Next: ${nx.date === TODAY ? 'Today' : fS(nx.date)}, ${nx.start}` : 'No upcoming lessons',
+      sub: nx
+        ? `Next: ${nx.date === TODAY ? 'Today' : formatShortDate(nx.date)}, ${nx.start}`
+        : 'No upcoming lessons',
       open: () => app.sheet('learnerActions', { lid: l.id }),
       pick: () => app.setState((st) => ({ draft: { ...st.draft, lid: l.id }, sheet: null })),
     };
@@ -894,20 +913,22 @@ function vmRest(app, v, c) {
 
   if (is.calendar) {
     const cd = s.calDate;
-    const wd = (D(cd).getUTCDay() + 6) % 7;
+    const wd = (parseIsoDate(cd).getUTCDay() + 6) % 7;
     const ws = addDays(cd, -wd);
     const HP = 64,
       HW = 40;
-    const d0 = D(cd);
+    const d0 = parseIsoDate(cd);
     const shift = (dir) => {
       if (s.calView === 'month') {
-        app.setState({ calDate: iso(new Date(Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth() + dir, 1))) });
+        app.setState({
+          calDate: toIsoDate(new Date(Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth() + dir, 1))),
+        });
       } else app.setState({ calDate: addDays(cd, dir * (s.calView === 'day' ? 1 : 7)) });
     };
-    const dayB = (date) => B.filter((b) => b.date === date).sort(cmpB);
+    const dayB = (date) => B.filter((b) => b.date === date).sort(compareBookings);
     const blk = (b, hp) => ({
       ...bvm(app, b),
-      top: Math.round(((tm(b.start) - 420) / 60) * hp),
+      top: Math.round(((timeToMinutes(b.start) - 420) / 60) * hp),
       h: Math.max(26, Math.round(b.dur * hp) - 3),
       op: b.status === 'cancelled' ? 0.6 : 1,
     });
@@ -916,7 +937,7 @@ function vmRest(app, v, c) {
     v.cal = {
       views: ['day', 'week', 'month'].map((k) => ({
         t: k[0].toUpperCase() + k.slice(1),
-        ...opt(s.calView === k),
+        ...choiceColors(s.calView === k),
         pick: () => app.setState({ calView: k }),
       })),
       isDay: s.calView === 'day',
@@ -924,10 +945,10 @@ function vmRest(app, v, c) {
       isMonth: s.calView === 'month',
       title:
         s.calView === 'day'
-          ? fL(cd)
+          ? formatLongDate(cd)
           : s.calView === 'week'
-            ? `${fS(ws)} – ${fS(addDays(ws, 6))}`
-            : `${MOL[d0.getUTCMonth()]} ${d0.getUTCFullYear()}`,
+            ? `${formatShortDate(ws)} – ${formatShortDate(addDays(ws, 6))}`
+            : `${MONTHS_LONG[d0.getUTCMonth()]} ${d0.getUTCFullYear()}`,
       prev: () => shift(-1),
       next: () => shift(1),
       today: () => app.setState({ calDate: TODAY }),
@@ -936,8 +957,8 @@ function vmRest(app, v, c) {
         const dt = addDays(ws, i);
         const sel = dt === cd;
         return {
-          dw: DW[D(dt).getUTCDay()],
-          num: D(dt).getUTCDate(),
+          dw: WEEKDAYS_SHORT[parseIsoDate(dt).getUTCDay()],
+          num: parseIsoDate(dt).getUTCDate(),
           bg: sel ? '#0A0A0F' : '#FFFFFF',
           fg: sel ? '#FFFFFF' : dt === TODAY ? '#6D28D9' : '#0A0A0F',
           dot: dayB(dt).some((b) => b.status !== 'cancelled') ? (sel ? '#A78BFA' : '#7C3AED') : 'transparent',
@@ -950,7 +971,7 @@ function vmRest(app, v, c) {
       showNow: cd === TODAY,
       nowTop: Math.round(((NOW - 420) / 60) * HP),
       summary: live.length
-        ? `${live.length} lesson${live.length > 1 ? 's' : ''} · ${live.reduce((a, b) => a + b.dur, 0)} hours · ${gbp(live.reduce((a, b) => a + fin(b), 0))}`
+        ? `${live.length} lesson${live.length > 1 ? 's' : ''} · ${live.reduce((a, b) => a + b.dur, 0)} hours · ${formatGBP(live.reduce((a, b) => a + fin(b), 0))}`
         : 'No lessons booked',
       dayEmpty: dB.length === 0,
       allEmpty: B.length === 0,
@@ -959,8 +980,8 @@ function vmRest(app, v, c) {
       week: [0, 1, 2, 3, 4, 5, 6].map((i) => {
         const dt = addDays(ws, i);
         return {
-          dw: DW[D(dt).getUTCDay()],
-          num: D(dt).getUTCDate(),
+          dw: WEEKDAYS_SHORT[parseIsoDate(dt).getUTCDay()],
+          num: parseIsoDate(dt).getUTCDate(),
           hbg: dt === TODAY ? '#7C3AED' : 'transparent',
           hfg: dt === TODAY ? '#FFFFFF' : '#0A0A0F',
           blocks: dayB(dt).map((b) => blk(b, HW)),
@@ -968,31 +989,31 @@ function vmRest(app, v, c) {
         };
       }),
       legend: ['upcoming', 'ongoing', 'completed', 'cancelled', 'rescheduled'].map((k) => ({
-        t: ST[k].label,
-        c: ST[k].bar,
+        t: STATUS_STYLES[k].label,
+        c: STATUS_STYLES[k].bar,
       })),
       newBooking: go.newBooking,
     };
     if (s.calView === 'month') {
-      const first = iso(new Date(Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), 1)));
-      const fo = (D(first).getUTCDay() + 6) % 7;
+      const first = toIsoDate(new Date(Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), 1)));
+      const fo = (parseIsoDate(first).getUTCDay() + 6) % 7;
       const gs = addDays(first, -fo);
       v.cal.cells = Array.from({ length: 42 }, (_, i) => {
         const dt = addDays(gs, i);
         const bs = dayB(dt);
-        const inM = D(dt).getUTCMonth() === d0.getUTCMonth();
+        const inM = parseIsoDate(dt).getUTCMonth() === d0.getUTCMonth();
         const sel = dt === cd;
         return {
-          num: D(dt).getUTCDate(),
+          num: parseIsoDate(dt).getUTCDate(),
           bg: sel ? '#0A0A0F' : '#FFFFFF',
           fg: sel ? '#FFFFFF' : inM ? (dt === TODAY ? '#6D28D9' : '#0A0A0F') : '#B4B4C4',
           fw: dt === TODAY ? 700 : 500,
-          dots: bs.slice(0, 4).map((b) => ({ c: ST[b.status].bar })),
+          dots: bs.slice(0, 4).map((b) => ({ c: STATUS_STYLES[b.status].bar })),
           pick: () => app.setState({ calDate: dt }),
         };
       });
       v.cal.list = dB.map((b) => bvm(app, b));
-      v.cal.listLabel = fL(cd).toUpperCase();
+      v.cal.listLabel = formatLongDate(cd).toUpperCase();
     }
   }
   if (is.learners) {
@@ -1017,7 +1038,11 @@ function vmRest(app, v, c) {
       filters: [
         ['all', `All · ${active.length}`],
         ['incomplete', `Needs details · ${incN}`],
-      ].map((f) => ({ t: f[1], ...opt(s.lFilter === f[0]), pick: () => app.setState({ lFilter: f[0] }) })),
+      ].map((f) => ({
+        t: f[1],
+        ...choiceColors(s.lFilter === f[0]),
+        pick: () => app.setState({ lFilter: f[0] }),
+      })),
       list: list.map(lvm),
       has: list.length > 0,
       noResults: active.length > 0 && list.length === 0,
@@ -1025,8 +1050,8 @@ function vmRest(app, v, c) {
       hasArch: arch.length > 0,
       arch: arch.map((l) => ({
         name: l.name,
-        initials: ini(l.name),
-        sub: `Removed ${fD(l.archivedOn)} · ${B.filter((b) => b.lid === l.id).length} lesson records kept`,
+        initials: initials(l.name),
+        sub: `Removed ${formatDate(l.archivedOn)} · ${B.filter((b) => b.lid === l.id).length} lesson records kept`,
         open: () => {
           app.setState({ hf: { status: 'all', learner: l.id, range: 'all' }, bkSeg: 'history' });
           app.push('bookings');
@@ -1038,34 +1063,39 @@ function vmRest(app, v, c) {
     const L = app.learner(prm.lid);
     if (L) {
       const bs = B.filter((b) => b.lid === L.id);
-      const up = bs.filter((b) => FUT.includes(b.status)).sort(cmpB);
-      const pv = bs.filter((b) => !FUT.includes(b.status)).sort((a, b) => cmpB(b, a));
+      const up = bs.filter((b) => FUTURE_STATUSES.includes(b.status)).sort(compareBookings);
+      const pv = bs.filter((b) => !FUTURE_STATUSES.includes(b.status)).sort((a, b) => compareBookings(b, a));
       const miss = app.missing(L);
       const done = bs.filter((b) => b.status === 'completed');
       const row = (k, val, req, ok) => ({
         k,
         v: val || (req ? 'Missing' : 'Not added'),
         req: req ? 'Required' : 'Optional',
-        c: req && !ok ? ERR : val ? '#0A0A0F' : '#6B6B7B',
+        c: req && !ok ? ERROR_COLOR : val ? '#0A0A0F' : '#6B6B7B',
         rc: req ? '#6D28D9' : '#6B6B7B',
       });
       v.lp = {
         name: L.name,
-        initials: ini(L.name),
+        initials: initials(L.name),
         incomplete: miss.length > 0,
         complete: !miss.length,
         missText: miss.join(', '),
-        since: `Learner since ${fD(L.since || TODAY)}`,
+        since: `Learner since ${formatDate(L.since || TODAY)}`,
         stats: [
           { k: 'Lessons taken', v: done.length },
           { k: 'Upcoming', v: up.length },
-          { k: 'Charged', v: gbp(done.reduce((a, b) => a + fin(b), 0)) },
+          { k: 'Charged', v: formatGBP(done.reduce((a, b) => a + fin(b), 0)) },
         ],
         rows: [
-          row('Mobile', L.phone, true, vPhone(L.phone)),
+          row('Mobile', L.phone, true, isValidUkMobile(L.phone)),
           row('Address', L.address, true, !!(L.address || '').trim()),
-          row('Postcode', L.postcode, true, vPc(L.postcode)),
-          row('Provisional licence', L.licence ? fLic(L.licence) : '', true, vLic(L.licence)),
+          row('Postcode', L.postcode, true, isValidPostcode(L.postcode)),
+          row(
+            'Provisional licence',
+            L.licence ? formatLicence(L.licence) : '',
+            true,
+            isValidLicence(L.licence),
+          ),
           row('Theory test certificate', L.theory, false, true),
           row('Email', L.email, false, true),
         ],
@@ -1074,7 +1104,11 @@ function vmRest(app, v, c) {
         segs: [
           ['upcoming', `Upcoming · ${up.length}`],
           ['previous', `Previous · ${pv.length}`],
-        ].map((x) => ({ t: x[1], ...opt(s.profSeg === x[0]), pick: () => app.setState({ profSeg: x[0] }) })),
+        ].map((x) => ({
+          t: x[1],
+          ...choiceColors(s.profSeg === x[0]),
+          pick: () => app.setState({ profSeg: x[0] }),
+        })),
         showUp: s.profSeg === 'upcoming',
         showPrev: s.profSeg === 'previous',
         up: up.map((b) => bvm(app, b)),
@@ -1102,7 +1136,7 @@ function vmRest(app, v, c) {
     const n = Object.keys(e).length;
     const b = {};
     ['name', 'phone', 'email', 'address', 'postcode', 'licence', 'theory'].forEach(
-      (k) => (b[k] = e[k] ? ERR : OKB),
+      (k) => (b[k] = e[k] ? ERROR_COLOR : BORDER_COLOR),
     );
     v.lfm = {
       title: l.id ? 'Edit learner' : 'Add learner',
@@ -1137,12 +1171,12 @@ function vmRest(app, v, c) {
     const base = d.date < TODAY ? d.date : TODAY;
     const dates = Array.from({ length: 21 }, (_, i) => {
       const dt = addDays(base, i);
-      const o = opt(dt === d.date);
+      const o = choiceColors(dt === d.date);
       const n = B.filter((x) => x.date === dt && x.status !== 'cancelled').length;
       return {
-        dw: dt === TODAY ? 'Today' : DW[D(dt).getUTCDay()],
-        num: D(dt).getUTCDate(),
-        mon: MO[D(dt).getUTCMonth()],
+        dw: dt === TODAY ? 'Today' : WEEKDAYS_SHORT[parseIsoDate(dt).getUTCDay()],
+        num: parseIsoDate(dt).getUTCDate(),
+        mon: MONTHS_SHORT[parseIsoDate(dt).getUTCMonth()],
         ...o,
         sub: dt === d.date ? '#EDE9FE' : '#6B6B7B',
         n: n ? `${n} booked` : 'Free',
@@ -1151,7 +1185,7 @@ function vmRest(app, v, c) {
     });
     const slots = [];
     for (let mm = 7 * 60; mm <= 19 * 60 + 30; mm += 30) {
-      const t = hm(mm);
+      const t = minutesToTime(mm);
       const past = d.date === TODAY && mm <= NOW;
       const busy = !past && app.overlap(d.date, mm, d.dur * 60, ex);
       const sel = d.start === t;
@@ -1173,22 +1207,22 @@ function vmRest(app, v, c) {
       [2, '2 hours'],
     ].map((x) => ({
       t: x[1],
-      ...opt(!d.custom && d.dur === x[0]),
+      ...choiceColors(!d.custom && d.dur === x[0]),
       pick: () => app.setDraft({ dur: x[0], custom: false }),
     }));
-    durs.push({ t: 'Custom', ...opt(d.custom), pick: () => app.setDraft({ custom: true }) });
+    durs.push({ t: 'Custom', ...choiceColors(d.custom), pick: () => app.setDraft({ custom: true }) });
     const counts = [
       [1, 'Single'],
       [5, '5 lessons'],
       [10, '10 lessons'],
     ].map((x) => ({
       t: x[1],
-      ...opt(!d.countCustom && d.count === x[0]),
+      ...choiceColors(!d.countCustom && d.count === x[0]),
       pick: () => app.setDraft({ count: x[0], countCustom: false, shifts: {} }),
     }));
     counts.push({
       t: 'Custom',
-      ...opt(d.countCustom),
+      ...choiceColors(d.countCustom),
       pick: () => app.setDraft({ countCustom: true, count: Math.max(2, d.count) }),
     });
     const L = m.L;
@@ -1197,11 +1231,11 @@ function vmRest(app, v, c) {
       edit: d.mode === 'edit',
       isNew: d.mode !== 'edit',
       learner: L
-        ? { name: L.name, initials: ini(L.name), sub: `${L.phone} · ${L.postcode || 'No postcode'}` }
+        ? { name: L.name, initials: initials(L.name), sub: `${L.phone} · ${L.postcode || 'No postcode'}` }
         : null,
       noLearner: !L,
       learnerErr: e.learner,
-      learnerBd: e.learner ? ERR : '#CFCFD8',
+      learnerBd: e.learner ? ERROR_COLOR : '#CFCFD8',
       pickLearner: () => app.sheet('pickLearner'),
       blocked: m.blocked,
       missText: m.miss.join(', '),
@@ -1209,18 +1243,18 @@ function vmRest(app, v, c) {
       op: m.blocked ? 0.4 : 1,
       pe: m.blocked ? 'none' : 'auto',
       dates,
-      dateLabel: fL(d.date),
+      dateLabel: formatLongDate(d.date),
       slots,
       startErr: e.start,
       durs,
       custom: d.custom,
-      durLabel: durL(d.dur),
+      durLabel: formatDurationLong(d.dur),
       durInc: () => app.setDraft({ dur: Math.min(8, d.dur + 0.5) }),
       durDec: () => app.setDraft({ dur: Math.max(0.5, d.dur - 0.5) }),
       rates: s.inst.rates.map((r) => ({
         t: r.label,
-        sub: `${gbp(r.rate)}/hr`,
-        ...opt(d.rateKey === r.key),
+        sub: `${formatGBP(r.rate)}/hr`,
+        ...choiceColors(d.rateKey === r.key),
         sc: d.rateKey === r.key ? '#EDE9FE' : '#6B6B7B',
         pick: () => app.setDraft({ rateKey: r.key }),
       })),
@@ -1236,15 +1270,17 @@ function vmRest(app, v, c) {
         ['twice', 'Twice a week'],
       ].map((x) => ({
         t: x[1],
-        ...opt(d.freq === x[0]),
+        ...choiceColors(d.freq === x[0]),
         pick: () => app.setDraft({ freq: x[0], shifts: {} }),
       })),
       sess: m.sess.map((x) => {
         const c = x.conflict ? bvm(app, x.conflict) : null;
         return {
           n: pad(x.i + 1),
-          date: fS(x.date),
-          time: d.start ? `${d.start}–${hm(tm(d.start) + Math.round(d.dur * 60))}` : '—',
+          date: formatShortDate(x.date),
+          time: d.start
+            ? `${d.start}–${minutesToTime(timeToMinutes(d.start) + Math.round(d.dur * 60))}`
+            : '—',
           conflict: !!c,
           cText: c ? `Clashes with ${c.name}, ${c.range}` : '',
           bg: c ? '#FFFBEB' : '#FFFFFF',
@@ -1258,7 +1294,11 @@ function vmRest(app, v, c) {
         ['home', 'Learner’s home'],
         ['test', 'Test centre'],
         ['other', 'Other'],
-      ].map((x) => ({ t: x[1], ...opt(d.locMode === x[0]), pick: () => app.setDraft({ locMode: x[0] }) })),
+      ].map((x) => ({
+        t: x[1],
+        ...choiceColors(d.locMode === x[0]),
+        pick: () => app.setDraft({ locMode: x[0] }),
+      })),
       locText: m.loc || 'Choose a learner first',
       locPc: m.pc,
       notOther: d.locMode !== 'other',
@@ -1274,26 +1314,26 @@ function vmRest(app, v, c) {
         ['10', '£10'],
         ['20', '£20'],
         ['custom', 'Custom'],
-      ].map((x) => ({ t: x[1], ...opt(d.disc === x[0]), pick: () => app.setDraft({ disc: x[0] }) })),
+      ].map((x) => ({ t: x[1], ...choiceColors(d.disc === x[0]), pick: () => app.setDraft({ disc: x[0] }) })),
       discCustom: d.disc === 'custom',
       discIn: d.discCustom,
       hDisc: (x) => app.setDraft({ discCustom: x.target.value.replace(/[^\d.]/g, '') }),
       discErr: e.disc,
-      discBd: e.disc ? ERR : OKB,
+      discBd: e.disc ? ERROR_COLOR : BORDER_COLOR,
       rows: [
-        { k: 'Hourly rate', v: `${gbp(m.rateO.rate)} × ${durS(d.dur)}` },
-        { k: d.count > 1 ? 'Per lesson' : 'Lesson value', v: gbp(m.per) },
-      ].concat(d.count > 1 ? [{ k: `${d.count} lessons`, v: gbp(m.sub) }] : []),
+        { k: 'Hourly rate', v: `${formatGBP(m.rateO.rate)} × ${formatDurationShort(d.dur)}` },
+        { k: d.count > 1 ? 'Per lesson' : 'Lesson value', v: formatGBP(m.per) },
+      ].concat(d.count > 1 ? [{ k: `${d.count} lessons`, v: formatGBP(m.sub) }] : []),
       hasDisc: m.disc > 0,
-      disc: '−' + gbp(m.disc),
-      fin: gbp(m.fin),
+      disc: '−' + formatGBP(m.disc),
+      fin: formatGBP(m.fin),
       cta: d.mode === 'edit' ? 'Save changes' : 'Review booking',
       review: () => app.review(),
       foot: m.blocked
         ? 'Complete learner details to continue'
         : d.count > 1
-          ? `${d.count} lessons · ${durL(d.dur)} each`
-          : `${fS(d.date)} · ${d.start || 'No time'} · ${durS(d.dur)}`,
+          ? `${d.count} lessons · ${formatDurationLong(d.dur)} each`
+          : `${formatShortDate(d.date)} · ${d.start || 'No time'} · ${formatDurationShort(d.dur)}`,
       ctaBg: m.blocked ? '#B4B4C4' : '#7C3AED',
     };
   }
@@ -1303,12 +1343,12 @@ function vmRest(app, v, c) {
       const L = app.learner(b.lid) || {};
       const bv = bvm(app, b);
       const can = ['upcoming', 'rescheduled'].includes(b.status);
-      const mins = tm(b.start) - NOW;
+      const mins = timeToMinutes(b.start) - NOW;
       v.ld = {
         ...bv,
         phone: L.phone || '',
         canChange: can,
-        canNav: FUT.includes(b.status),
+        canNav: FUTURE_STATUSES.includes(b.status),
         isCancelled: b.status === 'cancelled',
         note:
           b.status === 'ongoing'
@@ -1321,8 +1361,8 @@ function vmRest(app, v, c) {
                   ? `Moved from ${bv.prev}`
                   : b.date === TODAY
                     ? `Starts in ${mins >= 60 ? Math.floor(mins / 60) + ' hr ' : ''}${mins % 60} min`
-                    : `In ${dayDiff(TODAY, b.date)} day${dayDiff(TODAY, b.date) > 1 ? 's' : ''}`,
-        rateRow: `${gbp(b.rate)}/hr × ${durS(b.dur)}`,
+                    : `In ${daysBetween(TODAY, b.date)} day${daysBetween(TODAY, b.date) > 1 ? 's' : ''}`,
+        rateRow: `${formatGBP(b.rate)}/hr × ${formatDurationShort(b.dur)}`,
         call: () => app.toast(`Calling ${L.name} · ${L.phone}`, 'neutral'),
         msg: () => app.sheet('message', { kind: 'resend', ids: [b.id] }),
         resched: () => app.openEdit(b.id),
@@ -1337,11 +1377,15 @@ function vmRest(app, v, c) {
   }
   if (is.bookings) {
     const hf = s.hf;
-    const upAll = B.filter((b) => FUT.includes(b.status)).sort(cmpB);
+    const upAll = B.filter((b) => FUTURE_STATUSES.includes(b.status)).sort(compareBookings);
     const groups = [];
     upAll.forEach((b) => {
       const lab =
-        b.date === TODAY ? 'TODAY' : b.date === addDays(TODAY, 1) ? 'TOMORROW' : fL(b.date).toUpperCase();
+        b.date === TODAY
+          ? 'TODAY'
+          : b.date === addDays(TODAY, 1)
+            ? 'TOMORROW'
+            : formatLongDate(b.date).toUpperCase();
       let g = groups[groups.length - 1];
       if (!g || g.label !== lab) {
         g = { label: lab, items: [] };
@@ -1355,13 +1399,17 @@ function vmRest(app, v, c) {
     if (hf.learner !== 'all') hist = hist.filter((b) => b.lid === hf.learner);
     if (hf.range === 'month') hist = hist.filter((b) => b.date.slice(0, 7) === TODAY.slice(0, 7));
     if (hf.range === '30') hist = hist.filter((b) => b.date >= addDays(TODAY, -30));
-    hist.sort((a, b) => cmpB(b, a));
+    hist.sort((a, b) => compareBookings(b, a));
     const comp = hist.filter((b) => b.status === 'completed');
     v.bk = {
       segs: [
         ['upcoming', 'Upcoming'],
         ['history', 'History'],
-      ].map((x) => ({ t: x[1], ...opt(s.bkSeg === x[0]), pick: () => app.setState({ bkSeg: x[0] }) })),
+      ].map((x) => ({
+        t: x[1],
+        ...choiceColors(s.bkSeg === x[0]),
+        pick: () => app.setState({ bkSeg: x[0] }),
+      })),
       isUp: s.bkSeg === 'upcoming',
       isHist: s.bkSeg === 'history',
       groups,
@@ -1373,7 +1421,7 @@ function vmRest(app, v, c) {
         ['rescheduled', 'Rescheduled'],
       ].map((x) => ({
         t: x[1],
-        ...opt(hf.status === x[0]),
+        ...choiceColors(hf.status === x[0]),
         pick: () => app.setState({ hf: { ...hf, status: x[0] } }),
       })),
       learnerOpts: [{ v: 'all', t: 'All learners' }].concat(
@@ -1391,7 +1439,7 @@ function vmRest(app, v, c) {
       hist: hist.map((b) => bvm(app, b)),
       hasHist: hist.length > 0,
       noHist: !hist.length,
-      summary: `${hist.length} record${hist.length === 1 ? '' : 's'} · ${gbp(comp.reduce((a, b) => a + fin(b), 0))} from completed lessons`,
+      summary: `${hist.length} record${hist.length === 1 ? '' : 's'} · ${formatGBP(comp.reduce((a, b) => a + fin(b), 0))} from completed lessons`,
       filtered: hf.status !== 'all' || hf.learner !== 'all' || hf.range !== 'all',
       reset: () => app.setState({ hf: { status: 'all', learner: 'all', range: 'all' } }),
       newBooking: go.newBooking,
@@ -1412,7 +1460,11 @@ function vmRest(app, v, c) {
         ['learners', 'Learners'],
         ['billing', 'Billing'],
         ['rewards', 'Rewards'],
-      ].map((x) => ({ t: x[1], ...opt(s.notifCat === x[0]), pick: () => app.setState({ notifCat: x[0] }) })),
+      ].map((x) => ({
+        t: x[1],
+        ...choiceColors(s.notifCat === x[0]),
+        pick: () => app.setState({ notifCat: x[0] }),
+      })),
       list: list.map((n) => ({
         title: n.title,
         body: n.body,
@@ -1440,7 +1492,7 @@ function vmRest(app, v, c) {
   if (is.more) {
     v.mo = {
       name: s.inst.name,
-      initials: ini(s.inst.name),
+      initials: initials(s.inst.name),
       adi: `ADI ${s.inst.adi} · ${s.inst.status === 'adi' ? 'Approved Driving Instructor' : 'Trainee instructor'}`,
       badge: s.inst.status === 'adi' ? '#16A34A' : '#EC4899',
       business: s.inst.business || 'Independent instructor',
@@ -1451,22 +1503,26 @@ function vmRest(app, v, c) {
         expired: 'Expired · renew to book',
         cancelled: 'Cancelled · no charge',
       }[sub],
-      subC: { trial: '#6D28D9', active: '#166534', payment_failed: ERR, expired: ERR, cancelled: '#6B6B7B' }[
-        sub
-      ],
+      subC: {
+        trial: '#6D28D9',
+        active: '#166534',
+        payment_failed: ERROR_COLOR,
+        expired: ERROR_COLOR,
+        cancelled: '#6B6B7B',
+      }[sub],
       bankSub: s.bank
         ? `Sort code ••-••-${s.bank.sort.slice(-2)} · Acc ••••${s.bank.acct.slice(-4)}`
         : 'Not added — learners won’t see payment details',
       bankC: s.bank ? '#6B6B7B' : '#92400E',
-      refSub: `${gbp(RC.bal)} credit · ${s.refCode}`,
-      priceSub: `${gbp(s.inst.rates[0].rate)}/hr · ${durL(s.inst.defaultDur)} default`,
+      refSub: `${formatGBP(RC.bal)} credit · ${s.refCode}`,
+      priceSub: `${formatGBP(s.inst.rates[0].rate)}/hr · ${formatDurationLong(s.inst.defaultDur)} default`,
       unread: unread ? `${unread} unread` : 'All caught up',
       logout: () => app.sheet('logout'),
     };
   }
   if (is.subscription || is.upgrade || is.upgradeDone) {
     const fp = s.sub.trialEnd;
-    const endD = D(fp);
+    const endD = parseIsoDate(fp);
     endD.setUTCMonth(endD.getUTCMonth() + plan.months);
     const tg = {
       trial: ['Free trial', '#EDE9FE', '#5B21B6'],
@@ -1478,46 +1534,52 @@ function vmRest(app, v, c) {
     const rows =
       sub === 'trial'
         ? [
-            { k: 'Trial ends', v: fF(fp) },
+            { k: 'Trial ends', v: formatFullDate(fp) },
             ...(s.sub.refBonus
-              ? [{ k: 'Referral free month', v: `${fDM(fp)} – ${fD(addMonths(fp, 1))}` }]
+              ? [{ k: 'Referral free month', v: `${formatDayMonth(fp)} – ${formatDate(addMonths(fp, 1))}` }]
               : []),
             {
               k: 'First payment',
-              v: `${gbp(plan.total)} on ${s.sub.refBonus ? fD(addMonths(fp, 1)) : fD(fp)}`,
+              v: `${formatGBP(plan.total)} on ${s.sub.refBonus ? formatDate(addMonths(fp, 1)) : formatDate(fp)}`,
             },
-            { k: 'Billing', v: planTerm(plan) },
+            { k: 'Billing', v: planTermLabel(plan) },
             {
               k: 'Renews',
               v:
                 plan.months === 1
                   ? 'Every month until cancelled'
-                  : `${fD(iso(endD))} for ${plan.months} more months`,
+                  : `${formatDate(toIsoDate(endD))} for ${plan.months} more months`,
             },
             { k: 'Payment method', v: s.sub.card },
           ]
         : sub === 'active'
           ? [
-              { k: 'Next payment', v: `${gbp(plan.total)} on ${fD(sd('2026-10-26'))}` },
-              { k: 'Billing', v: planTerm(plan) },
-              { k: 'Renews', v: plan.months === 1 ? 'Every month' : fD(iso(endD)) },
+              {
+                k: 'Next payment',
+                v: `${formatGBP(plan.total)} on ${formatDate(shiftDemoDate('2026-10-26'))}`,
+              },
+              { k: 'Billing', v: planTermLabel(plan) },
+              { k: 'Renews', v: plan.months === 1 ? 'Every month' : formatDate(toIsoDate(endD)) },
               { k: 'Payment method', v: s.sub.card },
             ]
           : sub === 'payment_failed'
             ? [
-                { k: 'Failed payment', v: `${gbp(plan.total)} on ${fD(sd('2026-10-01'))}` },
-                { k: 'Next retry', v: fD(sd('2026-10-10')) },
-                { k: 'Access until', v: fD(sd('2026-10-14')) },
+                {
+                  k: 'Failed payment',
+                  v: `${formatGBP(plan.total)} on ${formatDate(shiftDemoDate('2026-10-01'))}`,
+                },
+                { k: 'Next retry', v: formatDate(shiftDemoDate('2026-10-10')) },
+                { k: 'Access until', v: formatDate(shiftDemoDate('2026-10-14')) },
                 { k: 'Payment method', v: `${s.sub.card} · declined` },
               ]
             : sub === 'expired'
               ? [
-                  { k: 'Expired on', v: fD(sd('2026-09-30')) },
+                  { k: 'Expired on', v: formatDate(shiftDemoDate('2026-09-30')) },
                   { k: 'Your records', v: 'Kept safe for 12 months' },
                   { k: 'Bookings', v: 'Read-only until you renew' },
                 ]
               : [
-                  { k: 'Access until', v: fF(fp) },
+                  { k: 'Access until', v: formatFullDate(fp) },
                   { k: 'Charges', v: 'None — you won’t be billed' },
                   { k: 'Your records', v: 'Kept for 12 months' },
                 ];
@@ -1525,26 +1587,26 @@ function vmRest(app, v, c) {
       trial:
         trialDays <= 3
           ? {
-              t: `Your trial ends in ${trialDays} days. The ${plan.name.toLowerCase()} plan starts automatically on ${fS(fp)}.`,
+              t: `Your trial ends in ${trialDays} days. The ${plan.name.toLowerCase()} plan starts automatically on ${formatShortDate(fp)}.`,
               bg: '#FFFBEB',
               fg: '#78350F',
               bd: '#FDE68A',
             }
           : null,
       payment_failed: {
-        t: `We couldn’t take your ${gbp(plan.total)} payment on ${fDM(sd('2026-10-01'))}. Update your card by ${fDM(sd('2026-10-14'))} to keep booking lessons.`,
+        t: `We couldn’t take your ${formatGBP(plan.total)} payment on ${formatDayMonth(shiftDemoDate('2026-10-01'))}. Update your card by ${formatDayMonth(shiftDemoDate('2026-10-14'))} to keep booking lessons.`,
         bg: '#FEF2F2',
         fg: '#7F1D1D',
         bd: '#FECACA',
       },
       expired: {
-        t: `Your subscription expired on ${fDM(sd('2026-09-30'))}. Learner and lesson records are safe — renew to start booking again.`,
+        t: `Your subscription expired on ${formatDayMonth(shiftDemoDate('2026-09-30'))}. Learner and lesson records are safe — renew to start booking again.`,
         bg: '#0A0A0F',
         fg: '#FFFFFF',
         bd: '#0A0A0F',
       },
       cancelled: {
-        t: `Cancelled. You keep full access until ${fS(fp)} and won’t be charged.`,
+        t: `Cancelled. You keep full access until ${formatShortDate(fp)} and won’t be charged.`,
         bg: '#F7F7F9',
         fg: '#0A0A0F',
         bd: '#E7E7EC',
@@ -1554,14 +1616,14 @@ function vmRest(app, v, c) {
     const higher = PLANS.filter((x) => x.months > plan.months);
     v.sb = {
       planName: plan.name,
-      price: gbp(plan.price),
+      price: formatGBP(plan.price),
       tag: tg[0],
       tagBg: tg[1],
       tagFg: tg[2],
       rows,
       banner,
-      save: planSave(plan)
-        ? `Saving ${gbp(planSave(plan))} over the term vs monthly`
+      save: planSaving(plan)
+        ? `Saving ${formatGBP(planSaving(plan))} over the term vs monthly`
         : 'No commitment · cancel any time',
       canUpgrade: higher.length > 0 && (sub === 'trial' || sub === 'active'),
       maxed: !higher.length && (sub === 'trial' || sub === 'active'),
@@ -1570,7 +1632,7 @@ function vmRest(app, v, c) {
       cancelLabel: sub === 'trial' ? 'Cancel free trial' : 'Cancel subscription',
       fixPay: sub === 'payment_failed',
       renew: sub === 'expired',
-      fixPayGo: () => app.toast(`Card updated · ${gbp(plan.total)} payment taken`),
+      fixPayGo: () => app.toast(`Card updated · ${formatGBP(plan.total)} payment taken`),
       renewGo: () => {
         app.setState({ upPick: plan.key });
         app.push('upgrade');
@@ -1584,14 +1646,14 @@ function vmRest(app, v, c) {
       credit:
         RC.bal > 0 && sub !== 'expired'
           ? {
-              bal: gbp(RC.bal),
+              bal: formatGBP(RC.bal),
               t: s.autoCredit
                 ? 'Will be applied to your next payment'
                 : 'Use it on your next payment or a longer plan',
             }
           : null,
       isTrial: sub === 'trial',
-      trialEnd: fF(fp),
+      trialEnd: formatFullDate(fp),
       trialLeft: `${trialDays} of 14 days left`,
       trialPct: Math.max(4, Math.round(((14 - trialDays) / 14) * 100)),
     };
@@ -1601,7 +1663,7 @@ function vmRest(app, v, c) {
     const canCr = RC.bal > 0 && !same;
     const applied = canCr && s.useCredit ? Math.min(RC.bal, charge) : 0;
     const payable = Math.round((charge - applied) * 100) / 100;
-    const when = sub === 'trial' ? `when your trial ends on ${fS(fp)}` : 'today';
+    const when = sub === 'trial' ? `when your trial ends on ${formatShortDate(fp)}` : 'today';
     v.up = {
       opts: PLANS.map((pl) => {
         const cur = pl.key === plan.key;
@@ -1609,23 +1671,23 @@ function vmRest(app, v, c) {
         const dis = pl.months < plan.months && sub !== 'expired';
         return {
           name: pl.name,
-          term: planTerm(pl),
-          price: gbp(pl.total),
-          per: planPer(pl),
-          save: planSave(pl) ? `Save ${gbp(planSave(pl))} · ${planPct(pl)}% off` : '',
+          term: planTermLabel(pl),
+          price: formatGBP(pl.total),
+          per: planPeriodLabel(pl),
+          save: planSaving(pl) ? `Save ${formatGBP(planSaving(pl))} · ${planDiscountPercent(pl)}% off` : '',
           cur,
           bg: sel ? '#F7F5FF' : '#FFFFFF',
           bd: sel ? '2px solid #7C3AED' : '1.5px solid #CFCFD8',
-          ring: ring(sel),
+          ring: radioRing(sel),
           op: dis ? 0.45 : 1,
           pick: dis ? () => {} : () => app.setState({ upPick: pl.key }),
         };
       }),
       summary: same
         ? 'You’re already on this plan. Choose a longer term to save more.'
-        : `${pk.name} for ${gbp(pk.total)}${pk.months > 1 ? ` (${gbp(pk.price)}/month)` : ''}, starting ${when}. ${planSave(pk) ? `You save ${gbp(planSave(pk))} over the term compared with monthly.` : ''}`,
+        : `${pk.name} for ${formatGBP(pk.total)}${pk.months > 1 ? ` (${formatGBP(pk.price)}/month)` : ''}, starting ${when}. ${planSaving(pk) ? `You save ${formatGBP(planSaving(pk))} over the term compared with monthly.` : ''}`,
       hasCredit: canCr,
-      creditAvail: gbp(RC.bal),
+      creditAvail: formatGBP(RC.bal),
       cred: {
         bg: s.useCredit ? '#7C3AED' : '#CFCFD8',
         x: s.useCredit ? 22 : 2,
@@ -1634,15 +1696,15 @@ function vmRest(app, v, c) {
       rows: same
         ? []
         : [
-            { k: `${pk.name} plan`, v: gbp(charge), c: '#0A0A0F' },
-            ...(applied ? [{ k: 'NexDrive Credit', v: '−' + gbp(applied), c: '#166534' }] : []),
+            { k: `${pk.name} plan`, v: formatGBP(charge), c: '#0A0A0F' },
+            ...(applied ? [{ k: 'NexDrive Credit', v: '−' + formatGBP(applied), c: '#166534' }] : []),
           ],
       showRows: !same,
-      payable: gbp(payable),
-      payLabel: sub === 'trial' ? `Payable on ${fS(fp)}` : 'Amount payable today',
-      creditLeft: applied ? `${gbp(RC.bal - applied)} credit left after this payment` : '',
-      price: gbp(payable),
-      was: same ? '' : applied ? `after ${gbp(applied)} NexDrive Credit` : `${pk.name} plan`,
+      payable: formatGBP(payable),
+      payLabel: sub === 'trial' ? `Payable on ${formatShortDate(fp)}` : 'Amount payable today',
+      creditLeft: applied ? `${formatGBP(RC.bal - applied)} credit left after this payment` : '',
+      price: formatGBP(payable),
+      was: same ? '' : applied ? `after ${formatGBP(applied)} NexDrive Credit` : `${pk.name} plan`,
       ctaBg: same ? '#B4B4C4' : '#7C3AED',
       cta: sub === 'expired' ? 'Renew subscription' : 'Confirm upgrade',
       confirm: () => {
@@ -1672,7 +1734,7 @@ function vmRest(app, v, c) {
                     cat: 'rewards',
                     icon: 'gift',
                     title: 'NexDrive Credit applied',
-                    body: `${gbp(applied)} of your NexDrive Credit has been applied to your subscription.`,
+                    body: `${formatGBP(applied)} of your NexDrive Credit has been applied to your subscription.`,
                     time: 'now',
                     unread: true,
                     act: { screen: 'credit' },
@@ -1684,7 +1746,7 @@ function vmRest(app, v, c) {
               cat: 'billing',
               icon: 'upgrade',
               title: 'Subscription upgraded',
-              body: `You’re now on the ${pk.name.toLowerCase()} plan · ${gbp(pk.total)}${applied ? `, ${gbp(payable)} paid after credit` : ''}.`,
+              body: `You’re now on the ${pk.name.toLowerCase()} plan · ${formatGBP(pk.total)}${applied ? `, ${formatGBP(payable)} paid after credit` : ''}.`,
               time: 'now',
               unread: true,
               act: { screen: 'subscription' },
@@ -1698,15 +1760,15 @@ function vmRest(app, v, c) {
     v.upd = {
       name: plan.name,
       rows: [
-        { k: 'Plan', v: `${plan.name} · ${gbp(plan.total)}` },
+        { k: 'Plan', v: `${plan.name} · ${formatGBP(plan.total)}` },
         ...(ud.applied
           ? [
-              { k: 'NexDrive Credit used', v: '−' + gbp(ud.applied) },
-              { k: 'Amount paid', v: gbp(ud.payable) },
+              { k: 'NexDrive Credit used', v: '−' + formatGBP(ud.applied) },
+              { k: 'Amount paid', v: formatGBP(ud.payable) },
             ]
-          : [{ k: 'Amount', v: gbp(ud.payable) }]),
-        { k: 'Starts', v: sub === 'trial' ? `${fS(fp)}, when your trial ends` : 'Today' },
-        { k: 'Saving over term', v: planSave(plan) ? gbp(planSave(plan)) : '—' },
+          : [{ k: 'Amount', v: formatGBP(ud.payable) }]),
+        { k: 'Starts', v: sub === 'trial' ? `${formatShortDate(fp)}, when your trial ends` : 'Today' },
+        { k: 'Saving over term', v: planSaving(plan) ? formatGBP(planSaving(plan)) : '—' },
         { k: 'Receipt sent to', v: s.inst.email },
       ],
       done: () => app.back(),
@@ -1717,15 +1779,19 @@ function vmRest(app, v, c) {
     const e = s.profTried
       ? {
           ...(!f.name.trim() ? { name: 'Enter your full name' } : {}),
-          ...(!vPhone(f.phone) ? { phone: 'Enter a UK mobile number, like 07700 900123' } : {}),
-          ...(!vEmail(f.email) ? { email: 'Enter a valid email address' } : {}),
+          ...(!isValidUkMobile(f.phone) ? { phone: 'Enter a UK mobile number, like 07700 900123' } : {}),
+          ...(!isValidEmail(f.email) ? { email: 'Enter a valid email address' } : {}),
         }
       : {};
     const h = (k) => app.setIn('profForm', k);
     v.pf = {
       f,
       e,
-      b: { name: e.name ? ERR : OKB, phone: e.phone ? ERR : OKB, email: e.email ? ERR : OKB },
+      b: {
+        name: e.name ? ERROR_COLOR : BORDER_COLOR,
+        phone: e.phone ? ERROR_COLOR : BORDER_COLOR,
+        email: e.email ? ERROR_COLOR : BORDER_COLOR,
+      },
       h: {
         name: h('name'),
         phone: h('phone'),
@@ -1735,12 +1801,13 @@ function vmRest(app, v, c) {
         business: h('business'),
         areas: h('areas'),
       },
-      initials: ini(f.name),
+      initials: initials(f.name),
       status: f.status === 'adi' ? 'Approved Driving Instructor' : 'Trainee instructor (PDI)',
       badge: f.status === 'adi' ? '#16A34A' : '#EC4899',
       photo: () => app.toast('Choose a photo from your library', 'neutral'),
       save: () => {
-        if (!f.name.trim() || !vPhone(f.phone) || !vEmail(f.email)) return app.setState({ profTried: true });
+        if (!f.name.trim() || !isValidUkMobile(f.phone) || !isValidEmail(f.email))
+          return app.setState({ profTried: true });
         app.setState({
           inst: {
             ...s.inst,
@@ -1765,7 +1832,7 @@ function vmRest(app, v, c) {
         label: r.label,
         note: i === 0 ? 'Default for new bookings' : 'Optional session rate',
         rate: r.rate,
-        bd: !(parseFloat(r.rate) > 0) ? ERR : OKB,
+        bd: !(parseFloat(r.rate) > 0) ? ERROR_COLOR : BORDER_COLOR,
         h: (e) => {
           const rates = f.rates.map((x, j) =>
             j === i ? { ...x, rate: e.target.value.replace(/[^\d.]/g, '') } : x,
@@ -1779,10 +1846,10 @@ function vmRest(app, v, c) {
         [2, '2 hours'],
       ].map((x) => ({
         t: x[1],
-        ...opt(f.dur === x[0]),
+        ...choiceColors(f.dur === x[0]),
         pick: () => app.setState({ priceForm: { ...f, dur: x[0] } }),
       })),
-      preview: [1, 2, 3].map((x) => ({ k: durL(x), v: gbp(std * x) })),
+      preview: [1, 2, 3].map((x) => ({ k: formatDurationLong(x), v: formatGBP(std * x) })),
       save: () => {
         if (bad) return app.toast('Enter a price above £0 for every rate', 'err');
         app.setState({
@@ -1793,7 +1860,7 @@ function vmRest(app, v, c) {
           },
         });
         app.back();
-        app.toast(`Prices saved · new bookings use ${gbp(std)}/hr`);
+        app.toast(`Prices saved · new bookings use ${formatGBP(std)}/hr`);
       },
     };
   }
@@ -1814,7 +1881,11 @@ function vmRest(app, v, c) {
       saved: !editing,
       f,
       e,
-      b: { holder: e.holder ? ERR : OKB, sort: e.sort ? ERR : OKB, acct: e.acct ? ERR : OKB },
+      b: {
+        holder: e.holder ? ERROR_COLOR : BORDER_COLOR,
+        sort: e.sort ? ERROR_COLOR : BORDER_COLOR,
+        acct: e.acct ? ERROR_COLOR : BORDER_COLOR,
+      },
       missing: !s.bank,
       h: {
         holder: app.setIn('bankForm', 'holder'),
@@ -1875,12 +1946,12 @@ function vmRest(app, v, c) {
       },
       mins: ['15', '30', '60'].map((x) => ({
         t: x + ' min',
-        ...opt(pr.mins === x),
+        ...choiceColors(pr.mins === x),
         pick: () => app.setState({ prefs: { ...pr, mins: x } }),
       })),
       chans: ['SMS', 'WhatsApp', 'Email'].map((x) => ({
         t: x,
-        ...opt(pr.channel === x),
+        ...choiceColors(pr.channel === x),
         pick: () => app.setState({ prefs: { ...pr, channel: x } }),
       })),
       showMins: pr.reminder,
@@ -1906,7 +1977,11 @@ function vmRest(app, v, c) {
       pwLabel: f ? 'Cancel' : 'Change',
       f: f || { cur: '', nw: '', conf: '' },
       e,
-      b: { cur: e.cur ? ERR : OKB, nw: e.nw ? ERR : OKB, conf: e.conf ? ERR : OKB },
+      b: {
+        cur: e.cur ? ERROR_COLOR : BORDER_COLOR,
+        nw: e.nw ? ERROR_COLOR : BORDER_COLOR,
+        conf: e.conf ? ERROR_COLOR : BORDER_COLOR,
+      },
       h: { cur: app.setIn('pw', 'cur'), nw: app.setIn('pw', 'nw'), conf: app.setIn('pw', 'conf') },
       save: () => {
         if (!f.cur || f.nw.length < 8 || !/\d/.test(f.nw) || f.nw !== f.conf)
@@ -1959,7 +2034,9 @@ function vmRest(app, v, c) {
       },
     };
   if (S.type === 'pickBooking') {
-    const up = B.filter((b) => b.lid === S.lid && ['upcoming', 'rescheduled'].includes(b.status)).sort(cmpB);
+    const up = B.filter((b) => b.lid === S.lid && ['upcoming', 'rescheduled'].includes(b.status)).sort(
+      compareBookings,
+    );
     v.pb = {
       title:
         S.mode === 'reschedule' ? 'Which lesson do you want to move?' : 'Which lesson do you want to cancel?',
@@ -1982,8 +2059,8 @@ function vmRest(app, v, c) {
           ? 'This lesson is already booked'
           : 'You already have a lesson scheduled during this time.',
         body: S.dup
-          ? `${cn} already has a lesson at ${S.start} on ${fS(S.date)}. Booking it again would create a duplicate.`
-          : `A lesson at ${S.start} on ${fS(S.date)} would overlap this booking.`,
+          ? `${cn} already has a lesson at ${S.start} on ${formatShortDate(S.date)}. Booking it again would create a duplicate.`
+          : `A lesson at ${S.start} on ${formatShortDate(S.date)} would overlap this booking.`,
         another: () => {
           const d = app.state.draft;
           app.setState({ sheet: null });
@@ -2004,7 +2081,7 @@ function vmRest(app, v, c) {
     const m = app.bfModel();
     if (m && m.L) {
       const d = m.d;
-      const end = hm(tm(d.start) + Math.round(d.dur * 60));
+      const end = minutesToTime(timeToMinutes(d.start) + Math.round(d.dur * 60));
       v.cm = {
         title: d.count > 1 ? `Confirm ${d.count} lessons` : 'Confirm booking',
         multi: d.count > 1,
@@ -2013,26 +2090,28 @@ function vmRest(app, v, c) {
             d.count > 1
               ? [{ k: 'Schedule', v: `${d.freq === 'weekly' ? 'Weekly' : 'Twice a week'} at ${d.start}` }]
               : [
-                  { k: 'Date', v: fF(d.date) },
+                  { k: 'Date', v: formatFullDate(d.date) },
                   { k: 'Time', v: `${d.start}–${end}` },
                 ],
           )
           .concat([
-            { k: 'Duration', v: durL(d.dur) + (d.count > 1 ? ' each' : '') },
+            { k: 'Duration', v: formatDurationLong(d.dur) + (d.count > 1 ? ' each' : '') },
             { k: 'Location', v: `${m.loc}, ${m.pc}` },
           ]),
         sess:
-          d.count > 1 ? m.sess.map((x) => ({ n: pad(x.i + 1), t: `${fS(x.date)} · ${d.start}–${end}` })) : [],
+          d.count > 1
+            ? m.sess.map((x) => ({ n: pad(x.i + 1), t: `${formatShortDate(x.date)} · ${d.start}–${end}` }))
+            : [],
         price: [
           {
             k:
               d.count > 1
-                ? `${d.count} × ${gbp(m.per)}`
-                : `Lesson value (${gbp(m.rateO.rate)} × ${durS(d.dur)})`,
-            v: gbp(m.sub),
+                ? `${d.count} × ${formatGBP(m.per)}`
+                : `Lesson value (${formatGBP(m.rateO.rate)} × ${formatDurationShort(d.dur)})`,
+            v: formatGBP(m.sub),
           },
-        ].concat(m.disc ? [{ k: 'Discount', v: '−' + gbp(m.disc) }] : []),
-        fin: gbp(m.fin),
+        ].concat(m.disc ? [{ k: 'Discount', v: '−' + formatGBP(m.disc) }] : []),
+        fin: formatGBP(m.fin),
         confirm: () => app.confirmBooking(),
         edit: () => app.setState({ sheet: null }),
       };
@@ -2045,7 +2124,11 @@ function vmRest(app, v, c) {
       v.cl = {
         ...bvm(app, b),
         reasons: ['Learner request', 'Instructor unavailable', 'Weather', 'Vehicle issue', 'Other'].map(
-          (r) => ({ t: r, ...opt(S.reason === r), pick: () => app.setState({ sheet: { ...S, reason: r } }) }),
+          (r) => ({
+            t: r,
+            ...choiceColors(S.reason === r),
+            pick: () => app.setState({ sheet: { ...S, reason: r } }),
+          }),
         ),
         confirm: () => app.cancelLesson(b.id, S.reason),
         keep: () => app.setState({ sheet: null }),
@@ -2065,7 +2148,9 @@ function vmRest(app, v, c) {
         copy: () => {
           try {
             navigator.clipboard.writeText(q);
-          } catch (e) {}
+          } catch {
+            // Best effort: not available in every browser or context.
+          }
           app.toast('Address copied');
         },
         steps: [
@@ -2087,7 +2172,7 @@ function vmRest(app, v, c) {
       title: sub === 'trial' ? 'Cancel your free trial?' : 'Cancel your subscription?',
       body:
         sub === 'trial'
-          ? `You won’t be charged. You keep full access until ${fF(s.sub.trialEnd)}, then bookings become read-only. Learner and lesson records are kept for 12 months.`
+          ? `You won’t be charged. You keep full access until ${formatFullDate(s.sub.trialEnd)}, then bookings become read-only. Learner and lesson records are kept for 12 months.`
           : 'Your plan stays active until the end of your current term, then won’t renew. You won’t be charged again after that.',
       confirm: () => {
         app.setState({ sub: { ...s.sub, state: 'cancelled' }, sheet: null });

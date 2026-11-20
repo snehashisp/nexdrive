@@ -41,9 +41,37 @@ function Monogram({ id }) {
         ))}
         <g style={anim('aTop', 0.6, 0.05)}>{half('T')}</g>
         <g style={anim('aBot', 0.6, 0.05)}>{half('B')}</g>
-        <line x1="-40" y1="125" x2="160" y2="27" stroke="#FFFFFF" strokeWidth="2" style={anim('aFlash', 0.35, 0.5, 'ease-out')} />
-        <line x1="-2" y1="101" x2="-30" y2="115" stroke="#9333EA" strokeWidth="4" strokeLinecap="round" strokeDasharray="32" style={anim('ndDraw', 0.3, 0.55)} />
-        <line x1="122" y1="41" x2="150" y2="27" stroke="#9333EA" strokeWidth="4" strokeLinecap="round" strokeDasharray="32" style={anim('ndDraw', 0.3, 0.6)} />
+        <line
+          x1="-40"
+          y1="125"
+          x2="160"
+          y2="27"
+          stroke="#FFFFFF"
+          strokeWidth="2"
+          style={anim('aFlash', 0.35, 0.5, 'ease-out')}
+        />
+        <line
+          x1="-2"
+          y1="101"
+          x2="-30"
+          y2="115"
+          stroke="#9333EA"
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeDasharray="32"
+          style={anim('ndDraw', 0.3, 0.55)}
+        />
+        <line
+          x1="122"
+          y1="41"
+          x2="150"
+          y2="27"
+          stroke="#9333EA"
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeDasharray="32"
+          style={anim('ndDraw', 0.3, 0.6)}
+        />
       </g>
     </svg>
   );
@@ -57,7 +85,16 @@ function Wordmark() {
     [72, 40],
   ];
   return (
-    <span style={{ fontSize: 36, fontWeight: 500, lineHeight: 1, display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>
+    <span
+      style={{
+        fontSize: 36,
+        fontWeight: 500,
+        lineHeight: 1,
+        display: 'flex',
+        alignItems: 'center',
+        whiteSpace: 'nowrap',
+      }}
+    >
       <span style={{ letterSpacing: '.105em', display: 'flex' }}>
         {'NEX'.split('').map((letter, i) => (
           <span key={i} style={{ display: 'inline-block', ...anim('aLetter', 0.45, 0.55 + i * 0.07) }}>
@@ -131,7 +168,17 @@ export default function Splash({ run, fadingOut, onSkip }) {
         <div style={{ marginTop: 20, fontSize: 14, color: '#8A8A9C', ...anim('ndUp', 0.5, 1.55) }}>
           Lessons, learners and bookings
         </div>
-        <div style={{ position: 'absolute', left: 32, right: 32, bottom: 64, display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div
+          style={{
+            position: 'absolute',
+            left: 32,
+            right: 32,
+            bottom: 64,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+          }}
+        >
           <div style={{ height: 2, background: '#1A1A24', overflow: 'hidden' }}>
             <div
               style={{

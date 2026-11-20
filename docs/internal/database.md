@@ -9,7 +9,7 @@
 | Reference data | `database/seed.sql`: the four subscription plans (required in every environment) |
 | Demo data | `database/demo_data.sql` (SQL) and `database/sample_data.json` (the same data in API JSON shape). Local/staging only |
 | Code that reads/writes the DB | **None.** No API exists yet, and `server.js` has no database driver |
-| Front end | Uses its own in-memory demo data (`src/data/seeds.js`), which mirrors `demo_data.sql` |
+| Front end | Uses its own in-memory demo data (`src/demo/seeds.js`), which mirrors `demo_data.sql` |
 
 So everything below describes **how the database is designed to be used** by the planned API (`API_DOCUMENTATION.md`), plus the gaps between that design and what the front end does today (section 7).
 

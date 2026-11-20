@@ -21,7 +21,7 @@ Severity: **High** = blocks real users or is a security risk · **Medium** = wil
 | Push notifications | An in-app banner pretends to be a push, triggered by a timer | `App.schedulePush()` |
 | Profile photo upload | Toast only | `viewModel.js` (`pf.photo`) |
 | Background jobs (Redis/BullMQ) | Lesson status changes are computed in the browser every 15s | `App.tick()`, `liveStatus()` |
-| Referral validation | Codes are checked against a hard-coded demo table | `REF_CODES` in `src/data/constants.js` |
+| Referral validation | Codes are checked against a hard-coded demo table | `REF_CODES` in `src/demo/referral-codes.js` |
 | `mode: 'live'` | The setting exists in `config.js` but no code reads it; there is no `api.js` client | `public/js/config.js` |
 
 ### A2. Database designed but unused (High)
@@ -53,9 +53,9 @@ On `main`, the page shows a fragment of script text instead of the app. Commit `
 
 The offline banner exists (preview prop `offline`), but there is no queue of changes made offline. Offline support is read-only caching of the app files.
 
-### A7. No tests, linting or CI (Medium)
+### A7. Few tests, no CI (Medium)
 
-There are no unit, integration or end-to-end tests. There is no ESLint/Prettier config and no CI pipeline. The test plan in `DEVELOPER_HANDOVER.md` A6 is not implemented.
+TypeScript, ESLint (including import boundaries between features), Prettier and Vitest are set up; `npm run check` runs them all. Unit tests cover only the shared helpers in `src/lib/` and the referral and plan rules. Screens and `App` actions have no tests, there are no end-to-end tests, and there is no CI pipeline. The test plan in `DEVELOPER_HANDOVER.md` A6 is not implemented.
 
 ### A8. Broken or outdated pieces of the repository (Medium / Low)
 
@@ -77,7 +77,7 @@ There are no unit, integration or end-to-end tests. There is no ESLint/Prettier 
 ### A9. Placeholder business values (Medium)
 
 - Subscription prices are marked "placeholder, confirm before launch" in `seed.sql`.
-- The same prices are hard-coded in three places: `database/seed.sql`, `src/data/constants.js` (`PLANS`), and `product/index.html`. They must be changed together.
+- The same prices are hard-coded in three places: `database/seed.sql`, `src/features/subscription/plans.js` (`PLANS`), and `product/index.html`. They must be changed together.
 - The demo referral code `NEXMARK14` would fail the database's code format check (it needs two digits from 20 to 99).
 
 ---
@@ -93,7 +93,7 @@ Most of these come from how the app was made. It was exported from a design tool
 | B3 | **Class component, not hooks** | Hooks are the norm since 2019. Classes still work but are legacy style | Most current docs and examples won't match |
 | B4 | **Inline `style={{…}}` on almost every element** (roughly 1,500 style objects) with literal hex colours, while `base.css` defines colour tokens (`--nd-violet`…) that the components don't use | CSS modules, a utility framework (Tailwind), styled components, or a component library; tokens referenced, not repeated | Theming or a brand change means editing many files |
 | B5 | **Hover/focus/pressed styles via `!important` utility classes** (`interactions.css`), needed because inline styles beat normal CSS | Normal CSS rules, possible once styles move out of inline objects | Fragile ordering; `!important` spreads |
-| B6 | **Very short identifiers** (`s`, `p`, `v`, `B`, `L`, `d`, `m`, `hm`, `bf`, `bk2`, `sh`, `fS`, `fDM`, `bvm`, `rvm`) and dense one-line logic | Descriptive names | Slow to read; easy to misread |
+| B6 | **Very short identifiers** (`s`, `p`, `v`, `B`, `L`, `d`, `m`, `hm`, `bf`, `bk2`, `sh`, `fS`, `fDM`, `bvm`, `rvm`) and dense one-line logic | Descriptive names | Slow to read; easy to misread. Partly fixed: the helpers in `src/lib/` and the feature constants now have descriptive names (`formatShortDate`, `timeToMinutes`, `formatGBP`, `isValidPostcode`…); the short names inside `App` and the view model remain |
 | B7 | **Navigation is a stack in state** (`tab` + `stack`), with no URLs | A router (React Router) with a URL per screen | No deep links, no browser back button, no bookmarkable screens; the server's SPA fallback has nothing to route |
 | B8 | **A module-level mutable clock**: `export let TODAY, NOW`, reassigned by `syncClock()`, plus `sd()` shifting all demo dates relative to 7 Oct 2026 | Pass "now" in explicitly, or use a date library and a clock abstraction | Hidden global state; tests need clock mocking |
 | B9 | **Hand-rolled date/time helpers on `'YYYY-MM-DD'` strings and minutes** | A time-zone-aware library (Luxon, date-fns-tz) | BST/GMT and time-zone issues once real data arrives (A5) |

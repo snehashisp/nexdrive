@@ -11,7 +11,8 @@ export default function QrCode({ text, size }) {
     const margin = 4; // the blank "quiet zone" scanners need around the code
     let d = '';
     for (let row = 0; row < count; row++)
-      for (let col = 0; col < count; col++) if (qr.isDark(row, col)) d += `M${col + margin} ${row + margin}h1v1h-1z`;
+      for (let col = 0; col < count; col++)
+        if (qr.isDark(row, col)) d += `M${col + margin} ${row + margin}h1v1h-1z`;
     return { path: d, total: count + margin * 2 };
   }, [text]);
 

@@ -1,4 +1,4 @@
-import QrCode from '../components/QrCode';
+import QrCode from './QrCode';
 export default function ReferralQr({ v }) {
   const { back, ic, icl, ics, rq } = v;
   if (!rq) return null;

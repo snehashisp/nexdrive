@@ -2,37 +2,31 @@ import { Component, createRef } from 'react';
 import qrcode from 'qrcode-generator';
 import AppView from './AppView';
 import { buildViewModel } from './viewModel';
-import {
-  FUT,
-  PLANS,
-  REF,
-  REF_CODES,
-  REF_USED_PHONES,
-  TEST,
-  cmpB,
-  genCode,
-  liveStatus,
-  refReward,
-} from './data/constants';
-import { seedBookings, seedCredit, seedInst, seedLearners, seedNotifs, seedReferrals } from './data/seeds';
+import { REF_CODES, REF_USED_PHONES } from '@/demo/referral-codes';
+import { FUTURE_STATUSES, TEST_CENTRE } from '@/features/bookings/constants';
+import { compareBookings, withLiveStatus } from '@/features/bookings/utils';
+import { REFERRAL } from '@/features/referrals/constants';
+import { generateReferralCode, referralReward } from '@/features/referrals/utils';
+import { PLANS } from '@/features/subscription/plans';
+import { seedBookings, seedCredit, seedInst, seedLearners, seedNotifs, seedReferrals } from '@/demo/seeds';
 import {
   NOW,
   TODAY,
   addDays,
   addMonths,
-  dayDiff,
-  durL,
-  fD,
-  fDM,
-  fS,
-  fSY,
-  hm,
-  sd,
+  daysBetween,
+  formatDurationLong,
+  formatDate,
+  formatDayMonth,
+  formatShortDate,
+  formatShortDateYear,
+  minutesToTime,
+  shiftDemoDate,
   syncClock,
-  tm,
-} from './lib/dates';
-import { cLic, gbp } from './lib/format';
-import { vEmail, vLic, vPc, vPhone } from './lib/validation';
+  timeToMinutes,
+} from '@/lib/dates';
+import { normalizeLicence, formatGBP } from '@/lib/format';
+import { isValidEmail, isValidLicence, isValidPostcode, isValidUkMobile } from '@/lib/validation';
 
 // The whole NexDrive app. This class owns all the data (`this.state`) and every action that changes it
 // (booking a lesson, saving a learner, switching screens…). It does not draw anything itself:
@@ -84,8 +78,8 @@ export default class App extends Component {
       sub: {
         plan: '1m',
         state: 'active',
-        trialEnd: sd('2026-10-10'),
-        start: sd('2025-10-26'),
+        trialEnd: shiftDemoDate('2026-10-10'),
+        start: shiftDemoDate('2025-10-26'),
         card: 'Visa •••• 4242',
       },
       sheet: null,
@@ -106,7 +100,7 @@ export default class App extends Component {
       notifCat: 'all',
       upPick: '12m',
       ref: { code: '', status: null, via: null },
-      refCode: REF.code,
+      refCode: REFERRAL.code,
       refs: full ? seedReferrals() : [],
       credit: full ? seedCredit() : [],
       autoCredit: false,
@@ -152,7 +146,9 @@ export default class App extends Component {
             .slice(0, 16),
           'link',
         );
-    } catch (e) {}
+    } catch {
+      // Best effort: not available in every browser or context.
+    }
     if (this.launchOn()) this.startSplash();
     else this.schedulePush();
   }
@@ -215,13 +211,14 @@ export default class App extends Component {
     syncClock();
     if (pd === TODAY && pn === NOW) return;
     const s = this.state;
-    const ch = { bookings: s.bookings.map(liveStatus) };
+    const ch = { bookings: s.bookings.map(withLiveStatus) };
     if (s.calDate === pd && pd !== TODAY) ch.calDate = TODAY;
     this.setState(ch, () => {
       const st = this.state;
       if (st.phase !== 'app' || !st.reminder || !st.prefs.reminder) return;
       const nb = this.nextLesson();
-      if (nb && nb.id !== this._pushed && tm(nb.start) - NOW <= (+st.prefs.mins || 30)) this.schedulePush();
+      if (nb && nb.id !== this._pushed && timeToMinutes(nb.start) - NOW <= (+st.prefs.mins || 30))
+        this.schedulePush();
     });
   }
   nextLesson(any) {
@@ -230,13 +227,13 @@ export default class App extends Component {
         (b) =>
           ['upcoming', 'rescheduled'].includes(b.status) &&
           (any ? b.date >= TODAY : b.date === TODAY) &&
-          (b.date > TODAY || tm(b.start) > NOW),
+          (b.date > TODAY || timeToMinutes(b.start) > NOW),
       )
-      .sort(cmpB)[0];
+      .sort(compareBookings)[0];
   }
   pushInfo(b) {
     const L = this.state.learners.find((l) => l.id === b.lid);
-    const mins = dayDiff(TODAY, b.date) * 1440 + tm(b.start) - NOW;
+    const mins = daysBetween(TODAY, b.date) * 1440 + timeToMinutes(b.start) - NOW;
     const when =
       mins < 60
         ? `${mins} minute${mins === 1 ? '' : 's'}`
@@ -247,8 +244,8 @@ export default class App extends Component {
       bid: b.id,
       title: when
         ? `Your next lesson starts in ${when}`
-        : `Your next lesson is ${b.date === addDays(TODAY, 1) ? 'tomorrow' : 'on ' + fS(b.date)}`,
-      text: `${L ? L.name : 'Learner'} · ${b.date === TODAY ? '' : fS(b.date) + ', '}${b.start} · ${durL(b.dur)} · ${b.pc}`,
+        : `Your next lesson is ${b.date === addDays(TODAY, 1) ? 'tomorrow' : 'on ' + formatShortDate(b.date)}`,
+      text: `${L ? L.name : 'Learner'} · ${b.date === TODAY ? '' : formatShortDate(b.date) + ', '}${b.start} · ${formatDurationLong(b.dur)} · ${b.pc}`,
     };
   }
   schedulePush(force) {
@@ -258,7 +255,7 @@ export default class App extends Component {
     if (s.phase !== 'app' || !s.reminder || !s.prefs.reminder) return;
     const b = this.nextLesson(force);
     if (!b) return;
-    if (!force && tm(b.start) - NOW > (+s.prefs.mins || 30)) return;
+    if (!force && timeToMinutes(b.start) - NOW > (+s.prefs.mins || 30)) return;
     this._pushed = b.id;
     this.pt = setTimeout(
       () => {
@@ -272,7 +269,7 @@ export default class App extends Component {
     const n = this.init('app', data);
     this.setState({ ...n, vw: this.state.vw, vh: this.state.vh, ...extra }, () => {
       this.schedulePush();
-      cb && cb();
+      cb?.();
     });
   }
   flow(k) {
@@ -346,7 +343,7 @@ export default class App extends Component {
     const s = this.state;
     const r = s.refs.find((x) => x.id === rid);
     if (!r || r.status === 'awarded' || !r.plan) return;
-    const amt = refReward(PLANS.find((p) => p.key === r.plan));
+    const amt = referralReward(PLANS.find((p) => p.key === r.plan));
     const first = r.name.split(' ')[0];
     const now = Date.now();
     this.setState({
@@ -360,8 +357,8 @@ export default class App extends Component {
           id: 'n' + now,
           cat: 'rewards',
           icon: 'gift',
-          title: `${gbp(amt)} added to your NexDrive Credit`,
-          body: `Great news! ${first} has joined NexDrive using your referral code. ${gbp(amt)} has been added to your NexDrive Credit.`,
+          title: `${formatGBP(amt)} added to your NexDrive Credit`,
+          body: `Great news! ${first} has joined NexDrive using your referral code. ${formatGBP(amt)} has been added to your NexDrive Credit.`,
           time: 'now',
           unread: true,
           act: { screen: 'credit' },
@@ -372,18 +369,22 @@ export default class App extends Component {
       stack: [{ name: 'referrals' }],
       sheet: null,
     });
-    this.toast(`${first}’s referral qualified · ${gbp(amt)} credit added`);
+    this.toast(`${first}’s referral qualified · ${formatGBP(amt)} credit added`);
   }
   copy(t, msg) {
     try {
-      navigator.clipboard && navigator.clipboard.writeText(t).catch(() => {});
-    } catch (e) {}
+      navigator.clipboard?.writeText(t).catch(() => {});
+    } catch {
+      // Best effort: not available in every browser or context.
+    }
     this.toast(msg);
   }
   openExt(url) {
     try {
       window.open(url, '_blank', 'noopener');
-    } catch (e) {}
+    } catch {
+      // Best effort: not available in every browser or context.
+    }
   }
   nativeShare(text, url) {
     if (navigator.share) navigator.share({ title: 'Join me on NexDrive', text, url }).catch(() => {});
@@ -498,10 +499,10 @@ export default class App extends Component {
     const m = [];
     if (!l) return ['Learner'];
     if (!(l.name || '').trim()) m.push('Full name');
-    if (!vPhone(l.phone)) m.push('Mobile number');
+    if (!isValidUkMobile(l.phone)) m.push('Mobile number');
     if (!(l.address || '').trim()) m.push('Address');
-    if (!vPc(l.postcode)) m.push('Postcode');
-    if (!vLic(l.licence)) m.push('Provisional licence number');
+    if (!isValidPostcode(l.postcode)) m.push('Postcode');
+    if (!isValidLicence(l.licence)) m.push('Provisional licence number');
     return m;
   }
   overlap(date, sm, dm, excl = []) {
@@ -510,8 +511,8 @@ export default class App extends Component {
         b.date === date &&
         b.status !== 'cancelled' &&
         !excl.includes(b.id) &&
-        tm(b.start) < sm + dm &&
-        sm < tm(b.start) + b.dur * 60,
+        timeToMinutes(b.start) < sm + dm &&
+        sm < timeToMinutes(b.start) + b.dur * 60,
     );
   }
   subState() {
@@ -529,9 +530,9 @@ export default class App extends Component {
   regErr(r) {
     const e = {};
     if (!r.name.trim()) e.name = 'Enter your full name';
-    if (!vPhone(r.phone))
+    if (!isValidUkMobile(r.phone))
       e.phone = r.phone.trim() ? 'Enter a UK mobile number, like 07700 900123' : 'Enter your mobile number';
-    if (!vEmail(r.email))
+    if (!isValidEmail(r.email))
       e.email = r.email.trim()
         ? 'Enter a valid email address, like name@example.co.uk'
         : 'Enter your email address';
@@ -620,7 +621,7 @@ export default class App extends Component {
           card: 'Visa •••• 4242',
           refBonus: s.ref.status === 'valid',
         },
-        refCode: genCode(name),
+        refCode: generateReferralCode(name),
         notifs: [
           ...(s.ref.status === 'valid'
             ? [
@@ -629,7 +630,7 @@ export default class App extends Component {
                   cat: 'rewards',
                   icon: 'gift',
                   title: 'Referral applied — 1 month free',
-                  body: `Thanks to your referral, your free month runs from ${fDM(addDays(TODAY, 14))} to ${fD(addMonths(addDays(TODAY, 14), 1))}, straight after your 14-day trial.`,
+                  body: `Thanks to your referral, your free month runs from ${formatDayMonth(addDays(TODAY, 14))} to ${formatDate(addMonths(addDays(TODAY, 14), 1))}, straight after your 14-day trial.`,
                   time: 'now',
                   unread: true,
                   act: { screen: 'subscription' },
@@ -641,7 +642,7 @@ export default class App extends Component {
             cat: 'billing',
             icon: 'check',
             title: 'Your 14-day free trial has started',
-            body: `Full access until ${fSY(addDays(TODAY, 14))}. Cancel any time in Account → Subscription.`,
+            body: `Full access until ${formatShortDateYear(addDays(TODAY, 14))}. Cancel any time in Account → Subscription.`,
             time: 'now',
             unread: true,
             act: { screen: 'subscription' },
@@ -680,22 +681,28 @@ export default class App extends Component {
     if (!l.name.trim()) e.name = 'Enter the learner’s full name';
     if (!l.phone.trim()) {
       if (strict) e.phone = 'Needed to send lesson details';
-    } else if (!vPhone(l.phone)) e.phone = 'Enter a UK mobile number, like 07700 900123';
-    if (l.email.trim() && !vEmail(l.email)) e.email = 'Enter a valid email address, like name@example.co.uk';
+    } else if (!isValidUkMobile(l.phone)) e.phone = 'Enter a UK mobile number, like 07700 900123';
+    if (l.email.trim() && !isValidEmail(l.email))
+      e.email = 'Enter a valid email address, like name@example.co.uk';
     if (!l.address.trim() && strict) e.address = 'Needed for the pickup location';
     if (!l.postcode.trim()) {
       if (strict) e.postcode = 'Enter a postcode';
-    } else if (!vPc(l.postcode)) e.postcode = 'Enter a full UK postcode, like SL1 3NY';
+    } else if (!isValidPostcode(l.postcode)) e.postcode = 'Enter a full UK postcode, like SL1 3NY';
     if (!l.licence.trim()) {
       if (strict) e.licence = 'Needed before booking a lesson';
-    } else if (!vLic(l.licence)) e.licence = 'Licence numbers are 16 characters, like SMITH 801157 J9 9AB';
+    } else if (!isValidLicence(l.licence))
+      e.licence = 'Licence numbers are 16 characters, like SMITH 801157 J9 9AB';
     if (l.theory.trim() && !/^\d{8}$/.test(l.theory.replace(/\s/g, '')))
       e.theory = 'Theory certificate numbers are 8 digits';
     return e;
   }
   saveLearner(andBook) {
     const s = this.state;
-    const l = { ...s.lf, postcode: s.lf.postcode.toUpperCase().trim(), licence: cLic(s.lf.licence) };
+    const l = {
+      ...s.lf,
+      postcode: s.lf.postcode.toUpperCase().trim(),
+      licence: normalizeLicence(s.lf.licence),
+    };
     const strict = andBook || s.lfRet === 'booking';
     const e = this.lfErr(l, strict);
     if (Object.keys(e).length) return this.setState({ lfTried: true, lfStrict: strict });
@@ -732,7 +739,7 @@ export default class App extends Component {
     const L = this.learner(lid);
     let n = 0;
     const bookings = s.bookings.map((b) => {
-      if (b.lid === lid && FUT.includes(b.status) && b.status !== 'ongoing') {
+      if (b.lid === lid && FUTURE_STATUSES.includes(b.status) && b.status !== 'ongoing') {
         n++;
         return { ...b, status: 'cancelled', reason: 'Learner removed' };
       }
@@ -748,7 +755,7 @@ export default class App extends Component {
   firstFree(date, dur) {
     for (let m = 8 * 60; m <= 19 * 60; m += 30) {
       if (date === TODAY && m <= NOW + 15) continue;
-      if (!this.overlap(date, m, dur * 60)) return hm(m);
+      if (!this.overlap(date, m, dur * 60)) return minutesToTime(m);
     }
     return null;
   }
@@ -792,7 +799,7 @@ export default class App extends Component {
     const b = this.booking(bid);
     const L = this.learner(b.lid) || {};
     const disc = b.discount ? ([5, 10, 20].includes(b.discount) ? String(b.discount) : 'custom') : 'none';
-    const locMode = b.loc === L.address ? 'home' : b.loc === TEST.loc ? 'test' : 'other';
+    const locMode = b.loc === L.address ? 'home' : b.loc === TEST_CENTRE.loc ? 'test' : 'other';
     const d = {
       mode: 'edit',
       bid,
@@ -828,7 +835,7 @@ export default class App extends Component {
     for (let i = 0; i < d.count; i++) {
       if (i > 0) off += d.freq === 'weekly' ? 7 : i % 2 === 1 ? 3 : 4;
       const date = addDays(d.date, off + (d.shifts[i] || 0));
-      const c = d.start ? this.overlap(date, tm(d.start), d.dur * 60, ex) : null;
+      const c = d.start ? this.overlap(date, timeToMinutes(d.start), d.dur * 60, ex) : null;
       out.push({ i, date, conflict: c });
     }
     return out;
@@ -846,19 +853,26 @@ export default class App extends Component {
     const sess = this.sessions(d);
     const clashes = sess.filter((x) => x.conflict);
     const miss = L ? this.missing(L) : [];
-    const loc = d.locMode === 'home' ? (L ? L.address : '') : d.locMode === 'test' ? TEST.loc : d.locAddr;
+    const loc =
+      d.locMode === 'home' ? (L ? L.address : '') : d.locMode === 'test' ? TEST_CENTRE.loc : d.locAddr;
     const pc =
-      d.locMode === 'home' ? (L ? L.postcode : '') : d.locMode === 'test' ? TEST.pc : d.locPc.toUpperCase();
+      d.locMode === 'home'
+        ? L
+          ? L.postcode
+          : ''
+        : d.locMode === 'test'
+          ? TEST_CENTRE.pc
+          : d.locPc.toUpperCase();
     const errs = {};
     if (!L) errs.learner = 'Choose a learner';
     if (!d.start) errs.start = 'Choose a start time';
-    if (d.start && d.date === TODAY && tm(d.start) <= NOW)
+    if (d.start && d.date === TODAY && timeToMinutes(d.start) <= NOW)
       errs.start = 'That time has already passed — choose a later slot';
-    if (disc > sub) errs.disc = `Discount can’t be more than the lesson value (${gbp(sub)})`;
+    if (disc > sub) errs.disc = `Discount can’t be more than the lesson value (${formatGBP(sub)})`;
     if (disc < 0) errs.disc = 'Discount must be £0 or more';
     if (d.locMode === 'other') {
       if (!d.locAddr.trim()) errs.loc = 'Enter a pickup address';
-      else if (!vPc(d.locPc)) errs.loc = 'Enter a full UK postcode, like SL1 3NY';
+      else if (!isValidPostcode(d.locPc)) errs.loc = 'Enter a full UK postcode, like SL1 3NY';
     }
     return {
       d,
@@ -879,7 +893,7 @@ export default class App extends Component {
   }
   pickSlot(t) {
     const d = this.state.draft;
-    const c = this.overlap(d.date, tm(t), d.dur * 60, d.mode === 'edit' ? [d.bid] : []);
+    const c = this.overlap(d.date, timeToMinutes(t), d.dur * 60, d.mode === 'edit' ? [d.bid] : []);
     this.setDraft({ start: t });
     if (c)
       this.sheet('conflict', { cid: c.id, dup: c.lid === d.lid && c.start === t, date: d.date, start: t });
@@ -888,7 +902,11 @@ export default class App extends Component {
     const d = this.state.draft;
     let start = d.start;
     const ex = d.mode === 'edit' ? [d.bid] : [];
-    if (!start || (date === TODAY && tm(start) <= NOW) || this.overlap(date, tm(start), d.dur * 60, ex))
+    if (
+      !start ||
+      (date === TODAY && timeToMinutes(start) <= NOW) ||
+      this.overlap(date, timeToMinutes(start), d.dur * 60, ex)
+    )
       start = this.firstFree(date, d.dur) || '';
     this.setDraft({ date, start, shifts: {} });
   }
@@ -931,8 +949,8 @@ export default class App extends Component {
     }));
     const body =
       d.count > 1
-        ? `${d.count} lessons for ${m.L.name} · ${gbp(m.fin)}${m.disc ? ` after ${gbp(m.disc)} discount` : ''}.`
-        : `${m.L.name} · ${fS(d.date)}, ${d.start} · ${gbp(m.fin)}`;
+        ? `${d.count} lessons for ${m.L.name} · ${formatGBP(m.fin)}${m.disc ? ` after ${formatGBP(m.disc)} discount` : ''}.`
+        : `${m.L.name} · ${formatShortDate(d.date)}, ${d.start} · ${formatGBP(m.fin)}`;
     this.setState({
       bookings: [...s.bookings, ...nb],
       notifs: [
@@ -991,7 +1009,7 @@ export default class App extends Component {
           cat: 'lessons',
           icon: 'repeat',
           title: 'Booking changed',
-          body: `${(this.learner(b.lid) || {}).name} · ${fS(b.date)} ${b.start} → ${fS(d.date)} ${d.start}`,
+          body: `${(this.learner(b.lid) || {}).name} · ${formatShortDate(b.date)} ${b.start} → ${formatShortDate(d.date)} ${d.start}`,
           time: 'now',
           unread: true,
           act: { lesson: b.id },
@@ -1012,7 +1030,7 @@ export default class App extends Component {
           cat: 'lessons',
           icon: 'calendarX',
           title: 'Booking cancelled',
-          body: `${(this.learner(b.lid) || {}).name} · ${fS(b.date)}, ${b.start} · ${reason}`,
+          body: `${(this.learner(b.lid) || {}).name} · ${formatShortDate(b.date)}, ${b.start} · ${reason}`,
           time: 'now',
           unread: true,
           act: { lesson: bid },
@@ -1075,7 +1093,7 @@ export default class App extends Component {
   learnerPick(lid, mode) {
     const up = this.state.bookings
       .filter((b) => b.lid === lid && ['upcoming', 'rescheduled'].includes(b.status))
-      .sort(cmpB);
+      .sort(compareBookings);
     if (!up.length) {
       this.setState({ sheet: null });
       return this.toast(

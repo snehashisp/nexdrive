@@ -26,22 +26,37 @@ So the browser currently does everything a backend normally would: it holds the 
 ```text
 nexdrive/
 ├── index.html            Entry HTML page for the app (Vite's starting point, see §5)
-├── vite.config.mjs       Build tool settings
-├── package.json          Library list + npm scripts (dev, build, start)
+├── vite.config.mts       Build tool + test runner settings (incl. the @/ import alias)
+├── tsconfig.json         TypeScript settings (JS files still allowed while code is converted)
+├── eslint.config.mjs     Lint rules, including import boundaries between features
+├── .prettierrc.json      Code formatting settings
+├── package.json          Library list + npm scripts (dev, build, start, check…)
 ├── package-lock.json     Exact installed library versions (generated, commit it)
 ├── build.js              Post-build step: writes the offline precache list into dist/
 ├── server.js             Express web server: serves dist/ (used in production and by `npm start`)
 │
-├── src/                  ← THE APP (React + JSX). Everything here gets compiled and bundled
-│   ├── main.jsx            Entry point: mounts <App/> into the page
-│   ├── App.jsx             The single stateful component: all data + all actions
-│   ├── viewModel.js        Turns App's state into display-ready values ("v")
-│   ├── AppView.jsx         Top-level layout: phone frame, current screen, nav, sheets
-│   ├── screens/            One file per full-screen page (27, incl. onboarding/)
-│   ├── sheets/             One file per pop-up panel that slides up from the bottom (14)
-│   ├── components/         Shared pieces: nav bar, status bar, toast, icons, QR code, splash…
-│   ├── lib/                Pure helpers: dates.js, format.js, validation.js
-│   ├── data/               constants.js (plans, statuses, demo flows), seeds.js (demo data)
+├── src/                  ← THE APP (React + TypeScript/JSX). Everything here gets compiled and bundled
+│   ├── main.tsx            Entry point: mounts <App/> into the page
+│   ├── app/                Application shell: wires the features together
+│   │   ├── App.jsx           The single stateful component: all data + all actions
+│   │   ├── viewModel.js      Turns App's state into display-ready values ("v")
+│   │   ├── AppView.jsx       Top-level layout: phone frame, current screen, nav, sheets
+│   │   ├── constants.js      Phone-frame sizes
+│   │   └── components/       Shell pieces: bottom nav, status bar, splash, sheet overlay
+│   ├── features/           One folder per business area; each holds its screens and sheets
+│   │   │                     (components/) plus its own constants and helpers
+│   │   ├── onboarding/       Welcome → register → verify → details → plan
+│   │   ├── dashboard/        Home screen
+│   │   ├── calendar/         Day / week / month views
+│   │   ├── bookings/         Booking form, lesson details, booking list, message/maps/clash sheets
+│   │   ├── learners/         Learner list, profile, form
+│   │   ├── notifications/    Notification list, lesson-reminder push banner
+│   │   ├── referrals/        Refer & earn, QR invite, NexDrive Credit
+│   │   ├── subscription/     Plans, upgrade, cancel
+│   │   └── settings/         Account (More), profile, pricing, bank details, preferences, security
+│   ├── components/         Shared UI used across features: icons, toast
+│   ├── lib/                Pure helpers in TypeScript, with tests: dates, format, validation
+│   ├── demo/               Demo-only code: seed data, workflow panel, fake referral-code lookup
 │   └── styles/             base.css (font + design tokens), app.css, interactions.css
 │
 ├── public/               ← Static files copied into the build unchanged
@@ -76,15 +91,20 @@ nexdrive/
 | `npm run dev` | `vite` | Development server with instant reload |
 | `npm run build` | `vite build && node build.js` | Compile `src/` + copy `public/` into `dist/`, then write the offline precache list |
 | `npm start` | `prestart` (= `npm run build`), then `node server.js` | Build and serve, as the hosting does |
+| `npm run check` | typecheck + lint + format check + tests | Run before committing |
+| `npm run typecheck` | `tsc --noEmit` | Type-check the TypeScript files |
+| `npm run lint` | `eslint .` | Code-quality rules and import boundaries |
+| `npm run format` | `prettier --write …` | Reformat `src/` and tool configs |
+| `npm test` | `vitest run` | Unit tests (`*.test.ts` next to the code they test) |
 | `npm run clean` | delete `dist/` | |
 
-Dependencies: `react`, `react-dom` (UI library), `qrcode-generator` (QR codes), `express` (web server), `vite` and `@vitejs/plugin-react` (build tool).
+Dependencies: `react`, `react-dom` (UI library), `qrcode-generator` (QR codes), `express` (web server), `vite` and `@vitejs/plugin-react` (build tool). Dev dependencies (needed only on a developer machine, not to build or run): TypeScript, ESLint, Prettier, Vitest.
 
 ### 4.2 JavaScript modules (`import` / `export`)
 
 > **How it works.** Each `.js`/`.jsx` file is a **module** with its own scope. A file makes things public with `export` and another file pulls them in with `import { name } from './file'`. A path starting with `./` or `../` is another file in the project. A bare name such as `'react'` means a package in `node_modules/`. Imports are **live bindings**: if the exporting module reassigns an exported `let` variable, importers see the new value.
 
-**In this repo:** `src/lib/dates.js` exports `let TODAY, NOW` (the current date and minute of the day) and a `syncClock()` function that updates them. Every other module imports them and always sees the current value (section 8.6).
+**In this repo:** `src/lib/dates.ts` exports `let TODAY, NOW` (the current date and minute of the day) and a `syncClock()` function that updates them. Every other module imports them and always sees the current value (section 8.6).
 
 ### 4.3 React
 
@@ -110,8 +130,8 @@ Dependencies: `react`, `react-dom` (UI library), `qrcode-generator` (QR codes), 
 
 **In this repo:**
 
-- `src/main.jsx` does `createRoot(document.getElementById('root')).render(<StrictMode><App /></StrictMode>)`. That hands the empty `<div id="root">` from `index.html` to React.
-- There is **one** stateful component, `App` (`src/App.jsx`), a class component. Its `init()` returns the whole initial state. That is roughly 60 fields: which screen is open, the learners, the bookings, form drafts, toasts and so on. Every user action is a method on `App` that calls `this.setState`.
+- `src/main.tsx` does `createRoot(document.getElementById('root')).render(<StrictMode><App /></StrictMode>)`. That hands the empty `<div id="root">` from `index.html` to React.
+- There is **one** stateful component, `App` (`src/app/App.jsx`), a class component. Its `init()` returns the whole initial state. That is roughly 60 fields: which screen is open, the learners, the bookings, form drafts, toasts and so on. Every user action is a method on `App` that calls `this.setState`.
 - **All other components are stateless functions** that only display what they're given (section 6).
 
 ### 4.4 JSX
@@ -126,18 +146,18 @@ Dependencies: `react`, `react-dom` (UI library), `qrcode-generator` (QR codes), 
 >
 > The differences from HTML: `{ … }` embeds any JavaScript expression; `className` instead of `class`; `style` takes an object with camelCase keys (`fontSize`, not `font-size`); event props are camelCase (`onClick`). A component name starts with a capital letter (`<Home />`), and lowercase names are HTML tags. Conditional UI is written as `{cond && <X/>}` or `{cond ? <X/> : null}`, and lists as `{items.map((it, i) => <Row key={i} … />)}`. Text is escaped automatically, so user input can't inject HTML.
 
-**In this repo:** every file under `src/screens`, `src/sheets`, `src/components`, plus `App.jsx`, `AppView.jsx` and `main.jsx`, is JSX. They use `.jsx` extensions. Styling is almost entirely inline `style={{ … }}` objects (section 8.3).
+**In this repo:** the components under `src/app`, `src/features`, `src/components` and `src/demo` are JSX (`.jsx`), while `main.tsx` and `src/lib/` are already TypeScript. Components move to `.tsx` as each feature is converted. Styling is almost entirely inline `style={{ … }}` objects (section 8.3).
 
 ### 4.5 Vite (build tool and development server)
 
 > **How it works.** Vite has two modes.
 >
-> - **Dev server** (`vite`): an HTTP server. When the browser requests `index.html`, it serves it. When the browser then asks for `/src/main.jsx`, Vite reads the file, compiles the JSX to JavaScript **on that request**, rewrites bare imports like `'react'` to URLs it can serve, and responds. Each source file is a separate request, so start-up is instant. It also keeps a WebSocket open to the page. When you save a file, it pushes the change and the page swaps that module in place (**hot module replacement**).
+> - **Dev server** (`vite`): an HTTP server. When the browser requests `index.html`, it serves it. When the browser then asks for `/src/main.tsx`, Vite reads the file, compiles the JSX to JavaScript **on that request**, rewrites bare imports like `'react'` to URLs it can serve, and responds. Each source file is a separate request, so start-up is instant. It also keeps a WebSocket open to the page. When you save a file, it pushes the change and the page swaps that module in place (**hot module replacement**).
 > - **Production build** (`vite build`): starts at `index.html`, follows every `import`, compiles JSX, and **bundles** everything into a few files with **content hashes** in their names (`bundle/index-FzDhyoyp.js`). It minifies them and rewrites `index.html` to reference them. Files in `public/` are copied as-is. Because the name changes whenever the content changes, browsers can cache these files forever.
 >
 > Plugins extend Vite. `@vitejs/plugin-react` adds the JSX compilation and React-specific dev features.
 
-**In this repo** (`vite.config.mjs`):
+**In this repo** (`vite.config.mts`):
 
 - `base: './'`: links in the built page are relative, so the app also works from a sub-folder.
 - `build.assetsDir: 'bundle'`: compiled JS/CSS land in `dist/bundle/`, kept apart from `public/assets/`.
@@ -167,7 +187,7 @@ There are no API routes, no sessions and no security headers here (see gaps).
 
 **In this repo:**
 
-- `src/main.jsx` registers `sw.js`, in production builds only.
+- `src/main.tsx` registers `sw.js`, in production builds only.
 - `public/sw.js` (hand-written) behaves like this:
   - **Install:** pre-caches a core list plus every file named in `dist/sw-precache.js`.
   - **Navigations:** network first, falling back to the cached `index.html`, then to `offline.html`.
@@ -176,7 +196,7 @@ There are no API routes, no sessions and no security headers here (see gaps).
 
 ### 4.8 Small libraries
 
-- **qrcode-generator**: computes QR code modules. It is used by `src/components/QrCode.jsx` (on-screen SVG) and `App.qrPng()` (the downloadable PNG, drawn on a canvas).
+- **qrcode-generator**: computes QR code modules. It is used by `src/features/referrals/components/QrCode.jsx` (on-screen SVG) and `App.qrPng()` (the downloadable PNG, drawn on a canvas).
 
 ## 5. What happens when someone opens the app (production)
 
@@ -185,7 +205,7 @@ There are no API routes, no sessions and no security headers here (see gaps).
    - `js/config.js`: a classic script that sets `window.NEXDRIVE_CONFIG` (runtime settings). It is deliberately **not** bundled, so each environment can edit it without rebuilding.
    - `bundle/index-<hash>.css` and `bundle/index-<hash>.js`: the compiled app, with React included.
 3. The bundle runs `main.jsx`, which mounts `<App/>` into `<div id="root">`.
-4. `App`'s constructor builds the initial state from the demo **seed** data (`src/data/seeds.js`).
+4. `App`'s constructor builds the initial state from the demo **seed** data (`src/demo/seeds.js`).
 5. `render()` → `buildViewModel(this)` → `<AppView v={…}/>`. React creates the page.
 6. `componentDidMount()`:
    - listens for window resizes (the phone frame scales to fit)
@@ -194,20 +214,20 @@ There are no API routes, no sessions and no security headers here (see gaps).
    - plays the launch animation
 7. After the page has loaded, `main.jsx` registers the service worker, which pre-caches every file for offline use.
 
-In **dev mode** (`npm run dev`) steps 1–2 are served by Vite instead: `index.html` loads `/src/main.jsx` directly, and Vite compiles each file as it is requested. There is no service worker.
+In **dev mode** (`npm run dev`) steps 1–2 are served by Vite instead: `index.html` loads `/src/main.tsx` directly, and Vite compiles each file as it is requested. There is no service worker.
 
 ## 6. How the app is structured inside
 
 Three layers, each in its own place:
 
 ```text
-App (src/App.jsx)               state + actions        "what is true, and how it changes"
+App (src/app/App.jsx)               state + actions        "what is true, and how it changes"
    │  render()
    ▼
-buildViewModel (src/viewModel.js)  state → display values  "what exactly to show: text, colours, handlers"
+buildViewModel (src/app/viewModel.js)  state → display values  "what exactly to show: text, colours, handlers"
    │  returns one object, `v`
    ▼
-AppView + screens + sheets (src/*.jsx)   JSX            "how it looks"
+AppView + feature components (src/app, src/features)   JSX            "how it looks"
 ```
 
 ### 6.1 `App`: state and actions
@@ -242,7 +262,7 @@ Action methods change state with `setState`. Examples:
 
 ### 6.2 `buildViewModel`: state into display values
 
-`src/viewModel.js` exports `buildViewModel(app)`. It is called on **every** render and returns one object, conventionally called `v`, holding everything the screens need already worked out:
+`src/app/viewModel.js` exports `buildViewModel(app)`. It is called on **every** render and returns one object, conventionally called `v`, holding everything the screens need already worked out:
 
 - **Formatted text:** `"£80"`, `"Tue 4 Nov"`, `"3 lessons · 4 hours · £160"`.
 - **Colours that depend on state:** for example, the highlighted tab or a selected option.
@@ -293,7 +313,7 @@ The same loop drives every interaction: **event → App method → setState → 
 | Where | What | Read by |
 | --- | --- | --- |
 | `public/js/config.js` → `window.NEXDRIVE_CONFIG` | `mode` (`demo`/`live`), `apiBaseUrl`, `referralBaseUrl`, `showDemoPanel`, `deviceFrame`, `launchAnimation` | `App.cfg()` at runtime |
-| `App.defaultProps` in `src/App.jsx` | Preview switches: device size, start screen, empty data, subscription state, offline | `App` |
+| `App.defaultProps` in `src/app/App.jsx` | Preview switches: device size, start screen, empty data, subscription state, offline | `App` |
 | `PORT`, `HOST` environment variables | Web server listen address | `server.js` |
 | `.env` (from `.env.example`) | **Backend** secrets (database, Stripe, Twilio…), for the planned API only | Nothing yet |
 
@@ -308,9 +328,9 @@ The same loop drives every interaction: **event → App method → setState → 
 
 ### 7.3 Dates and time
 
-- Dates are `'YYYY-MM-DD'` strings. Times are `'HH:MM'` strings or "minutes since midnight" integers. Small helpers live in `src/lib/dates.js` (`addDays`, `fS` = "Tue 4 Nov", `tm`/`hm` = time ↔ minutes…).
+- Dates are `'YYYY-MM-DD'` strings. Times are `'HH:MM'` strings or "minutes since midnight" integers. Small helpers live in `src/lib/dates.ts` (`addDays`, `formatShortDate` = "Tue 4 Nov", `timeToMinutes`/`minutesToTime`…).
 - `TODAY` and `NOW` come from the **device clock**, re-read every 15 seconds.
-- The demo data was written around 7 Oct 2026. `sd()` shifts every seed date by (today − 7 Oct), so the demo always looks current.
+- The demo data was written around 7 Oct 2026. `shiftDemoDate()` shifts every seed date by (today − 7 Oct), so the demo always looks current.
 
 ### 7.4 Business rules in the front end
 
@@ -319,7 +339,7 @@ Implemented in `App`/`viewModel` for demo purposes. The plan is that the API and
 - price = rate × hours × lessons − discount, where the discount can't exceed the value
 - no overlapping lessons (`overlap()`)
 - a learner must have a phone, address, postcode and licence before booking (`missing()`)
-- the field formats: UK mobile, e-mail, postcode, DVLA licence, ADI number, theory certificate (`src/lib/validation.js`)
+- the field formats: UK mobile, e-mail, postcode, DVLA licence, ADI number, theory certificate (`src/lib/validation.ts`)
 - the referral reward = 20% of the referred instructor's plan
 
 ## 8. Things that look odd at first
@@ -329,7 +349,7 @@ All of these are listed with their impact in [gaps-and-quirks.md](gaps-and-quirk
 1. **One big state component and a single `v` object** instead of many components with their own state and specific props.
 2. **A 2,100-line view-model function.**
 3. **Inline styles everywhere** rather than CSS classes or a component library.
-4. **Very short variable names** (`s`, `v`, `B`, `L`, `hm`, `bf`, `bk2`, `fS`, `fDM`) inherited from the original code.
+4. **Very short variable names** (`s`, `v`, `B`, `L`, `bf`, `bk2`) inherited from the original code, mostly inside `App` and the view model. The shared helpers in `src/lib/` and the feature constants have descriptive names.
 5. **Navigation is a stack in state**, not URLs. The browser's back button does not move between screens.
 6. **A module-level mutable clock** (`TODAY`, `NOW`) instead of passing time in.
 
@@ -337,11 +357,14 @@ All of these are listed with their impact in [gaps-and-quirks.md](gaps-and-quirk
 
 | Task | File |
 | --- | --- |
-| Change wording or layout of a screen | `src/screens/<Screen>.jsx` (or `src/sheets/…`) |
-| Change what a button does | Find its `onClick={x.y}` → find `y:` under that screen's section in `src/viewModel.js` → follow to the `App` method |
-| Change a calculation shown on screen | `src/viewModel.js` (display) or `App.bfModel()` (booking maths) |
-| Add or change demo data | `src/data/seeds.js` |
-| Plans, prices, status colours, demo workflows | `src/data/constants.js` |
+| Change wording or layout of a screen | `src/features/<feature>/components/<Screen>.jsx` (sheets live in the same folder) |
+| Change what a button does | Find its `onClick={x.y}` → find `y:` under that screen's section in `src/app/viewModel.js` → follow to the `App` method |
+| Change a calculation shown on screen | `src/app/viewModel.js` (display) or `App.bfModel()` (booking maths) |
+| Add or change demo data | `src/demo/seeds.js` |
+| Plans and prices | `src/features/subscription/plans.js` |
+| Lesson status colours | `src/features/bookings/constants.js` |
+| Referral rules and statuses | `src/features/referrals/constants.js`, `utils.js` |
+| Demo workflows | `src/demo/flows.js` |
 | Date / money / validation helpers | `src/lib/` |
 | Hover/focus colours | `src/styles/interactions.css` |
 | Offline behaviour | `public/sw.js`, `build.js` |

@@ -81,10 +81,10 @@ Who renders whom. Only `App` holds state. Every other box is a stateless functio
 
 ```mermaid
 flowchart TD
-  MAIN["main.jsx<br/>createRoot + StrictMode"] --> APP
+  MAIN["main.tsx<br/>createRoot + StrictMode"] --> APP
 
-  APP["App (App.jsx)<br/>class component<br/>STATE + ACTIONS"]
-  VM["buildViewModel(app)<br/>viewModel.js<br/>state → display values 'v'"]
+  APP["App (app/App.jsx)<br/>class component<br/>STATE + ACTIONS"]
+  VM["buildViewModel(app)<br/>app/viewModel.js<br/>state → display values 'v'"]
   APP -- "render() calls" --> VM
   APP -- "render() returns AppView, passing v" --> VIEW
 
@@ -112,7 +112,7 @@ flowchart TD
   VM -.-> ICON["Icon / iconSet()<br/>v.ic, v.ics, v.icl"]
 ```
 
-Footer components live in the same file as their screen (for example `LearnerFormFooter` is exported from `screens/LearnerForm.jsx`).
+Footer components live in the same file as their screen (for example `LearnerFormFooter` is exported from `features/learners/components/LearnerForm.jsx`).
 
 ## 4. One interaction, end to end
 
@@ -142,39 +142,44 @@ sequenceDiagram
 
 ## 5. Module dependencies inside `src/`
 
-Arrows point from the importer to what it imports. Nothing in `lib/` or `data/` imports React.
+Arrows point from the importer to what it imports. Imports only flow one way: shared code (`lib/`, `components/`) → `features/` → `app/`. A feature never imports from another feature; ESLint enforces this (`eslint.config.mjs`). Nothing in `lib/` imports React.
 
 ```mermaid
 flowchart LR
-  MAIN[main.jsx] --> APP[App.jsx]
+  MAIN[main.tsx] --> APP
   MAIN --> CSS[styles/*.css]
-  APP --> VIEW[AppView.jsx]
-  APP --> VM[viewModel.js]
+
+  subgraph APPL[app/]
+    APP[App.jsx<br/>state + actions] --> VIEW[AppView.jsx]
+    APP --> VM[viewModel.js]
+    VIEW --> SHELL[components/<br/>BottomNav, StatusBar,<br/>Splash, SheetOverlay]
+  end
+
+  subgraph FEAT[features/]
+    F1[onboarding · dashboard · calendar ·<br/>bookings · learners · notifications ·<br/>referrals · subscription · settings]
+    FC[each: components/ screens + sheets,<br/>plus constants / utils / plans]
+  end
+
+  subgraph DEMO[demo/]
+    SEEDS[seeds.js, flows.js,<br/>referral-codes.js, DemoPanel.jsx]
+  end
+
+  subgraph SHARED[shared]
+    LIB[lib/<br/>dates, format, validation,<br/>inline-styles — TypeScript]
+    COMP[components/<br/>Icon, iconSet, Toast]
+  end
+
+  VIEW --> FEAT
+  SHELL --> FEAT
+  APP --> FEAT
+  VM --> FEAT
+  APP --> DEMO
+  VM --> DEMO
+  VIEW --> DEMO
+  APP --> SHARED
+  VM --> SHARED
+  FEAT --> SHARED
+  DEMO --> FEAT
   APP --> QRLIB[(qrcode-generator)]
-  VIEW --> SCR[screens/*.jsx]
-  VIEW --> SH[sheets via SheetOverlay]
-  VIEW --> COMP[components/*.jsx]
-  SCR --> COMP
-  VM --> ICON[components/Icon.jsx]
-  COMP --> QRLIB
-
-  APP --> DATA
-  VM --> DATA
-  APP --> LIB
-  VM --> LIB
-
-  subgraph DATA[data/]
-    CONST[constants.js<br/>plans, statuses, flows]
-    SEEDS[seeds.js<br/>demo learners, bookings…]
-  end
-  subgraph LIB[lib/]
-    DATES[dates.js<br/>TODAY, NOW, formatting]
-    FMT[format.js<br/>£, initials, licence]
-    VAL[validation.js<br/>phone, email, postcode, licence]
-  end
-  SEEDS --> CONST
-  SEEDS --> DATES
-  CONST --> DATES
-  CONST --> FMT
-  VAL --> FMT
+  FEAT --> QRLIB
 ```
