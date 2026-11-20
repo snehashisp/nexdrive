@@ -1,6 +1,8 @@
+import { useMessageView } from '../hooks/useMessageView';
 import styles from './MessageSheet.module.css';
 
-export default function MessageSheet({ v }) {
+export default function MessageSheet() {
+  const v = useMessageView();
   const { ic, ics, msg } = v;
   if (!msg) return null;
   return (

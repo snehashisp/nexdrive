@@ -1,6 +1,8 @@
+import { useOnboardingView } from '../hooks/useOnboardingView';
 import styles from './TrialStarted.module.css';
 
-export default function TrialStarted({ v }) {
+export default function TrialStarted() {
+  const v = useOnboardingView();
   const { icl, obSum } = v;
   return (
     <div className={styles.stack}>

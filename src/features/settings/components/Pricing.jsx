@@ -1,6 +1,8 @@
+import { usePricingView } from '../hooks/usePricingView';
 import styles from './Pricing.module.css';
 
-export default function Pricing({ v }) {
+export default function Pricing() {
+  const v = usePricingView();
   const { back, icl, pr } = v;
   if (!pr) return null;
   return (
@@ -57,7 +59,8 @@ export default function Pricing({ v }) {
   );
 }
 
-export function PricingFooter({ v }) {
+export function PricingFooter() {
+  const v = usePricingView();
   const { ic, padB, pr } = v;
   if (!pr) return null;
   return (

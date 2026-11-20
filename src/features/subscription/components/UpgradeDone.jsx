@@ -1,6 +1,8 @@
+import { useSubscriptionView } from '../hooks/useSubscriptionView';
 import styles from './UpgradeDone.module.css';
 
-export default function UpgradeDone({ v }) {
+export default function UpgradeDone() {
+  const v = useSubscriptionView();
   const { ic, icl, upd } = v;
   if (!upd) return null;
   return (

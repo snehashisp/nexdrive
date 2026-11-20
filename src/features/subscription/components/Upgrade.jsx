@@ -1,6 +1,8 @@
+import { useSubscriptionView } from '../hooks/useSubscriptionView';
 import styles from './Upgrade.module.css';
 
-export default function Upgrade({ v }) {
+export default function Upgrade() {
+  const v = useSubscriptionView();
   const { back, ic, icl, up } = v;
   if (!up) return null;
   return (
@@ -72,7 +74,8 @@ export default function Upgrade({ v }) {
   );
 }
 
-export function UpgradeFooter({ v }) {
+export function UpgradeFooter() {
+  const v = useSubscriptionView();
   const { ic, padB, up } = v;
   if (!up) return null;
   return (

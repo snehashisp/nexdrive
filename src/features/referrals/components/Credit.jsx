@@ -1,6 +1,8 @@
+import { useCreditView } from '../hooks/useCreditView';
 import styles from './Credit.module.css';
 
-export default function Credit({ v }) {
+export default function Credit() {
+  const v = useCreditView();
   const { back, cr, ic, icl, ics } = v;
   if (!cr) return null;
   return (

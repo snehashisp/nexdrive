@@ -1,6 +1,8 @@
+import { usePickLearnerView } from '../hooks/usePickLearnerView';
 import styles from './PickLearnerSheet.module.css';
 
-export default function PickLearnerSheet({ v }) {
+export default function PickLearnerSheet() {
+  const v = usePickLearnerView();
   const { closeSheet, ic, pl } = v;
   if (!pl) return null;
   return (

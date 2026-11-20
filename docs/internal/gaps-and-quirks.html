@@ -173,7 +173,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <tr>
 <td>Payments (Stripe)</td>
 <td>&quot;Add card&quot; just shows &quot;Card saved&quot;; upgrades and credit are simulated</td>
-<td><code>viewModel.js</code> (<code>addCard</code>, <code>up.confirm</code>)</td>
+<td><code>useOnboardingView.js</code> (<code>addCard</code>), <code>useSubscriptionView.js</code> (<code>up.confirm</code>)</td>
 </tr>
 <tr>
 <td>SMS / WhatsApp / e-mail</td>
@@ -188,7 +188,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <tr>
 <td>Profile photo upload</td>
 <td>Toast only</td>
-<td><code>viewModel.js</code> (<code>pf.photo</code>)</td>
+<td><code>useProfileView.js</code> (<code>pf.photo</code>)</td>
 </tr>
 <tr>
 <td>Background jobs (Redis/BullMQ)</td>
@@ -299,7 +299,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <td>B2</td>
 <td><strong>A single &quot;view model&quot; object <code>v</code> (built by a ~2,100-line function) is passed to every component</strong>, and each one destructures what it needs</td>
 <td>Each component receives only the props it uses, or reads from a store; derived values computed close to where they&#39;re used (<code>useMemo</code>)</td>
-<td>Unclear which component depends on what; one large function to change</td>
+<td>Unclear which component depends on what; one large function to change. Mostly fixed: each screen and sheet calls its own view hook in its feature folder; they still all start from one shared context hook that subscribes to the whole store</td>
 </tr>
 <tr>
 <td>B3</td>

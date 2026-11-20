@@ -16,10 +16,10 @@ Severity: **High** = blocks real users or is a security risk · **Medium** = wil
 | Persistence | All data lives in browser memory and resets on reload | [database.md](database.md) |
 | Authentication | "I already have an account" loads the demo account with no password. Passwords typed during sign-up are never stored or checked | API §1 |
 | Phone verification | Fixed code `482913` | `App.obNext()` |
-| Payments (Stripe) | "Add card" just shows "Card saved"; upgrades and credit are simulated | `viewModel.js` (`addCard`, `up.confirm`) |
+| Payments (Stripe) | "Add card" just shows "Card saved"; upgrades and credit are simulated | `useOnboardingView.js` (`addCard`), `useSubscriptionView.js` (`up.confirm`) |
 | SMS / WhatsApp / e-mail | "Send message" waits 0.7s and shows a toast | `App.sendMsg()` |
 | Push notifications | An in-app banner pretends to be a push, triggered by a timer | `App.schedulePush()` |
-| Profile photo upload | Toast only | `viewModel.js` (`pf.photo`) |
+| Profile photo upload | Toast only | `useProfileView.js` (`pf.photo`) |
 | Background jobs (Redis/BullMQ) | Lesson status changes are computed in the browser every 15s | `App.tick()`, `liveStatus()` |
 | Referral validation | Codes are checked against a hard-coded demo table | `REF_CODES` in `src/demo/referral-codes.js` |
 | `mode: 'live'` | The setting exists in `config.js` but no code reads it; there is no `api.js` client | `public/js/config.js` |
@@ -89,7 +89,7 @@ Most of these come from how the app was made. It was exported from a design tool
 | # | Pattern | What is usual instead | Impact |
 | --- | --- | --- | --- |
 | B1 | **One stateful class component (`App`, ~1,100 lines) holds every piece of state and every action** | Function components with hooks (`useState`, `useReducer`); state split by feature, or a store (Zustand, Redux Toolkit); context for shared data | Hard to test pieces in isolation; every change re-renders the whole app. Fixed: state and actions now live in a Zustand store, with actions split into one slice per feature |
-| B2 | **A single "view model" object `v` (built by a ~2,100-line function) is passed to every component**, and each one destructures what it needs | Each component receives only the props it uses, or reads from a store; derived values computed close to where they're used (`useMemo`) | Unclear which component depends on what; one large function to change |
+| B2 | **A single "view model" object `v` (built by a ~2,100-line function) is passed to every component**, and each one destructures what it needs | Each component receives only the props it uses, or reads from a store; derived values computed close to where they're used (`useMemo`) | Unclear which component depends on what; one large function to change. Mostly fixed: each screen and sheet calls its own view hook in its feature folder; they still all start from one shared context hook that subscribes to the whole store |
 | B3 | **Class component, not hooks** | Hooks are the norm since 2019. Classes still work but are legacy style | Most current docs and examples won't match. Fixed: `App` is a function component using hooks |
 | B4 | **Inline `style={{…}}` on almost every element** (roughly 1,500 style objects) with literal hex colours, while `base.css` defines colour tokens (`--nd-violet`…) that the components don't use | CSS modules, a utility framework (Tailwind), styled components, or a component library; tokens referenced, not repeated | Theming or a brand change means editing many files. Mostly fixed: static styles are now in per-component CSS Modules using `var(--nd-…)` tokens (`src/styles/tokens.css`); about 270 run-time values remain inline, and some colours are still computed in the view model |
 | B5 | **Hover/focus/pressed styles via `!important` utility classes** (`interactions.css`), needed because inline styles beat normal CSS | Normal CSS rules, possible once styles move out of inline objects | Fragile ordering; `!important` spreads. Still needed for elements that keep a run-time inline colour; can go once the view model stops passing colours |

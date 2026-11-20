@@ -1,6 +1,8 @@
+import { useShellView } from '../hooks/useShellView';
 import styles from './BottomNav.module.css';
 
-export default function BottomNav({ v }) {
+export default function BottomNav() {
+  const v = useShellView();
   const { go, ic, icl, nav, navPadB } = v;
   return (
     <nav className={styles.nav} style={{ paddingBottom: `${navPadB}px` }}>

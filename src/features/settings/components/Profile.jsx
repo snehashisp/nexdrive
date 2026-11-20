@@ -1,6 +1,8 @@
+import { useProfileView } from '../hooks/useProfileView';
 import styles from './Profile.module.css';
 
-export default function Profile({ v }) {
+export default function Profile() {
+  const v = useProfileView();
   const { back, icl, ics, pf } = v;
   if (!pf) return null;
   return (
@@ -114,7 +116,8 @@ export default function Profile({ v }) {
   );
 }
 
-export function ProfileFooter({ v }) {
+export function ProfileFooter() {
+  const v = useProfileView();
   const { ic, padB, pf } = v;
   if (!pf) return null;
   return (

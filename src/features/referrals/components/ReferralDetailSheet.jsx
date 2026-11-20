@@ -1,6 +1,8 @@
+import { useReferralDetailView } from '../hooks/useReferralDetailView';
 import styles from './ReferralDetailSheet.module.css';
 
-export default function ReferralDetailSheet({ v }) {
+export default function ReferralDetailSheet() {
+  const v = useReferralDetailView();
   const { closeSheet, ic, rd } = v;
   if (!rd) return null;
   return (

@@ -133,7 +133,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <div class="layout">
   <nav class="sidebar">
     <div class="toc-title">Pages</div><a class="page" href="index.html">Start here</a><a class="page" href="setup.html">Setup</a><a class="page current" href="overview.html">How it works</a><a class="page" href="component-diagram.html">Component diagrams</a><a class="page" href="database.html">Database</a><a class="page" href="gaps-and-quirks.html">Gaps & quirks</a>
-    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#1-the-product-in-one-paragraph">1. The product in one paragraph</a><a class="toc d2" href="#2-what-exists-today-and-what-doesnt">2. What exists today and what doesn&#39;t</a><a class="toc d2" href="#3-repository-map">3. Repository map</a><a class="toc d2" href="#4-tools-and-frameworks-one-at-a-time">4. Tools and frameworks, one at a time</a><a class="toc d3" href="#41-npm-and-packagejson">4.1 npm and package.json</a><a class="toc d3" href="#42-javascript-modules-import--export">4.2 JavaScript modules (import / export)</a><a class="toc d3" href="#43-react">4.3 React</a><a class="toc d3" href="#44-jsx">4.4 JSX</a><a class="toc d3" href="#45-vite-build-tool-and-development-server">4.5 Vite (build tool and development server)</a><a class="toc d3" href="#46-nodejs-and-express-the-web-server">4.6 Node.js and Express (the web server)</a><a class="toc d3" href="#47-service-worker-and-pwa">4.7 Service worker and PWA</a><a class="toc d3" href="#48-small-libraries">4.8 Small libraries</a><a class="toc d2" href="#5-what-happens-when-someone-opens-the-app-production">5. What happens when someone opens the app (production)</a><a class="toc d2" href="#6-how-the-app-is-structured-inside">6. How the app is structured inside</a><a class="toc d3" href="#61-the-store-state-and-actions">6.1 The store: state and actions</a><a class="toc d3" href="#62-buildviewmodel-state-into-display-values">6.2 buildViewModel: state into display values</a><a class="toc d3" href="#63-the-views-appview-screens-sheets">6.3 The views: AppView, screens, sheets</a><a class="toc d3" href="#64-one-click-end-to-end">6.4 One click, end to end</a><a class="toc d2" href="#7-cross-cutting-details">7. Cross-cutting details</a><a class="toc d3" href="#71-configuration">7.1 Configuration</a><a class="toc d3" href="#72-styling">7.2 Styling</a><a class="toc d3" href="#73-dates-and-time">7.3 Dates and time</a><a class="toc d3" href="#74-business-rules-in-the-front-end">7.4 Business rules in the front end</a><a class="toc d2" href="#8-things-that-look-odd-at-first">8. Things that look odd at first</a><a class="toc d2" href="#9-where-to-look-for">9. Where to look for…</a>
+    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#1-the-product-in-one-paragraph">1. The product in one paragraph</a><a class="toc d2" href="#2-what-exists-today-and-what-doesnt">2. What exists today and what doesn&#39;t</a><a class="toc d2" href="#3-repository-map">3. Repository map</a><a class="toc d2" href="#4-tools-and-frameworks-one-at-a-time">4. Tools and frameworks, one at a time</a><a class="toc d3" href="#41-npm-and-packagejson">4.1 npm and package.json</a><a class="toc d3" href="#42-javascript-modules-import--export">4.2 JavaScript modules (import / export)</a><a class="toc d3" href="#43-react">4.3 React</a><a class="toc d3" href="#44-jsx">4.4 JSX</a><a class="toc d3" href="#45-vite-build-tool-and-development-server">4.5 Vite (build tool and development server)</a><a class="toc d3" href="#46-nodejs-and-express-the-web-server">4.6 Node.js and Express (the web server)</a><a class="toc d3" href="#47-service-worker-and-pwa">4.7 Service worker and PWA</a><a class="toc d3" href="#48-small-libraries">4.8 Small libraries</a><a class="toc d2" href="#5-what-happens-when-someone-opens-the-app-production">5. What happens when someone opens the app (production)</a><a class="toc d2" href="#6-how-the-app-is-structured-inside">6. How the app is structured inside</a><a class="toc d3" href="#61-the-store-state-and-actions">6.1 The store: state and actions</a><a class="toc d3" href="#62-view-hooks-state-into-display-values">6.2 View hooks: state into display values</a><a class="toc d3" href="#63-the-views-appview-screens-sheets">6.3 The views: AppView, screens, sheets</a><a class="toc d3" href="#64-one-click-end-to-end">6.4 One click, end to end</a><a class="toc d2" href="#7-cross-cutting-details">7. Cross-cutting details</a><a class="toc d3" href="#71-configuration">7.1 Configuration</a><a class="toc d3" href="#72-styling">7.2 Styling</a><a class="toc d3" href="#73-dates-and-time">7.3 Dates and time</a><a class="toc d3" href="#74-business-rules-in-the-front-end">7.4 Business rules in the front end</a><a class="toc d2" href="#8-things-that-look-odd-at-first">8. Things that look odd at first</a><a class="toc d2" href="#9-where-to-look-for">9. Where to look for…</a>
   </nav>
   <main class="content">
 <h1 id="how-the-nexdrive-codebase-works">How the NexDrive codebase works</h1>
@@ -184,15 +184,16 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 ├── src/                  ← THE APP (React + TypeScript/JSX). Everything here gets compiled and bundled
 │   ├── main.tsx            Entry point: mounts &lt;App/&gt; into the page
 │   ├── app/                Application shell: wires the features together
-│   │   ├── App.jsx           Root component: subscribes to the store, builds the view model
+│   │   ├── App.jsx           Root component: creates the store and provides it to the tree
 │   │   ├── store/            The app store (Zustand): createAppStore.js composes the slices;
 │   │   │                       appSlice.js (navigation, sheets, toasts, splash, clock); initialState.js
-│   │   ├── viewModel.js      Turns App's state into display-ready values (&quot;v&quot;)
+│   │   ├── hooks/            useShellView: values for the frame, status bar, nav, toast, sheets
 │   │   ├── AppView.jsx       Top-level layout: phone frame, current screen, nav, sheets
 │   │   ├── constants.js      Phone-frame sizes
 │   │   └── components/       Shell pieces: bottom nav, status bar, splash, sheet overlay
 │   ├── features/           One folder per business area; each holds its screens and sheets
-│   │   │                     (components/) and its store slice (stores/: that feature's actions)
+│   │   │                     (components/), one view hook per screen/sheet (hooks/) and its
+│   │   │                     store slice (stores/: that feature's actions)
 │   │   ├── onboarding/       Welcome → register → verify → details → plan
 │   │   ├── dashboard/        Home screen
 │   │   ├── calendar/         Day / week / month views
@@ -203,6 +204,10 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 │   │   ├── subscription/     Plans, upgrade, cancel
 │   │   └── settings/         Account (More), profile, pricing, bank details, preferences, security
 │   ├── components/         Shared UI used across features: icons, toast
+│   ├── hooks/              Shared hooks: useViewContext (what every view hook starts from),
+│   │                         useStoreFacade, viewHelpers (lesson card, referral row)
+│   ├── stores/             AppStoreContext: how components reach the store
+│   ├── config/             Phone-frame sizes
 │   ├── lib/                Pure helpers in TypeScript, with tests: dates, format, validation
 │   ├── domain/             Business rules shared by several features: lesson statuses, plans, referrals
 │   ├── demo/               Demo-only code: seed data, workflow panel, fake referral-code lookup
@@ -298,7 +303,9 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <li>It applies only the differences to the real page (the <strong>DOM</strong>, the browser&#39;s live object model of the page).</li>
 </ol>
 <p><strong>State</strong> is data that, when it changes, should redraw the page. A function component keeps local state with the <code>useState</code> hook; data shared by many components usually lives in a <strong>store</strong> outside React (here Zustand, section 4.8), which components subscribe to. Changing the state schedules a re-render; React batches several changes from the same event into one re-render.</p>
-<p><strong>Props</strong> are inputs a parent passes to a child component, like function arguments: <code>&lt;Home v={v} /&gt;</code> gives <code>Home</code> a prop called <code>v</code>.</p>
+<p><strong>Props</strong> are inputs a parent passes to a child component, like function arguments: <code>&lt;Toast toast={t} bottom={96} /&gt;</code> gives <code>Toast</code> two props.</p>
+<p><strong>Custom hooks</strong> are your own functions built from other hooks, named <code>useSomething</code>. They are the usual way to share logic between components: a component calls <code>useHomeView()</code> and gets everything it needs to draw.</p>
+<p><strong>Context</strong> passes a value to every component below a provider without threading it through props: <code>&lt;AppStoreContext.Provider value={store}&gt;</code> makes the store available to any component that calls <code>useContext(AppStoreContext)</code>.</p>
 <p><strong>Hooks</strong> are functions starting with <code>use</code> that a function component calls on every render: <code>useState</code> (local state), <code>useRef</code> (a mutable box, often a DOM element), <code>useEffect(fn, deps)</code> (run <code>fn</code> after the render whenever <code>deps</code> change; the function <code>fn</code> returns runs as clean-up, for example to remove listeners when the component goes away).</p>
 <p><strong>Events:</strong> React attaches one listener at the root of the page and routes clicks to whichever element&#39;s <code>onClick</code> prop matches (&quot;synthetic events&quot;). Handlers are plain functions.</p>
 <p><strong>Lists</strong> need a <code>key</code> on each item so React can match items between renders.</p>
@@ -379,26 +386,26 @@ jsx('button', { onClick: save, style: { color: 'red' }, children: ['Save ', name
 <li><code>bundle/index-&lt;hash&gt;.css</code> and <code>bundle/index-&lt;hash&gt;.js</code>: the compiled app, with React included.</li>
 </ul>
 </li>
-<li>The bundle runs <code>main.jsx</code>, which mounts <code>&lt;App/&gt;</code> into <code>&lt;div id=&quot;root&quot;&gt;</code>.</li>
-<li><code>App</code>&#39;s constructor builds the initial state from the demo <strong>seed</strong> data (<code>src/demo/seeds.js</code>).</li>
-<li><code>render()</code> → <code>buildViewModel(this)</code> → <code>&lt;AppView v={…}/&gt;</code>. React creates the page.</li>
-<li><code>componentDidMount()</code>:<ul>
+<li>The bundle runs <code>main.tsx</code>, which mounts <code>&lt;App/&gt;</code> into <code>&lt;div id=&quot;root&quot;&gt;</code>.</li>
+<li><code>App</code> creates the store; its initial data comes from the demo <strong>seed</strong> data (<code>src/demo/seeds.js</code>).</li>
+<li><code>App</code> renders <code>&lt;AppView&gt;</code> inside the store&#39;s context provider. <code>AppView</code> and each visible screen call their view hooks. React creates the page.</li>
+<li>The store&#39;s <code>mount()</code> action, run from a <code>useEffect</code> in <code>App</code>:<ul>
 <li>listens for window resizes (the phone frame scales to fit)</li>
 <li>starts a 15-second clock tick (lesson statuses move from upcoming → ongoing → completed in real time)</li>
 <li>reads <code>?ref=CODE</code> from the URL (referral link)</li>
 <li>plays the launch animation</li>
 </ul>
 </li>
-<li>After the page has loaded, <code>main.jsx</code> registers the service worker, which pre-caches every file for offline use.</li>
+<li>After the page has loaded, <code>main.tsx</code> registers the service worker, which pre-caches every file for offline use.</li>
 </ol>
 <p>In <strong>dev mode</strong> (<code>npm run dev</code>) steps 1–2 are served by Vite instead: <code>index.html</code> loads <code>/src/main.tsx</code> directly, and Vite compiles each file as it is requested. There is no service worker.</p>
 <h2 id="6-how-the-app-is-structured-inside">6. How the app is structured inside<a class="anchor" href="#6-how-the-app-is-structured-inside" aria-hidden="true">#</a></h2>
 <p>Three layers, each in its own place:</p>
 <pre class="code"><code data-lang="text">store (src/app/store + feature slices)  state + actions    &quot;what is true, and how it changes&quot;
-   │  App subscribes, then on each render
+   │  read through AppStoreContext
    ▼
-buildViewModel (src/app/viewModel.js)  state → display values  &quot;what exactly to show: text, colours, handlers&quot;
-   │  returns one object, `v`
+view hooks (features/*/hooks, app/hooks)  state → display values  &quot;what exactly to show: text, colours, handlers&quot;
+   │  each screen calls its own hook
    ▼
 AppView + feature components (src/app, src/features)   JSX            &quot;how it looks&quot;</code></pre>
 <h3 id="61-the-store-state-and-actions">6.1 The store: state and actions<a class="anchor" href="#61-the-store-state-and-actions" aria-hidden="true">#</a></h3>
@@ -494,17 +501,17 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 </tr>
 </tbody></table>
 </div>
-<h3 id="62-buildviewmodel-state-into-display-values">6.2 <code>buildViewModel</code>: state into display values<a class="anchor" href="#62-buildviewmodel-state-into-display-values" aria-hidden="true">#</a></h3>
-<p><code>src/app/viewModel.js</code> exports <code>buildViewModel(app)</code>. It is called on <strong>every</strong> render and returns one object, conventionally called <code>v</code>, holding everything the screens need already worked out:</p>
+<h3 id="62-view-hooks-state-into-display-values">6.2 View hooks: state into display values<a class="anchor" href="#62-view-hooks-state-into-display-values" aria-hidden="true">#</a></h3>
+<p>Each screen and sheet has a <strong>view hook</strong> next to it, in its feature&#39;s <code>hooks/</code> folder (<code>features/dashboard/hooks/useHomeView.js</code>, <code>features/bookings/hooks/useConflictView.js</code>…). The component calls it on every render and gets one object, conventionally called <code>v</code>, holding everything that screen needs already worked out:</p>
 <ul>
 <li><strong>Formatted text:</strong> <code>&quot;£80&quot;</code>, <code>&quot;Tue 4 Nov&quot;</code>, <code>&quot;3 lessons · 4 hours · £160&quot;</code>.</li>
 <li><strong>Colours that depend on state:</strong> for example, the highlighted tab or a selected option.</li>
-<li><strong>Which screen is visible:</strong> <code>v.is.home</code>, <code>v.is.calendar</code> and so on, worked out from <code>phase</code>, <code>ob</code>, <code>tab</code> and <code>stack</code>.</li>
-<li><strong>Which sheet is open:</strong> <code>v.sh.conflict</code> and so on.</li>
-<li><strong>Per-screen sub-objects:</strong> <code>v.hm</code> (home), <code>v.cal</code> (calendar), <code>v.bf</code> (booking form), <code>v.lp</code> (learner profile)… Each is only computed while that screen is visible.</li>
-<li><strong>Event handlers:</strong> small arrow functions such as <code>go.newBooking = () =&gt; app.openBooking(null)</code>, which call back into <code>App</code>&#39;s methods.</li>
+<li><strong>The screen&#39;s own sub-object:</strong> <code>v.hm</code> (home), <code>v.cal</code> (calendar), <code>v.bf</code> (booking form), <code>v.lp</code> (learner profile)…</li>
+<li><strong>Event handlers:</strong> small arrow functions such as <code>() =&gt; store.openBooking(null)</code>, which call store actions.</li>
+<li><strong>Common values</strong> (<code>v.ic</code>, <code>v.back</code>, <code>v.go</code>, <code>v.padB</code>, <code>v.closeSheet</code>…) that most screens need.</li>
 </ul>
-<p>Helper functions in the same file are <code>bvm(app, booking)</code> (booking → display card), <code>rvm(app, referral)</code>, <code>msgVm(app, sheet)</code> (the message preview) and <code>vmRest(…)</code> (the second half of the view model, split out for size).</p>
+<p>Every view hook starts from <code>useViewContext()</code> (<code>src/hooks/</code>). It subscribes to the store (through <code>useStoreFacade()</code>) and works out what all screens share: which screen is visible (<code>is.home</code>…), layout sizes, icons, navigation handlers (<code>go</code>), upcoming lessons, credit totals and the <code>common</code> values. Helpers used by several features are in <code>src/hooks/viewHelpers.js</code>: <code>bookingCardView(store, booking)</code> (a lesson card) and <code>referralRowView(store, referral)</code>.</p>
+<p>The app shell has its own hook, <code>useShellView()</code> (<code>src/app/hooks/</code>), for the phone frame, status bar, bottom nav, toast, sheet overlay, splash and which screen and footer to show.</p>
 <h3 id="63-the-views-appview-screens-sheets">6.3 The views: <code>AppView</code>, screens, sheets<a class="anchor" href="#63-the-views-appview-screens-sheets" aria-hidden="true">#</a></h3>
 <ul>
 <li><p><code>AppView.jsx</code> draws the frame:</p>
@@ -517,27 +524,28 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 </ul>
 </li>
 <li><p>Every screen, sheet and component has the same shape:</p>
-<pre class="code"><code data-lang="jsx">export default function Home({ v }) {
-  const { dismissReminder, go, hm, ic, icl, ics } = v;   // take what this screen uses from v
+<pre class="code"><code data-lang="jsx">export default function Home() {
+  const v = useHomeView();                                // this screen's display values
+  const { dismissReminder, go, hm, ic, icl, ics } = v;   // take what it uses
   if (!hm) return null;                                   // its data isn't there → render nothing
   return ( &lt;div …&gt; … {hm.greeting} … &lt;button onClick={go.notifications}&gt; … &lt;/div&gt; );
 }</code></pre>
 </li>
-<li><p>They hold no state and contain almost no logic. They only place the values from <code>v</code> into markup.</p>
+<li><p>They hold no state and contain almost no logic. They only place the values from their view hook into markup.</p>
 </li>
-<li><p>Icons are passed in <code>v</code> as ready-made elements: <code>ic</code> (20px), <code>ics</code> (16px), <code>icl</code> (24px), built by <code>iconSet(size)</code> in <code>components/Icon.jsx</code>. <code>{ic.bell}</code> draws the bell icon.</p>
+<li><p>Icons come in <code>v</code> as ready-made elements: <code>ic</code> (20px), <code>ics</code> (16px), <code>icl</code> (24px), built by <code>iconSet(size)</code> in <code>components/Icon.jsx</code>. <code>{ic.bell}</code> draws the bell icon.</p>
 </li>
 </ul>
 <h3 id="64-one-click-end-to-end">6.4 One click, end to end<a class="anchor" href="#64-one-click-end-to-end" aria-hidden="true">#</a></h3>
 <p>Tapping <strong>Confirm</strong> in the &quot;Confirm booking&quot; sheet:</p>
 <ol>
 <li>In <code>ConfirmBookingSheet.jsx</code>, the button has <code>onClick={cm.confirm}</code>.</li>
-<li><code>cm.confirm</code> was created in <code>buildViewModel</code> as <code>() =&gt; app.confirmBooking()</code>.</li>
+<li><code>cm.confirm</code> was created in the sheet&#39;s view hook <code>useConfirmBookingView()</code> as <code>() =&gt; store.confirmBooking()</code>.</li>
 <li>The store action <code>confirmBooking()</code> (bookings slice) reads the state with <code>get()</code>, recomputes the booking with <code>bfModel()</code>, builds the new booking objects and a &quot;Booking created&quot; notification, then calls <code>get().setState({ bookings: [...], notifs: [...], sheet: { type: &#39;message&#39;, kind: &#39;new&#39;, ids } })</code>.</li>
-<li>The store notifies <code>App</code>, React re-renders it → <code>buildViewModel</code> → <code>v.sh.message</code> is now true and <code>v.msg</code> holds the message preview.</li>
+<li>The store notifies every subscribed component. <code>SheetOverlay</code> (through <code>useShellView</code>) now sees the <code>message</code> sheet, and <code>MessageSheet</code> calls <code>useMessageView()</code>, which builds the message preview.</li>
 <li><code>AppView</code> → <code>SheetOverlay</code> → <code>MessageSheet</code> renders the preview. React updates only the parts of the page that changed.</li>
 </ol>
-<p>The same loop drives every interaction: <strong>event → store action → setState → App re-renders → buildViewModel → JSX</strong>. A sequence diagram is in <a href="component-diagram.html#4-one-interaction-end-to-end">Component diagrams</a>.</p>
+<p>The same loop drives every interaction: <strong>event → store action → setState → subscribed components re-render → view hooks → JSX</strong>. A sequence diagram is in <a href="component-diagram.html#4-one-interaction-end-to-end">Component diagrams</a>.</p>
 <h2 id="7-cross-cutting-details">7. Cross-cutting details<a class="anchor" href="#7-cross-cutting-details" aria-hidden="true">#</a></h2>
 <h3 id="71-configuration">7.1 Configuration<a class="anchor" href="#71-configuration" aria-hidden="true">#</a></h3>
 <div class="table-wrap"><table>
@@ -587,7 +595,7 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <li>The demo data was written around 7 Oct 2026. <code>shiftDemoDate()</code> shifts every seed date by (today − 7 Oct), so the demo always looks current.</li>
 </ul>
 <h3 id="74-business-rules-in-the-front-end">7.4 Business rules in the front end<a class="anchor" href="#74-business-rules-in-the-front-end" aria-hidden="true">#</a></h3>
-<p>Implemented in <code>App</code>/<code>viewModel</code> for demo purposes. The plan is that the API and database enforce them, with the UI only previewing:</p>
+<p>Implemented in the store slices and view hooks for demo purposes. The plan is that the API and database enforce them, with the UI only previewing:</p>
 <ul>
 <li>price = rate × hours × lessons − discount, where the discount can&#39;t exceed the value</li>
 <li>no overlapping lessons (<code>overlap()</code>)</li>
@@ -598,10 +606,10 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <h2 id="8-things-that-look-odd-at-first">8. Things that look odd at first<a class="anchor" href="#8-things-that-look-odd-at-first" aria-hidden="true">#</a></h2>
 <p>All of these are listed with their impact in <a href="gaps-and-quirks.html#part-b-non-standard-patterns">Gaps & quirks</a>. They exist because the app was originally exported from a design tool and then converted mechanically to React, keeping its behaviour identical.</p>
 <ol>
-<li><strong>A single <code>v</code> object</strong> handed to every screen, instead of each screen reading the store for what it needs.</li>
+<li><strong>Wide view hooks.</strong> Each screen has its own view hook, but every hook starts from <code>useViewContext()</code>, which subscribes to the whole store, so every visible screen re-renders on any change. Narrower selectors (<code>useAppStore((s) =&gt; s.bookings)</code>) would be the next step.</li>
 <li><strong>A 2,100-line view-model function.</strong></li>
-<li><strong>Run-time colours passed as values.</strong> Most styling is in CSS Modules, but the view model still computes some colours (for example &quot;selected&quot; chip colours) and passes them to inline <code>style</code>.</li>
-<li><strong>Very short variable names</strong> (<code>s</code>, <code>v</code>, <code>B</code>, <code>L</code>, <code>bf</code>, <code>bk2</code>) inherited from the original code, mostly inside <code>App</code> and the view model. The shared helpers in <code>src/lib/</code> and the feature constants have descriptive names.</li>
+<li><strong>Run-time colours passed as values.</strong> Most styling is in CSS Modules, but the view hooks still compute some colours (for example &quot;selected&quot; chip colours) and passes them to inline <code>style</code>.</li>
+<li><strong>Very short variable names</strong> (<code>s</code>, <code>v</code>, <code>B</code>, <code>L</code>, <code>bf</code>, <code>bk2</code>) inherited from the original code, mostly inside the store slices and view hooks. The shared helpers in <code>src/lib/</code> and the feature constants have descriptive names.</li>
 <li><strong>Navigation is a stack in state</strong>, not URLs. The browser&#39;s back button does not move between screens.</li>
 <li><strong>A module-level mutable clock</strong> (<code>TODAY</code>, <code>NOW</code>) instead of passing time in.</li>
 </ol>
@@ -619,11 +627,11 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 </tr>
 <tr>
 <td>Change what a button does</td>
-<td>Find its <code>onClick={x.y}</code> → find <code>y:</code> under that screen&#39;s section in <code>src/app/viewModel.js</code> → follow to the <code>App</code> method</td>
+<td>Find its <code>onClick={x.y}</code> → find <code>y:</code> in the screen&#39;s view hook (<code>features/&lt;feature&gt;/hooks/use&lt;Screen&gt;View.js</code>) → follow to the store action in <code>features/&lt;feature&gt;/stores/</code></td>
 </tr>
 <tr>
 <td>Change a calculation shown on screen</td>
-<td><code>src/app/viewModel.js</code> (display) or <code>bfModel()</code> in the bookings slice (booking maths)</td>
+<td>The screen&#39;s view hook (display) or <code>bfModel()</code> in the bookings slice (booking maths)</td>
 </tr>
 <tr>
 <td>Add or change demo data</td>

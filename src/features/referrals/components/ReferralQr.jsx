@@ -1,6 +1,8 @@
+import { useReferralQrView } from '../hooks/useReferralQrView';
 import styles from './ReferralQr.module.css';
 import QrCode from './QrCode';
-export default function ReferralQr({ v }) {
+export default function ReferralQr() {
+  const v = useReferralQrView();
   const { back, ic, icl, ics, rq } = v;
   if (!rq) return null;
   return (

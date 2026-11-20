@@ -1,6 +1,8 @@
+import { useOnboardingView } from '../hooks/useOnboardingView';
 import styles from './VerifyPhone.module.css';
 
-export default function VerifyPhone({ v }) {
+export default function VerifyPhone() {
+  const v = useOnboardingView();
   const { fillOtp, hOtp, ics, otp, otpB, otpErr, reg, resendLabel, resendOtp } = v;
   return (
     <div className={styles.stack}>

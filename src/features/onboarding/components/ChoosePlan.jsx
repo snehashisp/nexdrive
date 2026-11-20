@@ -1,6 +1,8 @@
+import { useOnboardingView } from '../hooks/useOnboardingView';
 import styles from './ChoosePlan.module.css';
 
-export default function ChoosePlan({ v }) {
+export default function ChoosePlan() {
+  const v = useOnboardingView();
   const { addCard, ic, ics, obCard, obCardB, obCardErr, obNoCard, obPlans, obSum } = v;
   return (
     <div className={styles.stack}>

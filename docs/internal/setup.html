@@ -300,7 +300,7 @@ npm install                      # downloads React, Vite, Express … into node_
 <ol>
 <li><code>src/main.jsx</code>: the entry point (about 20 lines).</li>
 <li><code>src/app/store/</code>: the store. <code>initialState.js</code> is the data; <code>createAppStore.js</code> lists the slices, and each feature&#39;s actions (such as <code>openBooking</code>, <code>confirmBooking</code>, <code>saveLearner</code>) are in <code>src/features/&lt;feature&gt;/stores/</code>.</li>
-<li><code>src/app/viewModel.js</code> → <code>buildViewModel()</code>: turns the state into display values.</li>
+<li>A screen&#39;s view hook, for example <code>src/features/dashboard/hooks/useHomeView.js</code>: turns the state into display values.</li>
 <li><code>src/app/AppView.jsx</code>: picks which screen to show. Then any screen in <code>src/features/&lt;feature&gt;/components/</code>.</li>
 </ol>
 <p><a href="overview.html">How it works</a> explains each step.</p>

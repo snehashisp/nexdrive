@@ -1,6 +1,8 @@
+import { useBookingsView } from '../hooks/useBookingsView';
 import styles from './Bookings.module.css';
 
-export default function Bookings({ v }) {
+export default function Bookings() {
+  const v = useBookingsView();
   const { back, bk, icl, ics } = v;
   if (!bk) return null;
   return (

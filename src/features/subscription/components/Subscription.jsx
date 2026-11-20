@@ -1,6 +1,8 @@
+import { useSubscriptionView } from '../hooks/useSubscriptionView';
 import styles from './Subscription.module.css';
 
-export default function Subscription({ v }) {
+export default function Subscription() {
+  const v = useSubscriptionView();
   const { back, go, ic, icl, ics, sb } = v;
   if (!sb) return null;
   return (

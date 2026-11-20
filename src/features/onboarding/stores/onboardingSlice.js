@@ -5,6 +5,27 @@ import { isValidEmail, isValidUkMobile } from '@/lib/validation';
 // Onboarding: registration, phone verification, instructor details, plan, referral code.
 // A Zustand slice: actions read the store with get() and write with get().setState(update, callback).
 export const createOnboardingSlice = (set, get) => ({
+  // Demo helper: fill the registration form with sample details (a referred instructor in referral flows).
+  fillSampleRegistration() {
+    get().setState({
+      reg:
+        get().ref.code || (get().flow || '').startsWith('ref')
+          ? {
+              name: 'Chloe Adams',
+              phone: '07700 900874',
+              email: 'chloe@adamsdriving.co.uk',
+              password: 'Demo' + Math.random().toString(36).slice(2, 8) + '7',
+              terms: true,
+            }
+          : {
+              name: 'Daniel Wilson',
+              phone: '07700 900123',
+              email: 'daniel@wilsondriving.co.uk',
+              password: 'Demo' + Math.random().toString(36).slice(2, 8) + '7',
+              terms: true,
+            },
+    });
+  },
   checkRef(code) {
     const c = (code || '').trim().toUpperCase().replace(/\s/g, '');
     if (!c) return null;

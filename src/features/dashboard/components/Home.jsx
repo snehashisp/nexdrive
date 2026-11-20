@@ -1,6 +1,8 @@
+import { useHomeView } from '../hooks/useHomeView';
 import styles from './Home.module.css';
 
-export default function Home({ v }) {
+export default function Home() {
+  const v = useHomeView();
   const { dismissReminder, go, hm, ic, icl, ics } = v;
   if (!hm) return null;
   return (

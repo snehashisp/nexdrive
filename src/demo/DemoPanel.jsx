@@ -1,6 +1,8 @@
+import { useDemoPanelView } from './useDemoPanelView';
 import styles from './DemoPanel.module.css';
 
-export default function DemoPanel({ v }) {
+export default function DemoPanel() {
+  const v = useDemoPanelView();
   const { clockLabel, flows, ics, replaySplash } = v;
   return (
     <aside className={styles.aside}>

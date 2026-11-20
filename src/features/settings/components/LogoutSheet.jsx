@@ -1,6 +1,8 @@
+import { useLogoutView } from '../hooks/useLogoutView';
 import styles from './LogoutSheet.module.css';
 
-export default function LogoutSheet({ v }) {
+export default function LogoutSheet() {
+  const v = useLogoutView();
   const { ic, lo } = v;
   if (!lo) return null;
   return (

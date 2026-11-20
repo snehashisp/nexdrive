@@ -1,6 +1,8 @@
+import { useBookingFormView } from '../hooks/useBookingFormView';
 import styles from './BookingForm.module.css';
 
-export default function BookingForm({ v }) {
+export default function BookingForm() {
+  const v = useBookingFormView();
   const { back, bf, ic, icl, ics } = v;
   if (!bf) return null;
   return (
@@ -339,7 +341,8 @@ export default function BookingForm({ v }) {
   );
 }
 
-export function BookingFormFooter({ v }) {
+export function BookingFormFooter() {
+  const v = useBookingFormView();
   const { bf, ic, padB } = v;
   if (!bf) return null;
   return (

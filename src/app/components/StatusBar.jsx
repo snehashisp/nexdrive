@@ -1,6 +1,8 @@
+import { useShellView } from '../hooks/useShellView';
 import styles from './StatusBar.module.css';
 
-export default function StatusBar({ v }) {
+export default function StatusBar() {
+  const v = useShellView();
   const { clockTime, sbBg, sbFg, sbH } = v;
   return (
     <div className={styles.row} style={{ height: `${sbH}px`, background: sbBg, color: sbFg }}>

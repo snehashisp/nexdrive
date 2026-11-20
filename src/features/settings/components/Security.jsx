@@ -1,6 +1,8 @@
+import { useSecurityView } from '../hooks/useSecurityView';
 import styles from './Security.module.css';
 
-export default function Security({ v }) {
+export default function Security() {
+  const v = useSecurityView();
   const { back, ic, icl, ics, pwChanged, sec } = v;
   if (!sec) return null;
   return (

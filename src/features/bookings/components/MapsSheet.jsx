@@ -1,6 +1,8 @@
+import { useMapsView } from '../hooks/useMapsView';
 import styles from './MapsSheet.module.css';
 
-export default function MapsSheet({ v }) {
+export default function MapsSheet() {
+  const v = useMapsView();
   const { closeSheet, ic, mp } = v;
   if (!mp) return null;
   return (

@@ -1,6 +1,8 @@
+import { usePushNotificationView } from '../hooks/usePushNotificationView';
 import styles from './PushNotification.module.css';
 
-export default function PushNotification({ v }) {
+export default function PushNotification() {
+  const v = usePushNotificationView();
   const { openPush, pushText, pushTitle, pushTop } = v;
   return (
     <button onClick={openPush} className={styles.button} style={{ top: `${pushTop}px` }}>

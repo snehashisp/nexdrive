@@ -1,6 +1,8 @@
+import { useViewContext } from '@/hooks/useViewContext';
 import styles from './QuickAddSheet.module.css';
 
-export default function QuickAddSheet({ v }) {
+export default function QuickAddSheet() {
+  const v = useViewContext().common;
   const { closeSheet, go, ic, ics } = v;
   return (
     <>

@@ -1,6 +1,8 @@
+import { usePreferencesView } from '../hooks/usePreferencesView';
 import styles from './Preferences.module.css';
 
-export default function Preferences({ v }) {
+export default function Preferences() {
+  const v = usePreferencesView();
   const { back, icl, pp } = v;
   if (!pp) return null;
   return (

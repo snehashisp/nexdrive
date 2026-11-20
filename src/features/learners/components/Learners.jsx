@@ -1,6 +1,8 @@
+import { useLearnersView } from '../hooks/useLearnersView';
 import styles from './Learners.module.css';
 
-export default function Learners({ v }) {
+export default function Learners() {
+  const v = useLearnersView();
   const { go, ic, icl, ics, ls } = v;
   if (!ls) return null;
   return (

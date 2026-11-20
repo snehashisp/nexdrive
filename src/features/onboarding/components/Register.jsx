@@ -1,6 +1,8 @@
+import { useOnboardingView } from '../hooks/useOnboardingView';
 import styles from './Register.module.css';
 
-export default function Register({ v }) {
+export default function Register() {
+  const v = useOnboardingView();
   const { hReg, ic, ics, obInvite, pwRules, reg, regB, regE, rfo, sampleReg } = v;
   return (
     <div className={styles.stack}>

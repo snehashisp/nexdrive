@@ -1,6 +1,8 @@
+import { useCalendarView } from '../hooks/useCalendarView';
 import styles from './Calendar.module.css';
 
-export default function Calendar({ v }) {
+export default function Calendar() {
+  const v = useCalendarView();
   const { cal, ic, ics } = v;
   if (!cal) return null;
   return (

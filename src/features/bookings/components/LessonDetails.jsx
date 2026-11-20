@@ -1,6 +1,8 @@
+import { useLessonDetailsView } from '../hooks/useLessonDetailsView';
 import styles from './LessonDetails.module.css';
 
-export default function LessonDetails({ v }) {
+export default function LessonDetails() {
+  const v = useLessonDetailsView();
   const { back, ic, icl, ld } = v;
   if (!ld) return null;
   return (

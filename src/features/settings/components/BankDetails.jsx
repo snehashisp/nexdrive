@@ -1,6 +1,8 @@
+import { useBankDetailsView } from '../hooks/useBankDetailsView';
 import styles from './BankDetails.module.css';
 
-export default function BankDetails({ v }) {
+export default function BankDetails() {
+  const v = useBankDetailsView();
   const { back, bk2, ic, icl, ics } = v;
   if (!bk2) return null;
   return (
@@ -134,7 +136,8 @@ export default function BankDetails({ v }) {
   );
 }
 
-export function BankDetailsFooter({ v }) {
+export function BankDetailsFooter() {
+  const v = useBankDetailsView();
   const { bk2, ic, padB } = v;
   if (!bk2) return null;
   return (

@@ -1,6 +1,8 @@
+import { useReferralsView } from '../hooks/useReferralsView';
 import styles from './Referrals.module.css';
 
-export default function Referrals({ v }) {
+export default function Referrals() {
+  const v = useReferralsView();
   const { back, go, ic, icl, ics, rf } = v;
   if (!rf) return null;
   return (

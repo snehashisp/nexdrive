@@ -106,7 +106,7 @@ Install the **React Developer Tools** Chrome extension. It adds a **Components**
 
 1. `src/main.jsx`: the entry point (about 20 lines).
 2. `src/app/store/`: the store. `initialState.js` is the data; `createAppStore.js` lists the slices, and each feature's actions (such as `openBooking`, `confirmBooking`, `saveLearner`) are in `src/features/<feature>/stores/`.
-3. `src/app/viewModel.js` → `buildViewModel()`: turns the state into display values.
+3. A screen's view hook, for example `src/features/dashboard/hooks/useHomeView.js`: turns the state into display values.
 4. `src/app/AppView.jsx`: picks which screen to show. Then any screen in `src/features/<feature>/components/`.
 
 [overview.md](overview.md) explains each step.

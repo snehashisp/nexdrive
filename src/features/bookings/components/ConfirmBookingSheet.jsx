@@ -1,6 +1,8 @@
+import { useConfirmBookingView } from '../hooks/useConfirmBookingView';
 import styles from './ConfirmBookingSheet.module.css';
 
-export default function ConfirmBookingSheet({ v }) {
+export default function ConfirmBookingSheet() {
+  const v = useConfirmBookingView();
   const { cm, ic } = v;
   if (!cm) return null;
   return (

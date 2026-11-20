@@ -1,6 +1,8 @@
+import { useOnboardingView } from '../hooks/useOnboardingView';
 import styles from './OnboardingHeader.module.css';
 
-export default function OnboardingHeader({ v }) {
+export default function OnboardingHeader() {
+  const v = useOnboardingView();
   const { icl, obBack, step } = v;
   return (
     <div className={styles.header}>

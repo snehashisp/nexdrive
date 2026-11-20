@@ -1,6 +1,8 @@
+import { useCancelSubscriptionView } from '../hooks/useCancelSubscriptionView';
 import styles from './CancelSubscriptionSheet.module.css';
 
-export default function CancelSubscriptionSheet({ v }) {
+export default function CancelSubscriptionSheet() {
+  const v = useCancelSubscriptionView();
   const { cs } = v;
   if (!cs) return null;
   return (

@@ -1,3 +1,4 @@
+import { useShellView } from '../hooks/useShellView';
 import styles from './SheetOverlay.module.css';
 import CancelLessonSheet from '@/features/bookings/components/CancelLessonSheet';
 import CancelSubscriptionSheet from '@/features/subscription/components/CancelSubscriptionSheet';
@@ -14,7 +15,8 @@ import PickLearnerSheet from '@/features/learners/components/PickLearnerSheet';
 import QuickAddSheet from '@/features/bookings/components/QuickAddSheet';
 import ReferralDetailSheet from '@/features/referrals/components/ReferralDetailSheet';
 
-export default function SheetOverlay({ v }) {
+export default function SheetOverlay() {
+  const v = useShellView();
   const { closeSheet, padB, sh, stop } = v;
   return (
     <div onClick={closeSheet} className={styles.overlay}>

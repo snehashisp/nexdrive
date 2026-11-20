@@ -1,6 +1,8 @@
+import { useLearnerProfileView } from '../hooks/useLearnerProfileView';
 import styles from './LearnerProfile.module.css';
 
-export default function LearnerProfile({ v }) {
+export default function LearnerProfile() {
+  const v = useLearnerProfileView();
   const { back, ic, icl, ics, lp } = v;
   if (!lp) return null;
   return (

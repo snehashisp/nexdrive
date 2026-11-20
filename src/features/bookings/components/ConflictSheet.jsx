@@ -1,6 +1,8 @@
+import { useConflictView } from '../hooks/useConflictView';
 import styles from './ConflictSheet.module.css';
 
-export default function ConflictSheet({ v }) {
+export default function ConflictSheet() {
+  const v = useConflictView();
   const { cf, ic, icl } = v;
   if (!cf) return null;
   return (

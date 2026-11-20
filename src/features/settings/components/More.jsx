@@ -1,6 +1,8 @@
+import { useMoreView } from '../hooks/useMoreView';
 import styles from './More.module.css';
 
-export default function More({ v }) {
+export default function More() {
+  const v = useMoreView();
   const { go, ic, ics, mo } = v;
   if (!mo) return null;
   return (

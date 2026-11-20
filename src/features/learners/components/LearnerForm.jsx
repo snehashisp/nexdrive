@@ -1,6 +1,8 @@
+import { useLearnerFormView } from '../hooks/useLearnerFormView';
 import styles from './LearnerForm.module.css';
 
-export default function LearnerForm({ v }) {
+export default function LearnerForm() {
+  const v = useLearnerFormView();
   const { back, ic, icl, ics, lfm } = v;
   if (!lfm) return null;
   return (
@@ -187,7 +189,8 @@ export default function LearnerForm({ v }) {
   );
 }
 
-export function LearnerFormFooter({ v }) {
+export function LearnerFormFooter() {
+  const v = useLearnerFormView();
   const { ic, lfm, padB } = v;
   if (!lfm) return null;
   return (

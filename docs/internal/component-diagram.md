@@ -77,23 +77,24 @@ On the hosting, the platform runs `npm install` → `npm run build` → `npm sta
 
 ## 3. React component tree
 
-Who renders whom. Only `App` holds state. Every other box is a stateless function that receives the same view-model object `v`.
+Who renders whom. The data lives in the store, which `App` provides through context. Every box is a function component; each screen and sheet reads its display values from its own view hook.
 
 ```mermaid
 flowchart TD
   MAIN["main.tsx<br/>createRoot + StrictMode"] --> APP
 
-  APP["App (app/App.jsx)<br/>function component<br/>subscribes to the store"]
-  VM["buildViewModel(app)<br/>app/viewModel.js<br/>state → display values 'v'"]
-  STORE["App store (Zustand)<br/>app/store + feature slices<br/>STATE + ACTIONS"] -- "useStore()" --> APP
-  APP -- "each render calls" --> VM
-  APP -- "returns AppView, passing v" --> VIEW
+  APP["App (app/App.jsx)<br/>creates the store,<br/>provides AppStoreContext"]
+  STORE["App store (Zustand)<br/>app/store + feature slices<br/>STATE + ACTIONS"]
+  APP -- "creates" --> STORE
+  APP --> VIEW
+  HOOKS["view hooks<br/>useShellView, use&lt;Screen&gt;View<br/>state → display values"]
+  STORE -. "useViewContext()" .-> HOOKS
 
   VIEW["AppView<br/>phone frame + layout"]
 
   VIEW --> PANEL["DemoPanel<br/>(wide screens, showDemoPanel)"]
   VIEW --> STATUS["StatusBar"]
-  VIEW --> SCROLL{{"scroll area:<br/>exactly one screen,<br/>chosen by v.is.*"}}
+  VIEW --> SCROLL{{"scroll area:<br/>exactly one screen,<br/>chosen by is.*"}}
   VIEW --> FOOT{{"footer buttons<br/>for some screens"}}
   VIEW --> NAV["BottomNav<br/>Home · Calendar · + · Learners · More"]
   VIEW --> PUSH["PushNotification<br/>(simulated reminder)"]
@@ -107,10 +108,10 @@ flowchart TD
 
   FOOT --> FOOTS["OnboardingFooter · LearnerFormFooter ·<br/>BookingFormFooter · UpgradeFooter ·<br/>ProfileFooter · PricingFooter · BankDetailsFooter"]
 
-  OVER --> SHEETS["Sheets (one at a time, chosen by v.sh.*)<br/>QuickAdd · LearnerActions · DeleteLearner ·<br/>PickLearner · PickBooking · Conflict ·<br/>ConfirmBooking · Message · CancelLesson · Maps ·<br/>CancelSubscription · Logout · Expired · ReferralDetail"]
+  OVER --> SHEETS["Sheets (one at a time, chosen by sh.*)<br/>QuickAdd · LearnerActions · DeleteLearner ·<br/>PickLearner · PickBooking · Conflict ·<br/>ConfirmBooking · Message · CancelLesson · Maps ·<br/>CancelSubscription · Logout · Expired · ReferralDetail"]
 
   DETAIL -.-> QR["QrCode<br/>(ReferralQr only)"]
-  VM -.-> ICON["Icon / iconSet()<br/>v.ic, v.ics, v.icl"]
+  HOOKS -.-> ICON["Icon / iconSet()<br/>ic, ics, icl"]
 ```
 
 Footer components live in the same file as their screen (for example `LearnerFormFooter` is exported from `features/learners/components/LearnerForm.jsx`).
@@ -124,26 +125,22 @@ sequenceDiagram
   actor U as Instructor
   participant S as ConfirmBookingSheet (JSX)
   participant R as React
-  participant A as App (state + actions)
-  participant V as buildViewModel
-  participant AV as AppView → SheetOverlay → MessageSheet
+  participant A as Store (state + actions)
+  participant AV as SheetOverlay → MessageSheet
 
   U->>S: click "Confirm"
-  S->>A: onClick = v.cm.confirm → app.confirmBooking()
+  S->>A: onClick = v.cm.confirm → store.confirmBooking()
   A->>A: bfModel(): price, sessions, clashes
   A->>R: get().setState({ bookings, notifs, sheet: {type:'message'} })
-  Note over R: the store notifies App, React batches the re-render
-  R->>A: re-render App
-  A->>V: buildViewModel(app)
-  V-->>A: v (v.sh.message = true, v.msg = preview)
-  A-->>R: AppView element (with v)
-  R->>AV: re-render with new v
+  Note over R: the store notifies subscribed components, React batches the re-render
+  R->>AV: re-render: useShellView() sees the message sheet,
+  AV->>AV: MessageSheet calls useMessageView() (message preview)
   R->>U: page updated (only changed DOM nodes)
 ```
 
 ## 5. Module dependencies inside `src/`
 
-Arrows point from the importer to what it imports. Imports only flow one way: shared code (`lib/`, `components/`) → `features/` → `app/`. A feature never imports from another feature; ESLint enforces this (`eslint.config.mjs`). Nothing in `lib/` imports React.
+Arrows point from the importer to what it imports. Imports only flow one way: shared code (`lib/`, `domain/`, `components/`, `hooks/`, `stores/`, `config/`) → `features/` → `app/`. A feature never imports from another feature; ESLint enforces this (`eslint.config.mjs`). Nothing in `lib/` imports React.
 
 ```mermaid
 flowchart LR
@@ -151,34 +148,37 @@ flowchart LR
   MAIN --> CSS[styles/*.css]
 
   subgraph APPL[app/]
-    APP[App.jsx<br/>state + actions] --> VIEW[AppView.jsx]
-    APP --> VM[viewModel.js]
+    APP[App.jsx] --> VIEW[AppView.jsx]
+    APP --> STOREM[store/<br/>createAppStore, appSlice,<br/>initialState]
+    VIEW --> SHV[hooks/useShellView]
     VIEW --> SHELL[components/<br/>BottomNav, StatusBar,<br/>Splash, SheetOverlay]
   end
 
   subgraph FEAT[features/]
     F1[onboarding · dashboard · calendar ·<br/>bookings · learners · notifications ·<br/>referrals · subscription · settings]
-    FC[each: components/ screens + sheets,<br/>plus constants / utils / plans]
+    FC[each: components/ screens + sheets,<br/>hooks/ view hooks, stores/ slice]
   end
 
   subgraph DEMO[demo/]
-    SEEDS[seeds.js, flows.js,<br/>referral-codes.js, DemoPanel.jsx]
+    SEEDS[seeds.js, flows.js, referral-codes.js,<br/>demoSlice.js, DemoPanel.jsx]
   end
 
   subgraph SHARED[shared]
     LIB[lib/<br/>dates, format, validation,<br/>inline-styles — TypeScript]
     COMP[components/<br/>Icon, iconSet, Toast]
+    DOM[domain/<br/>bookings, plans, referrals]
+    HK[hooks/ + stores/<br/>useViewContext, viewHelpers,<br/>AppStoreContext]
   end
 
   VIEW --> FEAT
   SHELL --> FEAT
   APP --> FEAT
-  VM --> FEAT
+  STOREM --> FEAT
   APP --> DEMO
-  VM --> DEMO
+  STOREM --> DEMO
   VIEW --> DEMO
   APP --> SHARED
-  VM --> SHARED
+  STOREM --> SHARED
   FEAT --> SHARED
   DEMO --> FEAT
   APP --> QRLIB[(qrcode-generator)]

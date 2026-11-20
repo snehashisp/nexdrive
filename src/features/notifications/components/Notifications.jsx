@@ -1,6 +1,8 @@
+import { useNotificationsView } from '../hooks/useNotificationsView';
 import styles from './Notifications.module.css';
 
-export default function Notifications({ v }) {
+export default function Notifications() {
+  const v = useNotificationsView();
   const { back, icl, nt } = v;
   if (!nt) return null;
   return (

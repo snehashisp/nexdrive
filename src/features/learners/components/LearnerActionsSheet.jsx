@@ -1,6 +1,8 @@
+import { useLearnerActionsView } from '../hooks/useLearnerActionsView';
 import styles from './LearnerActionsSheet.module.css';
 
-export default function LearnerActionsSheet({ v }) {
+export default function LearnerActionsSheet() {
+  const v = useLearnerActionsView();
   const { closeSheet, ic, ics, la } = v;
   if (!la) return null;
   return (

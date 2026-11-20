@@ -1,6 +1,8 @@
+import { useExpiredView } from '../hooks/useExpiredView';
 import styles from './ExpiredSheet.module.css';
 
-export default function ExpiredSheet({ v }) {
+export default function ExpiredSheet() {
+  const v = useExpiredView();
   const { ex, ic, icl } = v;
   if (!ex) return null;
   return (

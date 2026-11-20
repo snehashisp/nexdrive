@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import AppView from './AppView';
 import { createAppStore } from './store/createAppStore';
-import { buildViewModel } from './viewModel';
+import { AppStoreContext } from '@/stores/appStoreContext';
 
 // Preview settings, carried over from the design tool. Change them here (or pass them as props from
 // main.tsx) to start the app in a different state.
@@ -22,12 +22,11 @@ function screenKey(s) {
 }
 
 // The whole NexDrive app. All data and every action that changes it live in the app store
-// (store/createAppStore.js: one slice per feature). This component subscribes to the store, hands the
-// state to buildViewModel() (viewModel.js), which prepares display-ready values, and <AppView> draws the
-// screens from those values.
+// (store/createAppStore.js: one slice per feature). This component creates the store and provides it to
+// the tree; <AppView> draws the shell, and each screen reads what it needs through its own view hook
+// (features/<feature>/hooks/use<Screen>View.js).
 export default function App(props) {
   const [store] = useState(() => createAppStore({ ...DEFAULT_PREVIEW, ...props }));
-  const state = useStore(store);
   const scrollRef = useRef(null);
 
   // Listeners and timers (resize, clock, splash, ?ref= links) for the lifetime of the app.
@@ -45,25 +44,14 @@ export default function App(props) {
   }, [store, dataState]);
 
   // When the visible screen changes, scroll the new screen back to the top.
-  const key = screenKey(state);
+  const key = useStore(store, screenKey);
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
   }, [key]);
 
-  // The view model was written against the old class component (`app.state`, `app.props`, `app.x()`);
-  // this object gives it the same shape until each screen reads the store through its own hook.
-  const app = {
-    ...state,
-    get state() {
-      return store.getState();
-    },
-    props: state.preview,
-    get splashRun() {
-      return store.getState().timers.splashRun;
-    },
-    get pt() {
-      return store.getState().timers.pt;
-    },
-  };
-  return <AppView v={buildViewModel(app)} scrollRef={scrollRef} />;
+  return (
+    <AppStoreContext.Provider value={store}>
+      <AppView scrollRef={scrollRef} />
+    </AppStoreContext.Provider>
+  );
 }

@@ -1,6 +1,8 @@
+import { useCancelLessonView } from '../hooks/useCancelLessonView';
 import styles from './CancelLessonSheet.module.css';
 
-export default function CancelLessonSheet({ v }) {
+export default function CancelLessonSheet() {
+  const v = useCancelLessonView();
   const { cl, ic, icl, ics } = v;
   if (!cl) return null;
   return (

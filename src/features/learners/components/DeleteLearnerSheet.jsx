@@ -1,6 +1,8 @@
+import { useLearnerActionsView } from '../hooks/useLearnerActionsView';
 import styles from './DeleteLearnerSheet.module.css';
 
-export default function DeleteLearnerSheet({ v }) {
+export default function DeleteLearnerSheet() {
+  const v = useLearnerActionsView();
   const { ic, icl, ics, la } = v;
   if (!la) return null;
   return (

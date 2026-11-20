@@ -1,6 +1,8 @@
+import { useOnboardingView } from '../hooks/useOnboardingView';
 import styles from './InstructorDetails.module.css';
 
-export default function InstructorDetails({ v }) {
+export default function InstructorDetails() {
+  const v = useOnboardingView();
   const { det, detB, detDur, detE, detStatus, hDet, ics } = v;
   return (
     <div className={styles.stack}>

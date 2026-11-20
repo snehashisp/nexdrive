@@ -1,6 +1,8 @@
+import { usePickBookingView } from '../hooks/usePickBookingView';
 import styles from './PickBookingSheet.module.css';
 
-export default function PickBookingSheet({ v }) {
+export default function PickBookingSheet() {
+  const v = usePickBookingView();
   const { closeSheet, ic, pb } = v;
   if (!pb) return null;
   return (

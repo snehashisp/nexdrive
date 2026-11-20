@@ -1,6 +1,8 @@
+import { useOnboardingView } from '../hooks/useOnboardingView';
 import styles from './Welcome.module.css';
 
-export default function Welcome({ v }) {
+export default function Welcome() {
+  const v = useOnboardingView();
   const { ic, ics, obGo, obInvite, obLogin } = v;
   return (
     <div className={styles.stack}>

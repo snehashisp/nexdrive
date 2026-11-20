@@ -1,3 +1,4 @@
+import { useShellView } from './hooks/useShellView';
 import styles from './AppView.module.css';
 import BottomNav from '@/app/components/BottomNav';
 import DemoPanel from '@/demo/DemoPanel';
@@ -37,7 +38,8 @@ import VerifyPhone from '@/features/onboarding/components/VerifyPhone';
 import Welcome from '@/features/onboarding/components/Welcome';
 
 // scrollRef is attached to the scrolling screen area so App can reset it when the screen changes.
-export default function AppView({ v, scrollRef }) {
+export default function AppView({ scrollRef }) {
+  const v = useShellView();
   const {
     fr,
     ics,
@@ -56,7 +58,7 @@ export default function AppView({ v, scrollRef }) {
   } = v;
   return (
     <div className={styles.row}>
-      {panel && <DemoPanel v={v} />}
+      {panel && <DemoPanel />}
       <main className={styles.main} style={{ padding: `${fr.pad}px` }}>
         <div className={styles.box} style={{ width: `${fr.ow}px`, height: `${fr.oh}px` }}>
           <div
@@ -75,7 +77,7 @@ export default function AppView({ v, scrollRef }) {
               className={styles.stack}
               style={{ width: `${fr.sw}px`, height: `${fr.sh}px`, borderRadius: `${fr.irad}px` }}
             >
-              {statusBar && <StatusBar v={v} />}
+              {statusBar && <StatusBar />}
               {offline ? (
                 <div className={styles.wifioffRow}>
                   {ics.wifiOff}
@@ -83,46 +85,46 @@ export default function AppView({ v, scrollRef }) {
                 </div>
               ) : null}
               <div className={`${styles.box2} nx-scroll`} ref={scrollRef} style={{ background: scrBg }}>
-                {is.ob_welcome && <Welcome v={v} />}
-                {obHeader && <OnboardingHeader v={v} />}
-                {is.ob_register && <Register v={v} />}
-                {is.ob_verify && <VerifyPhone v={v} />}
-                {is.ob_details && <InstructorDetails v={v} />}
-                {is.ob_plan && <ChoosePlan v={v} />}
-                {is.ob_started && <TrialStarted v={v} />}
-                {is.home && <Home v={v} />}
-                {is.calendar && <Calendar v={v} />}
-                {is.learners && <Learners v={v} />}
-                {is.learner && <LearnerProfile v={v} />}
-                {is.learnerForm && <LearnerForm v={v} />}
-                {is.booking && <BookingForm v={v} />}
-                {is.lesson && <LessonDetails v={v} />}
-                {is.bookings && <Bookings v={v} />}
-                {is.notifications && <Notifications v={v} />}
-                {is.more && <More v={v} />}
-                {is.subscription && <Subscription v={v} />}
-                {is.upgrade && <Upgrade v={v} />}
-                {is.upgradeDone && <UpgradeDone v={v} />}
-                {is.profile && <Profile v={v} />}
-                {is.pricing && <Pricing v={v} />}
-                {is.bank && <BankDetails v={v} />}
-                {is.prefs && <Preferences v={v} />}
-                {is.security && <Security v={v} />}
-                {is.referrals && <Referrals v={v} />}
-                {is.referralQr && <ReferralQr v={v} />}
-                {is.credit && <Credit v={v} />}
+                {is.ob_welcome && <Welcome />}
+                {obHeader && <OnboardingHeader />}
+                {is.ob_register && <Register />}
+                {is.ob_verify && <VerifyPhone />}
+                {is.ob_details && <InstructorDetails />}
+                {is.ob_plan && <ChoosePlan />}
+                {is.ob_started && <TrialStarted />}
+                {is.home && <Home />}
+                {is.calendar && <Calendar />}
+                {is.learners && <Learners />}
+                {is.learner && <LearnerProfile />}
+                {is.learnerForm && <LearnerForm />}
+                {is.booking && <BookingForm />}
+                {is.lesson && <LessonDetails />}
+                {is.bookings && <Bookings />}
+                {is.notifications && <Notifications />}
+                {is.more && <More />}
+                {is.subscription && <Subscription />}
+                {is.upgrade && <Upgrade />}
+                {is.upgradeDone && <UpgradeDone />}
+                {is.profile && <Profile />}
+                {is.pricing && <Pricing />}
+                {is.bank && <BankDetails />}
+                {is.prefs && <Preferences />}
+                {is.security && <Security />}
+                {is.referrals && <Referrals />}
+                {is.referralQr && <ReferralQr />}
+                {is.credit && <Credit />}
               </div>
-              {obFooter ? <OnboardingFooter v={v} /> : null}
-              {is.learnerForm && <LearnerFormFooter v={v} />}
-              {is.booking && <BookingFormFooter v={v} />}
-              {is.upgrade && <UpgradeFooter v={v} />}
-              {is.profile && <ProfileFooter v={v} />}
-              {is.pricing && <PricingFooter v={v} />}
-              {is.bank && <BankDetailsFooter v={v} />}
-              {showNav && <BottomNav v={v} />}
-              {push && <PushNotification v={v} />}
-              {toast ? <Toast v={v} /> : null}
-              {sheetOpen && <SheetOverlay v={v} />}
+              {obFooter ? <OnboardingFooter /> : null}
+              {is.learnerForm && <LearnerFormFooter />}
+              {is.booking && <BookingFormFooter />}
+              {is.upgrade && <UpgradeFooter />}
+              {is.profile && <ProfileFooter />}
+              {is.pricing && <PricingFooter />}
+              {is.bank && <BankDetailsFooter />}
+              {showNav && <BottomNav />}
+              {push && <PushNotification />}
+              {toast ? <Toast toast={toast} bottom={v.toastB} /> : null}
+              {sheetOpen && <SheetOverlay />}
               {splash && <Splash key={splash.run} {...splash} />}
             </div>
           </div>

@@ -1,6 +1,8 @@
+import { useOnboardingView } from '../hooks/useOnboardingView';
 import styles from './OnboardingFooter.module.css';
 
-export default function OnboardingFooter({ v }) {
+export default function OnboardingFooter() {
+  const v = useOnboardingView();
   const { ic, obFooter, padB } = v;
   return (
     <div className={styles.stack} style={{ padding: `12px 20px ${padB}px` }}>
