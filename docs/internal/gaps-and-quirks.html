@@ -311,13 +311,13 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <td>B4</td>
 <td><strong>Inline <code>style={{…}}</code> on almost every element</strong> (roughly 1,500 style objects) with literal hex colours, while <code>base.css</code> defines colour tokens (<code>--nd-violet</code>…) that the components don&#39;t use</td>
 <td>CSS modules, a utility framework (Tailwind), styled components, or a component library; tokens referenced, not repeated</td>
-<td>Theming or a brand change means editing many files</td>
+<td>Theming or a brand change means editing many files. Mostly fixed: static styles are now in per-component CSS Modules using <code>var(--nd-…)</code> tokens (<code>src/styles/tokens.css</code>); about 270 run-time values remain inline, and some colours are still computed in the view model</td>
 </tr>
 <tr>
 <td>B5</td>
 <td><strong>Hover/focus/pressed styles via <code>!important</code> utility classes</strong> (<code>interactions.css</code>), needed because inline styles beat normal CSS</td>
 <td>Normal CSS rules, possible once styles move out of inline objects</td>
-<td>Fragile ordering; <code>!important</code> spreads</td>
+<td>Fragile ordering; <code>!important</code> spreads. Still needed for elements that keep a run-time inline colour; can go once the view model stops passing colours</td>
 </tr>
 <tr>
 <td>B6</td>

@@ -1,0 +1,52 @@
+/* Styles for LogoutSheet.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  padding: 22px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.logOutNexdrive {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.yourLearnersLessons {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--nd-slate);
+}
+
+.stack2 {
+  padding: 18px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.logOutButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 18px;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stayLoggedButton {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0 18px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}

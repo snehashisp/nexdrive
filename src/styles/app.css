@@ -1,4 +1,5 @@
-/* App-wide styles that used to live in the <helmet> block of the old template. */
+/* App-wide styles that used to live in the <helmet> block of the old template.
+   Element rules are wrapped in :where() (zero specificity) so component classes override them. */
 
 /* The app fills the whole browser window. */
 html,
@@ -17,38 +18,28 @@ body {
   color: #0a0a0f;
   -webkit-font-smoothing: antialiased;
 }
-h1,
-h2,
-h3,
-h4 {
+:where(h1, h2, h3, h4) {
   font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
 }
-a {
+:where(a) {
   color: #6d28d9;
   text-decoration: none;
 }
-a:hover {
+:where(a:hover) {
   color: #5b21b6;
 }
 ::selection {
   background: #ede9fe;
   color: #0a0a0f;
 }
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible {
+:where(button, a, input, select):focus-visible {
   outline: 2px solid #7c3aed;
   outline-offset: 2px;
 }
-input,
-select,
-textarea,
-button {
+:where(input, select, textarea, button) {
   font-family: inherit;
 }
-input::placeholder,
-textarea::placeholder {
+:where(input, textarea)::placeholder {
   color: #9a9aaa;
 }
 .nx-scroll::-webkit-scrollbar {

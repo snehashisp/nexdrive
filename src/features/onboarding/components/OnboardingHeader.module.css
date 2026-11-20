@@ -1,0 +1,45 @@
+/* Styles for OnboardingHeader.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  padding: 4px 8px 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nd-muted);
+  padding-right: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 0 12px 0;
+}
+
+.text {
+  height: 3px;
+}

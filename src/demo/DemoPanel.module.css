@@ -1,0 +1,158 @@
+/* Styles for DemoPanel.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.aside {
+  width: 420px;
+  flex: none;
+  box-sizing: border-box;
+  background: var(--nd-white);
+  border-right: 2px solid var(--nd-ink);
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  height: 100vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.img {
+  height: 30px;
+  width: auto;
+}
+
+.text {
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.nex {
+  letter-spacing: 0.105em;
+}
+
+.drive {
+  color: var(--nd-violet);
+  letter-spacing: 0.005em;
+  margin-left: -0.06em;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.interactivePrototype {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--nd-violet-700);
+}
+
+.businessManagementFor {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  text-wrap: pretty;
+}
+
+.everyScreenLive {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--nd-slate);
+  text-wrap: pretty;
+}
+
+.stack2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.workflows {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--nd-muted);
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.button {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 16px;
+  align-items: start;
+  gap: 3px 10px;
+  text-align: left;
+  padding: 13px 0;
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.num {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nd-violet);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.right {
+  color: var(--nd-muted);
+  padding-top: 2px;
+}
+
+.steps {
+  font-size: 12.5px;
+  color: var(--nd-muted);
+  line-height: 1.45;
+}
+
+.stack3 {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border: 2px solid var(--nd-ink);
+  color: var(--nd-ink);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.replayLaunchScreenButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: var(--nd-white);
+  border: 1.5px solid var(--nd-border);
+  color: var(--nd-ink);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+}

@@ -1,0 +1,164 @@
+/* Styles for ReferralDetailSheet.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 12px 12px 20px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.joined {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.stack2 {
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.row2 {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 15px;
+}
+
+.plan {
+  color: var(--nd-slate);
+}
+
+.plan2 {
+  font-weight: 600;
+}
+
+.calc {
+  font-weight: 600;
+  text-align: right;
+}
+
+.row3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 15px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+}
+
+.reward {
+  font-weight: 600;
+  color: var(--nd-success);
+}
+
+.stack3 {
+  padding: 18px 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.progress {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+  padding-bottom: 6px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.row4 {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.text2 {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.reason {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: var(--nd-error-bg);
+  border: 1px solid var(--nd-error-border);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--nd-status-cancelled-ink);
+}
+
+.youCanSee {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--nd-muted);
+  padding-top: 10px;
+}
+
+.box {
+  padding: 14px 20px 4px;
+}
+
+.demoConfirmTheirButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  background: transparent;
+  color: var(--nd-slate);
+  border: 1px dashed var(--nd-border);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

@@ -1,179 +1,70 @@
+import styles from './Calendar.module.css';
+
 export default function Calendar({ v }) {
   const { cal, ic, ics } = v;
   if (!cal) return null;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
-      <div style={{ position: 'sticky', top: 0, zIndex: 6, background: '#FFFFFF' }}>
-        <div
-          style={{
-            padding: '14px 20px 12px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '12px',
-          }}
-        >
-          <h1 style={{ margin: 0, fontSize: '28px', fontWeight: 600, letterSpacing: '-0.025em' }}>
-            Calendar
-          </h1>
-          <div style={{ display: 'flex', gap: '8px' }}>
+    <div className={styles.stack}>
+      <div className={styles.header}>
+        <div className={styles.row}>
+          <h1 className={styles.calendar}>Calendar</h1>
+          <div className={styles.row2}>
             {cal.notToday ? (
-              <button
-                className="hover-bg-mist"
-                onClick={cal.today}
-                style={{
-                  height: '40px',
-                  padding: '0 14px',
-                  border: '1.5px solid #0A0A0F',
-                  background: '#FFFFFF',
-                  color: '#0A0A0F',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
+              <button className={`${styles.todayButton} hover-bg-mist`} onClick={cal.today}>
                 Today
               </button>
             ) : null}
             <button
-              className="hover-bg-violet-700"
+              className={`${styles.newBookingButton} hover-bg-violet-700`}
               onClick={cal.newBooking}
               aria-label="New booking"
-              style={{
-                width: '40px',
-                height: '40px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: '#7C3AED',
-                color: '#FFFFFF',
-                border: 0,
-                cursor: 'pointer',
-              }}
             >
               {ic.plus}
             </button>
           </div>
         </div>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3,1fr)',
-            margin: '0 20px',
-            border: '1.5px solid #0A0A0F',
-          }}
-        >
+        <div className={styles.grid}>
           {cal.views.map((o, i) => (
             <button
               key={i}
               onClick={o.pick}
-              style={{
-                height: '40px',
-                border: 0,
-                background: o.bg,
-                color: o.fg,
-                fontSize: '14px',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
+              className={styles.button}
+              style={{ background: o.bg, color: o.fg }}
             >
               {o.t}
             </button>
           ))}
         </div>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '8px 8px',
-            borderBottom: '2px solid #0A0A0F',
-          }}
-        >
+        <div className={styles.row3}>
           <button
-            className="hover-bg-mist"
+            className={`${styles.previousButton} hover-bg-mist`}
             onClick={cal.prev}
             aria-label="Previous"
-            style={{
-              width: '44px',
-              height: '44px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: 'transparent',
-              border: 0,
-              cursor: 'pointer',
-              color: '#0A0A0F',
-            }}
           >
             {ic.left}
           </button>
-          <span style={{ fontSize: '16px', fontWeight: 600 }}>{cal.title}</span>
-          <button
-            className="hover-bg-mist"
-            onClick={cal.next}
-            aria-label="Next"
-            style={{
-              width: '44px',
-              height: '44px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: 'transparent',
-              border: 0,
-              cursor: 'pointer',
-              color: '#0A0A0F',
-            }}
-          >
+          <span className={styles.title}>{cal.title}</span>
+          <button className={`${styles.previousButton} hover-bg-mist`} onClick={cal.next} aria-label="Next">
             {ic.right}
           </button>
         </div>
         {cal.isDay ? (
           <>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(7,minmax(0,1fr))',
-                gap: '4px',
-                padding: '10px 12px',
-                borderBottom: '1px solid #E7E7EC',
-              }}
-            >
+            <div className={styles.grid2}>
               {cal.strip.map((d, i) => (
                 <button
                   key={i}
                   onClick={d.pick}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '3px',
-                    padding: '6px 0 7px',
-                    background: d.bg,
-                    color: d.fg,
-                    border: 0,
-                    cursor: 'pointer',
-                  }}
+                  className={styles.button2}
+                  style={{ background: d.bg, color: d.fg }}
                 >
-                  <span style={{ fontSize: '11px', fontWeight: 500, opacity: 0.8 }}>{d.dw}</span>
-                  <span style={{ fontSize: '17px', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
-                    {d.num}
-                  </span>
-                  <span style={{ width: '5px', height: '5px', background: d.dot }} />
+                  <span className={styles.text}>{d.dw}</span>
+                  <span className={styles.num}>{d.num}</span>
+                  <span className={styles.text2} style={{ background: d.dot }} />
                 </button>
               ))}
             </div>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '10px 20px',
-                fontSize: '13px',
-                color: '#4A4A5A',
-                borderBottom: '1px solid #E7E7EC',
-              }}
-            >
+            <div className={styles.clockRow}>
               {ics.clock}
               {cal.summary}
             </div>
@@ -183,162 +74,50 @@ export default function Calendar({ v }) {
       {cal.isDay ? (
         <>
           {cal.dayEmpty ? (
-            <div
-              style={{
-                margin: '16px 20px 0',
-                border: '1px dashed #CFCFD8',
-                padding: '18px 18px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '12px',
-              }}
-            >
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                <span style={{ fontSize: '16px', fontWeight: 600 }}>Your calendar is clear.</span>
-                <span style={{ fontSize: '13px', color: '#6B6B7B' }}>No lessons booked for this day.</span>
+            <div className={styles.row4}>
+              <div className={styles.stack2}>
+                <span className={styles.title}>Your calendar is clear.</span>
+                <span className={styles.lessonsBookedFor}>No lessons booked for this day.</span>
               </div>
-              <button
-                className="hover-bg-violet-700"
-                onClick={cal.newBooking}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  height: '42px',
-                  padding: '0 14px',
-                  background: '#7C3AED',
-                  color: '#FFFFFF',
-                  border: 0,
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  flex: 'none',
-                }}
-              >
+              <button className={`${styles.plusButton} hover-bg-violet-700`} onClick={cal.newBooking}>
                 {ics.plus}Schedule a lesson
               </button>
             </div>
           ) : null}
-          <div style={{ position: 'relative', height: `${cal.tlH}px`, margin: '18px 0 28px' }}>
+          <div className={styles.box} style={{ height: `${cal.tlH}px` }}>
             {cal.hours.map((h, i) => (
-              <div
-                key={i}
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  right: 0,
-                  top: `${h.top}px`,
-                  borderTop: '1px solid #EFEFF3',
-                }}
-              >
-                <span
-                  style={{
-                    position: 'absolute',
-                    left: '12px',
-                    top: '-8px',
-                    background: '#FFFFFF',
-                    paddingRight: '6px',
-                    fontSize: '11px',
-                    color: '#6B6B7B',
-                    fontVariantNumeric: 'tabular-nums',
-                  }}
-                >
-                  {h.label}
-                </span>
+              <div key={i} className={styles.overlay} style={{ top: `${h.top}px` }}>
+                <span className={styles.labelOverlay}>{h.label}</span>
               </div>
             ))}
             {cal.showNow ? (
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '54px',
-                  right: 0,
-                  top: `${cal.nowTop}px`,
-                  height: '2px',
-                  background: '#DC2626',
-                  zIndex: 3,
-                }}
-              >
-                <span
-                  style={{
-                    position: 'absolute',
-                    left: '-4px',
-                    top: '-3px',
-                    width: '8px',
-                    height: '8px',
-                    background: '#DC2626',
-                  }}
-                />
+              <div className={styles.overlay2} style={{ top: `${cal.nowTop}px` }}>
+                <span className={styles.overlay3} />
               </div>
             ) : null}
             {cal.blocks.map((b, i) => (
               <button
                 key={i}
                 onClick={b.open}
+                className={styles.button3}
                 style={{
-                  position: 'absolute',
-                  left: '60px',
-                  right: '12px',
                   top: `${b.top}px`,
                   height: `${b.h}px`,
-                  zIndex: 2,
-                  boxSizing: 'border-box',
-                  padding: '6px 10px',
-                  textAlign: 'left',
                   background: b.st.tint,
-                  border: 0,
                   borderLeft: `4px solid ${b.st.bar}`,
                   color: b.st.ink,
                   opacity: b.op,
-                  cursor: 'pointer',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '2px',
                 }}
               >
-                <span
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    gap: '8px',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                  }}
-                >
-                  <span
-                    style={{
-                      textDecoration: b.deco,
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
+                <span className={styles.row5}>
+                  <span className={styles.name} style={{ textDecoration: b.deco }}>
                     {b.name}
                   </span>
-                  <span
-                    style={{
-                      fontSize: '10px',
-                      fontWeight: 600,
-                      padding: '2px 6px',
-                      background: b.st.bg,
-                      color: b.st.fg,
-                      flex: 'none',
-                    }}
-                  >
+                  <span className={styles.label} style={{ background: b.st.bg, color: b.st.fg }}>
                     {b.st.label}
                   </span>
                 </span>
-                <span
-                  style={{
-                    fontSize: '12px',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
+                <span className={styles.range}>
                   {b.range} · {b.durS} · {b.pc} · {b.fin}
                 </span>
               </button>
@@ -348,115 +127,45 @@ export default function Calendar({ v }) {
       ) : null}
       {cal.isWeek ? (
         <>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '30px repeat(7,minmax(0,1fr))',
-              borderBottom: '1px solid #E7E7EC',
-              paddingRight: '4px',
-            }}
-          >
+          <div className={styles.grid3}>
             <span />
             {cal.week.map((d, i) => (
-              <button
-                key={i}
-                onClick={d.pick}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '3px',
-                  padding: '8px 0',
-                  background: 'transparent',
-                  border: 0,
-                  cursor: 'pointer',
-                  color: '#0A0A0F',
-                }}
-              >
-                <span style={{ fontSize: '11px', color: '#6B6B7B', fontWeight: 500 }}>{d.dw}</span>
-                <span
-                  style={{
-                    width: '28px',
-                    height: '28px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    background: d.hbg,
-                    color: d.hfg,
-                  }}
-                >
+              <button key={i} onClick={d.pick} className={styles.button4}>
+                <span className={styles.text3}>{d.dw}</span>
+                <span className={styles.numRow} style={{ background: d.hbg, color: d.hfg }}>
                   {d.num}
                 </span>
               </button>
             ))}
           </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '30px repeat(7,minmax(0,1fr))',
-              height: `${cal.wH}px`,
-              margin: '8px 0 16px',
-              paddingRight: '4px',
-            }}
-          >
-            <div style={{ position: 'relative' }}>
+          <div className={styles.grid4} style={{ height: `${cal.wH}px` }}>
+            <div className={styles.box2}>
               {cal.wHours.map((h, i) => (
-                <span
-                  key={i}
-                  style={{
-                    position: 'absolute',
-                    top: `${h.top}px`,
-                    left: '6px',
-                    fontSize: '10px',
-                    color: '#6B6B7B',
-                    fontVariantNumeric: 'tabular-nums',
-                  }}
-                >
+                <span key={i} className={styles.labelOverlay2} style={{ top: `${h.top}px` }}>
                   {h.label}
                 </span>
               ))}
             </div>
             {cal.week.map((d, i) => (
-              <div
-                key={i}
-                style={{
-                  position: 'relative',
-                  borderLeft: '1px solid #E7E7EC',
-                  background:
-                    'repeating-linear-gradient(to bottom, #EFEFF3 0, #EFEFF3 1px, transparent 1px, transparent 40px)',
-                }}
-              >
+              <div key={i} className={styles.box3}>
                 {d.blocks.map((b, i1) => (
                   <button
                     key={i1}
                     onClick={b.open}
+                    className={styles.button5}
                     style={{
-                      position: 'absolute',
-                      left: '2px',
-                      right: '2px',
                       top: `${b.top}px`,
                       height: `${b.h}px`,
-                      padding: '3px',
-                      boxSizing: 'border-box',
-                      border: 0,
                       borderTop: `3px solid ${b.st.bar}`,
                       background: b.st.tint,
                       color: b.st.ink,
                       opacity: b.op,
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      overflow: 'hidden',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '1px',
                     }}
                   >
-                    <span style={{ fontSize: '11px', fontWeight: 700, textDecoration: b.deco }}>
+                    <span className={styles.initials} style={{ textDecoration: b.deco }}>
                       {b.initials}
                     </span>
-                    <span style={{ fontSize: '10px', fontVariantNumeric: 'tabular-nums' }}>{b.start}</span>
+                    <span className={styles.start}>{b.start}</span>
                   </button>
                 ))}
               </div>
@@ -466,175 +175,68 @@ export default function Calendar({ v }) {
       ) : null}
       {cal.isMonth ? (
         <>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(7,minmax(0,1fr))',
-              padding: '10px 12px 0',
-              fontSize: '11px',
-              fontWeight: 600,
-              color: '#6B6B7B',
-            }}
-          >
-            <span style={{ paddingLeft: '6px' }}>Mon</span>
-            <span style={{ paddingLeft: '6px' }}>Tue</span>
-            <span style={{ paddingLeft: '6px' }}>Wed</span>
-            <span style={{ paddingLeft: '6px' }}>Thu</span>
-            <span style={{ paddingLeft: '6px' }}>Fri</span>
-            <span style={{ paddingLeft: '6px' }}>Sat</span>
-            <span style={{ paddingLeft: '6px' }}>Sun</span>
+          <div className={styles.grid5}>
+            <span className={styles.mon}>Mon</span>
+            <span className={styles.mon}>Tue</span>
+            <span className={styles.mon}>Wed</span>
+            <span className={styles.mon}>Thu</span>
+            <span className={styles.mon}>Fri</span>
+            <span className={styles.mon}>Sat</span>
+            <span className={styles.mon}>Sun</span>
           </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(7,minmax(0,1fr))',
-              gap: '1px',
-              background: '#E7E7EC',
-              margin: '6px 12px 0',
-              border: '1px solid #E7E7EC',
-            }}
-          >
+          <div className={styles.grid6}>
             {cal.cells?.map((c, i) => (
               <button
                 key={i}
                 onClick={c.pick}
-                style={{
-                  height: '54px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  padding: '6px',
-                  background: c.bg,
-                  color: c.fg,
-                  border: 0,
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                }}
+                className={styles.button6}
+                style={{ background: c.bg, color: c.fg }}
               >
-                <span style={{ fontSize: '14px', fontWeight: c.fw, fontVariantNumeric: 'tabular-nums' }}>
+                <span className={styles.num2} style={{ fontWeight: c.fw }}>
                   {c.num}
                 </span>
-                <span style={{ display: 'flex', gap: '2px', flexWrap: 'wrap' }}>
+                <span className={styles.row6}>
                   {c.dots.map((dt, i1) => (
-                    <span key={i1} style={{ width: '6px', height: '6px', background: dt.c }} />
+                    <span key={i1} className={styles.text4} style={{ background: dt.c }} />
                   ))}
                 </span>
               </button>
             ))}
           </div>
-          <div style={{ padding: '20px 20px 8px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.16em', color: '#6B6B7B' }}>
-              {cal.listLabel}
-            </span>
+          <div className={styles.stack3}>
+            <span className={styles.listlabel}>{cal.listLabel}</span>
             {cal.list?.map((c, i) => (
               <button
                 key={i}
-                className="hover-bg-mist"
+                className={`${styles.button7} hover-bg-mist`}
                 onClick={c.open}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '68px minmax(0,1fr) auto',
-                  textAlign: 'left',
-                  padding: 0,
-                  background: '#FFFFFF',
-                  color: '#0A0A0F',
-                  border: '1px solid #E7E7EC',
-                  borderLeft: `4px solid ${c.st.bar}`,
-                  cursor: 'pointer',
-                }}
+                style={{ borderLeft: `4px solid ${c.st.bar}` }}
               >
-                <div
-                  style={{
-                    padding: '12px 10px',
-                    borderRight: '1px solid #E7E7EC',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '2px',
-                  }}
-                >
-                  <span style={{ fontSize: '17px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
-                    {c.start}
-                  </span>
-                  <span style={{ fontSize: '12px', color: '#6B6B7B' }}>{c.durS}</span>
+                <div className={styles.stack4}>
+                  <span className={styles.start2}>{c.start}</span>
+                  <span className={styles.durs}>{c.durS}</span>
                 </div>
-                <div
-                  style={{
-                    padding: '12px 10px 12px 12px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '5px',
-                    minWidth: 0,
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: '15px',
-                      fontWeight: 600,
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      textDecoration: c.deco,
-                    }}
-                  >
+                <div className={styles.stack5}>
+                  <span className={styles.name2} style={{ textDecoration: c.deco }}>
                     {c.name}
                   </span>
-                  <span style={{ fontSize: '13px', color: '#6B6B7B' }}>
+                  <span className={styles.lessonsBookedFor}>
                     {c.range} · {c.pc}
                   </span>
-                  <span
-                    style={{
-                      alignSelf: 'flex-start',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      padding: '3px 7px',
-                      background: c.st.bg,
-                      color: c.st.fg,
-                    }}
-                  >
+                  <span className={styles.label2} style={{ background: c.st.bg, color: c.st.fg }}>
                     {c.st.label}
                   </span>
                 </div>
-                <div
-                  style={{
-                    padding: '12px 12px 12px 4px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                    gap: '6px',
-                  }}
-                >
-                  <span style={{ fontSize: '15px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
-                    {c.fin}
-                  </span>
-                  <span style={{ color: '#9A9AAA' }}>{ics.right}</span>
+                <div className={styles.stack6}>
+                  <span className={styles.fin}>{c.fin}</span>
+                  <span className={styles.right}>{ics.right}</span>
                 </div>
               </button>
             ))}
             {cal.dayEmpty ? (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '12px',
-                  padding: '14px 16px',
-                  border: '1px dashed #CFCFD8',
-                }}
-              >
-                <span style={{ fontSize: '14px', color: '#4A4A5A' }}>Your calendar is clear.</span>
-                <button
-                  onClick={cal.newBooking}
-                  style={{
-                    height: '38px',
-                    padding: '0 12px',
-                    background: 'transparent',
-                    border: '1.5px solid #0A0A0F',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    color: '#0A0A0F',
-                  }}
-                >
+              <div className={styles.row7}>
+                <span className={styles.yourCalendarClear}>Your calendar is clear.</span>
+                <button onClick={cal.newBooking} className={styles.scheduleLessonButton}>
                   Schedule a lesson
                 </button>
               </div>
@@ -643,22 +245,10 @@ export default function Calendar({ v }) {
         </>
       ) : null}
       {cal.isDay ? <span /> : null}
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '8px 16px',
-          padding: '12px 20px 24px',
-          borderTop: '1px solid #E7E7EC',
-          marginTop: 'auto',
-        }}
-      >
+      <div className={styles.row8}>
         {cal.legend.map((g, i) => (
-          <span
-            key={i}
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#4A4A5A' }}
-          >
-            <span style={{ width: '10px', height: '10px', background: g.c }} />
+          <span key={i} className={styles.row9}>
+            <span className={styles.text5} style={{ background: g.c }} />
             {g.t}
           </span>
         ))}

@@ -1,0 +1,79 @@
+/* Styles for StatusBar.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.row {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px 0 34px;
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.row2 {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.row3 {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 11px;
+}
+
+.text {
+  width: 3px;
+  height: 4px;
+  background: currentColor;
+}
+
+.text2 {
+  width: 3px;
+  height: 6px;
+  background: currentColor;
+}
+
+.text3 {
+  width: 3px;
+  height: 8px;
+  background: currentColor;
+}
+
+.text4 {
+  width: 3px;
+  height: 11px;
+  background: currentColor;
+}
+
+.text5 {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.row4 {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.row5 {
+  width: 22px;
+  height: 11px;
+  border: 1.5px solid currentColor;
+  padding: 1.5px;
+  box-sizing: border-box;
+  display: flex;
+}
+
+.text6 {
+  width: 70%;
+  background: currentColor;
+}
+
+.text7 {
+  width: 2px;
+  height: 4px;
+  background: currentColor;
+}

@@ -1,0 +1,159 @@
+/* Styles for MapsSheet.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 12px 12px 20px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.navigateWithGoogle {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.stack {
+  padding: 16px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.row2 {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.pinRow {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  background: var(--nd-violet-100);
+  color: var(--nd-violet-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack2 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.loc {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.text {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.name {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.stack3 {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.text2 {
+  height: 3px;
+}
+
+.text3 {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--nd-ink);
+}
+
+.text4 {
+  font-size: 11px;
+  color: var(--nd-muted);
+  line-height: 1.3;
+}
+
+.checkRow {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--nd-success-soft);
+  border: 1px solid var(--nd-success-border);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--nd-status-completed-ink);
+}
+
+.stack4 {
+  padding: 16px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.extA {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+  padding: 0 18px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.navRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.copyButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 18px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.googleMapsNot {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--nd-muted);
+}
+
+.getGoogleMapsA {
+  font-weight: 600;
+}

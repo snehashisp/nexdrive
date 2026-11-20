@@ -1,0 +1,210 @@
+/* Styles for Profile.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.instructorProfile {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.stack2 {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.initialsRow {
+  width: 72px;
+  height: 72px;
+  flex: none;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.changePhotoButton {
+  height: 40px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.personal {
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--nd-ink);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fullName {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nd-slate);
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 52px;
+  padding: 0 14px;
+  font-size: 16px;
+  outline: none;
+}
+
+.alertRow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--nd-error);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.input2 {
+  width: 100%;
+  box-sizing: border-box;
+  height: 52px;
+  padding: 0 14px;
+  border: 1.5px solid var(--nd-border);
+  font-size: 16px;
+  outline: none;
+}
+
+.input3 {
+  width: 100%;
+  box-sizing: border-box;
+  height: 52px;
+  padding: 0 14px;
+  border: 1.5px solid var(--nd-border);
+  font-size: 16px;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.professional {
+  padding: 8px 0;
+  border-bottom: 2px solid var(--nd-ink);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.row2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--nd-mist);
+  border: 1px solid var(--nd-line);
+}
+
+.text {
+  width: 14px;
+  height: 22px;
+  flex: none;
+}
+
+.stack3 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.adi {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.status {
+  font-size: 13px;
+  color: var(--nd-slate);
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nd-success);
+}
+
+.box {
+  flex: none;
+  background: var(--nd-white);
+  border-top: 2px solid var(--nd-ink);
+}
+
+.saveProfileButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 52px;
+  padding: 0 18px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}

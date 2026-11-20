@@ -1,0 +1,101 @@
+/* Styles for VerifyPhone.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  padding: 24px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.stack2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.confirmYourMobile {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.enterTheDigit {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--nd-slate);
+}
+
+.phone {
+  color: var(--nd-ink);
+}
+
+.verificationCode {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nd-slate);
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 64px;
+  padding: 0 16px;
+  background: var(--nd-white);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  color: var(--nd-ink);
+  outline: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.alertRow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--nd-error);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--nd-mist);
+  border: 1px solid var(--nd-line);
+  font-size: 14px;
+  color: var(--nd-slate);
+}
+
+.strong {
+  color: var(--nd-ink);
+  letter-spacing: 0.1em;
+}
+
+.pasteCodeButton {
+  padding: 8px 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-violet-700);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.refreshButton {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

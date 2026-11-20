@@ -1,0 +1,5 @@
+/* Styles for Icon.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.svg {
+  display: block;
+  flex: none;
+}

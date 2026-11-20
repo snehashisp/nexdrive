@@ -1,0 +1,346 @@
+/* Styles for MessageSheet.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  padding: 20px 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-success);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.text {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.grid {
+  padding: 14px 20px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.button {
+  height: 38px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack2 {
+  margin: 14px 20px 0;
+  border: 1px solid var(--nd-line);
+  background: var(--nd-mist);
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  padding: 12px 14px;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.head {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.preview {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #b4b4c4;
+}
+
+.stack3 {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--nd-white);
+}
+
+.intro {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--nd-line);
+  border: 1px solid var(--nd-line);
+}
+
+.stack4 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: var(--nd-white);
+}
+
+.previous {
+  font-size: 11px;
+  color: var(--nd-muted);
+}
+
+.prevt {
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: line-through;
+  color: var(--nd-muted);
+}
+
+.stack5 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: var(--nd-violet-50);
+}
+
+.new {
+  font-size: 11px;
+  color: var(--nd-violet-700);
+}
+
+.newt {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.stack6 {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--nd-line);
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 13px;
+}
+
+.text2 {
+  color: var(--nd-violet-700);
+  font-weight: 600;
+}
+
+.text3 {
+  font-variant-numeric: tabular-nums;
+}
+
+.stack7 {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid4 {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.text4 {
+  color: var(--nd-muted);
+}
+
+.text5 {
+  font-weight: 500;
+}
+
+.stack8 {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--nd-line);
+  padding-top: 6px;
+}
+
+.row2 {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  font-size: 13px;
+}
+
+.text6 {
+  color: var(--nd-slate);
+}
+
+.text7 {
+  font-weight: 600;
+}
+
+.row3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 6px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.amtnote {
+  font-size: 12px;
+  color: var(--nd-warning);
+}
+
+.stack9 {
+  border: 1.5px solid var(--nd-ink);
+  display: flex;
+  flex-direction: column;
+}
+
+.bankRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.row4 {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  font-size: 13px;
+}
+
+.text8 {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.sign {
+  font-size: 13px;
+  color: var(--nd-slate);
+}
+
+.warnRow {
+  margin: 10px 20px 0;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--nd-warning-bg);
+  border: 1px solid var(--nd-warning-border);
+  font-size: 13px;
+  color: var(--nd-warning-strong);
+}
+
+.bankDetailsPayment {
+  flex: 1;
+}
+
+.addButton {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-ink);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.stack10 {
+  margin: 10px 20px 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--nd-error-bg);
+  border: 1.5px solid var(--nd-error);
+  color: var(--nd-status-cancelled-ink);
+}
+
+.wifioffRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.couldnReachThe {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.copyButton {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-status-cancelled-ink);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.grid5 {
+  padding: 14px 20px 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 8px;
+}
+
+.skiplabelButton {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  padding: 0 16px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sendlabelButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 16px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}

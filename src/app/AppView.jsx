@@ -1,3 +1,4 @@
+import styles from './AppView.module.css';
 import BottomNav from '@/app/components/BottomNav';
 import DemoPanel from '@/demo/DemoPanel';
 import OnboardingFooter from '@/features/onboarding/components/OnboardingFooter';
@@ -54,82 +55,34 @@ export default function AppView({ v }) {
     toast,
   } = v;
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#F7F7F9' }}>
+    <div className={styles.row}>
       {panel && <DemoPanel v={v} />}
-      <main
-        style={{
-          flex: 1,
-          minWidth: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: `${fr.pad}px`,
-          boxSizing: 'border-box',
-          minHeight: '100vh',
-        }}
-      >
-        <div style={{ width: `${fr.ow}px`, height: `${fr.oh}px`, position: 'relative', flex: 'none' }}>
+      <main className={styles.main} style={{ padding: `${fr.pad}px` }}>
+        <div className={styles.box} style={{ width: `${fr.ow}px`, height: `${fr.oh}px` }}>
           <div
+            className={styles.overlay}
             style={{
-              position: 'absolute',
-              left: 0,
-              top: 0,
               width: `${fr.w}px`,
               height: `${fr.h}px`,
               transform: `scale(${fr.sc})`,
               transformOrigin: '0 0',
-              background: '#0A0A0F',
               borderRadius: `${fr.rad}px`,
               padding: `${fr.bez}px`,
-              boxSizing: 'border-box',
               boxShadow: fr.shadow,
             }}
           >
             <div
-              style={{
-                position: 'relative',
-                width: `${fr.sw}px`,
-                height: `${fr.sh}px`,
-                borderRadius: `${fr.irad}px`,
-                overflow: 'hidden',
-                background: '#FFFFFF',
-                display: 'flex',
-                flexDirection: 'column',
-                color: '#0A0A0F',
-                fontSize: '15px',
-              }}
+              className={styles.stack}
+              style={{ width: `${fr.sw}px`, height: `${fr.sh}px`, borderRadius: `${fr.irad}px` }}
             >
               {statusBar && <StatusBar v={v} />}
               {offline ? (
-                <div
-                  style={{
-                    flex: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '10px 20px',
-                    background: '#0A0A0F',
-                    color: '#FFFFFF',
-                    fontSize: '13px',
-                    fontWeight: 500,
-                  }}
-                >
+                <div className={styles.wifioffRow}>
                   {ics.wifiOff}
                   <span>You're offline. Changes save on this phone and sync when you reconnect.</span>
                 </div>
               ) : null}
-              <div
-                className="nx-scroll"
-                ref={scrollRef}
-                style={{
-                  flex: 1,
-                  minHeight: 0,
-                  overflowY: 'auto',
-                  overflowX: 'hidden',
-                  position: 'relative',
-                  background: scrBg,
-                }}
-              >
+              <div className={`${styles.box2} nx-scroll`} ref={scrollRef} style={{ background: scrBg }}>
                 {is.ob_welcome && <Welcome v={v} />}
                 {obHeader && <OnboardingHeader v={v} />}
                 {is.ob_register && <Register v={v} />}

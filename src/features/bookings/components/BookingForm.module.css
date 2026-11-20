@@ -1,0 +1,641 @@
+/* Styles for BookingForm.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.closeButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.stack2 {
+  padding: 18px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.learner {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--nd-white);
+  border: 1.5px solid var(--nd-border);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.initialsRow {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  background: var(--nd-violet-100);
+  color: var(--nd-violet-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.stack3 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.change {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nd-violet-700);
+}
+
+.searchButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 56px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.chooseLearner {
+  flex: 1;
+}
+
+.alertRow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--nd-error);
+}
+
+.stack4 {
+  padding: 14px 16px;
+  background: var(--nd-warning-bg);
+  border: 1.5px solid var(--nd-warning-accent);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--nd-warning-strong);
+}
+
+.warnRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.pleaseCompleteThe {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.completeLearnerProfileButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack5 {
+  display: flex;
+  flex-direction: column;
+}
+
+.stack6 {
+  padding: 22px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.button2 {
+  height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  border: 1.5px solid var(--nd-border);
+}
+
+.fewerButton {
+  width: 52px;
+  height: 100%;
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--nd-line);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nd-ink);
+}
+
+.moreButton {
+  width: 52px;
+  height: 100%;
+  background: transparent;
+  border: 0;
+  border-left: 1px solid var(--nd-line);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nd-ink);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.button3 {
+  height: 40px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack7 {
+  padding: 22px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row2 {
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.date {
+  white-space: nowrap;
+}
+
+.datelabel {
+  letter-spacing: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nd-ink);
+  text-align: right;
+}
+
+.row3 {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 0 20px 2px;
+}
+
+.button4 {
+  flex: none;
+  width: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 9px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.text {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.num {
+  font-size: 20px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.text2 {
+  font-size: 10px;
+}
+
+.row4 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.row5 {
+  display: flex;
+  gap: 10px;
+  letter-spacing: 0;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.bookedRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.booked {
+  width: 8px;
+  height: 8px;
+  background: var(--nd-warning-border);
+}
+
+.passed {
+  width: 8px;
+  height: 8px;
+  background: var(--nd-line);
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+  gap: 6px;
+}
+
+.button5 {
+  height: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.stack8 {
+  padding: 22px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stack9 {
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid var(--nd-ink);
+}
+
+.grid4 {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 10px 0 10px 8px;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.text3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nd-violet-700);
+}
+
+.stack10 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.date2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.time {
+  font-size: 13px;
+  color: var(--nd-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.warnRow2 {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--nd-warning);
+  font-weight: 500;
+}
+
+.moveDayButton {
+  height: 34px;
+  padding: 0 10px;
+  margin-right: 8px;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.warnRow3 {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--nd-warning);
+}
+
+.grid5 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.button6 {
+  height: 44px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.row6 {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  background: var(--nd-mist);
+  border: 1px solid var(--nd-line);
+}
+
+.pin {
+  color: var(--nd-violet-700);
+  padding-top: 1px;
+}
+
+.loctext {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.locpc {
+  font-size: 13px;
+  color: var(--nd-muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.grid6 {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 48px;
+  padding: 0 12px;
+  border: 1.5px solid var(--nd-border);
+  font-size: 16px;
+  outline: none;
+}
+
+.input2 {
+  width: 100%;
+  box-sizing: border-box;
+  height: 48px;
+  padding: 0 12px;
+  border: 1.5px solid var(--nd-border);
+  font-size: 16px;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.button7 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 9px 10px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.text4 {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sub2 {
+  font-size: 12px;
+}
+
+.grid7 {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.button8 {
+  height: 42px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.row7 {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  box-sizing: border-box;
+}
+
+.text5 {
+  padding: 0 4px 0 14px;
+  font-size: 16px;
+  color: var(--nd-muted);
+}
+
+.input3 {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  background: transparent;
+}
+
+.offTheTotal {
+  padding-right: 14px;
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.stack11 {
+  margin: 22px 20px 0;
+  border-top: 2px solid var(--nd-ink);
+  display: flex;
+  flex-direction: column;
+}
+
+.row8 {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 15px;
+}
+
+.text6 {
+  color: var(--nd-slate);
+}
+
+.text7 {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.disc {
+  font-weight: 600;
+  color: var(--nd-success);
+  font-variant-numeric: tabular-nums;
+}
+
+.row9 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0 0;
+}
+
+.fin {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.grid8 {
+  flex: none;
+  background: var(--nd-white);
+  border-top: 2px solid var(--nd-ink);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.stack12 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.fin2 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.foot {
+  font-size: 12px;
+  color: var(--nd-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ctaButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  padding: 0 18px;
+  color: var(--nd-white);
+  border: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}

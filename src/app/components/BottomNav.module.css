@@ -1,0 +1,41 @@
+/* Styles for BottomNav.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.nav {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: stretch;
+  background: var(--nd-white);
+  border-top: 2px solid var(--nd-ink);
+}
+
+.homeButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 60px;
+  background: transparent;
+  border: 0;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newButton {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  cursor: pointer;
+}

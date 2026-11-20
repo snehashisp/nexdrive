@@ -1,3 +1,4 @@
+import styles from './Icon.module.css';
 import { ICON_SHAPES } from './iconShapes';
 
 // One icon. It draws in the current text colour, so it matches the button or label it sits in.
@@ -12,7 +13,7 @@ export function Icon({ name, size = 20 }) {
       strokeWidth={1.75}
       strokeLinecap="round"
       strokeLinejoin="round"
-      style={{ display: 'block', flex: 'none' }}
+      className={styles.svg}
     >
       {ICON_SHAPES[name]}
     </svg>

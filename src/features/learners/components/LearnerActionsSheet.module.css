@@ -1,0 +1,119 @@
+/* Styles for LearnerActionsSheet.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 12px 14px 20px;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.initialsRow {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  background: var(--nd-violet-100);
+  color: var(--nd-violet-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.phone {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.warnRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--nd-warning-bg);
+  color: var(--nd-warning-strong);
+  font-size: 13px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--nd-warning-border);
+}
+
+.stack2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  padding: 0 20px;
+  background: var(--nd-white);
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.viewLearnerProfile {
+  flex: 1;
+}
+
+.calendarplusButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  padding: 0 20px;
+  background: var(--nd-white);
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-violet-700);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.trashButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  padding: 0 20px;
+  background: var(--nd-white);
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-error);
+  font-size: 16px;
+  font-weight: 600;
+}

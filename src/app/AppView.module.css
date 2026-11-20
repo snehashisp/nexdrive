@@ -1,0 +1,59 @@
+/* Styles for AppView.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.row {
+  display: flex;
+  min-height: 100vh;
+  background: var(--nd-mist);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+.box {
+  position: relative;
+  flex: none;
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: var(--nd-ink);
+  box-sizing: border-box;
+}
+
+.stack {
+  position: relative;
+  overflow: hidden;
+  background: var(--nd-white);
+  display: flex;
+  flex-direction: column;
+  color: var(--nd-ink);
+  font-size: 15px;
+}
+
+.wifioffRow {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.box2 {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}

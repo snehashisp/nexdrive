@@ -1,0 +1,140 @@
+/* Styles for Preferences.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.notificationPreferences {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.stack2 {
+  padding: 8px 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.reminders {
+  padding: 14px 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.stack3 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nextLessonReminder {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.appBannerAnd {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.text {
+  width: 48px;
+  height: 28px;
+  flex: none;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 3px;
+  width: 22px;
+  height: 22px;
+  background: var(--nd-white);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 0 0 14px;
+}
+
+.button2 {
+  height: 40px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.alerts {
+  padding: 20px 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+  border-top: 1px solid var(--nd-line);
+}
+
+.stack4 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 0;
+  border-top: 1px solid var(--nd-line);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.button3 {
+  height: 42px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}

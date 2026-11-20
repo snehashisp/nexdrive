@@ -568,10 +568,12 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <p><code>mode: &#39;live&#39;</code> and <code>apiBaseUrl</code> exist but nothing uses them yet.</p>
 <h3 id="72-styling">7.2 Styling<a class="anchor" href="#72-styling" aria-hidden="true">#</a></h3>
 <ul>
-<li><code>src/styles/base.css</code> holds the self-hosted font, colour tokens as CSS variables (<code>--nd-violet</code>…) and a small reset.</li>
-<li><code>src/styles/app.css</code> holds body defaults and every <code>@keyframes</code> animation.</li>
-<li><code>src/styles/interactions.css</code> holds hover, focus and pressed-state classes such as <code>hover-bg-mist</code>. They use <code>!important</code> because they must override inline styles.</li>
-<li>Everything else is inline <code>style={{…}}</code> in the JSX, using literal hex colours (section 8.3).</li>
+<li><strong>Each component has a CSS Module</strong> next to it (<code>Pricing.jsx</code> + <code>Pricing.module.css</code>). The component imports it as <code>styles</code> and uses <code>className={styles.header}</code>. Vite renames the classes at build time, so names never clash between components.</li>
+<li><strong>Colours come from design tokens</strong>: <code>src/styles/tokens.css</code> defines them as CSS variables (<code>--nd-ink</code>, <code>--nd-violet</code>, <code>--nd-error</code>, status colours…), mirroring <code>docs/brand/tokens.json</code>. Module CSS uses <code>var(--nd-…)</code>, never a literal brand hex.</li>
+<li><strong>Inline <code>style</code> remains only for values computed at run time</strong> (for example a border colour that turns red when a field is invalid, or a phone-frame size). About 270 such declarations are left, against 7,200 moved into modules.</li>
+<li><code>src/styles/base.css</code> holds the self-hosted font and a small reset; <code>src/styles/app.css</code> holds body defaults and every <code>@keyframes</code> animation. Their element rules are wrapped in <code>:where(…)</code>, which gives them zero specificity, so any component class overrides them.</li>
+<li><code>src/styles/interactions.css</code> holds hover, focus and pressed-state classes such as <code>hover-bg-mist</code>. They still use <code>!important</code>, because some elements keep a run-time inline colour that the hover colour must beat.</li>
+<li><code>main.tsx</code> imports the global CSS before <code>App</code>, so component modules come later in the bundle and win ties.</li>
 </ul>
 <h3 id="73-dates-and-time">7.3 Dates and time<a class="anchor" href="#73-dates-and-time" aria-hidden="true">#</a></h3>
 <ul>
@@ -593,7 +595,7 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <ol>
 <li><strong>One big state component and a single <code>v</code> object</strong> instead of many components with their own state and specific props.</li>
 <li><strong>A 2,100-line view-model function.</strong></li>
-<li><strong>Inline styles everywhere</strong> rather than CSS classes or a component library.</li>
+<li><strong>Run-time colours passed as values.</strong> Most styling is in CSS Modules, but the view model still computes some colours (for example &quot;selected&quot; chip colours) and passes them to inline <code>style</code>.</li>
 <li><strong>Very short variable names</strong> (<code>s</code>, <code>v</code>, <code>B</code>, <code>L</code>, <code>bf</code>, <code>bk2</code>) inherited from the original code, mostly inside <code>App</code> and the view model. The shared helpers in <code>src/lib/</code> and the feature constants have descriptive names.</li>
 <li><strong>Navigation is a stack in state</strong>, not URLs. The browser&#39;s back button does not move between screens.</li>
 <li><strong>A module-level mutable clock</strong> (<code>TODAY</code>, <code>NOW</code>) instead of passing time in.</li>
@@ -641,6 +643,14 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <tr>
 <td>Date / money / validation helpers</td>
 <td><code>src/lib/</code></td>
+</tr>
+<tr>
+<td>A component&#39;s look</td>
+<td>Its <code>.module.css</code> file next to the <code>.jsx</code></td>
+</tr>
+<tr>
+<td>Brand colours</td>
+<td><code>src/styles/tokens.css</code> (and <code>docs/brand/tokens.json</code>)</td>
 </tr>
 <tr>
 <td>Hover/focus colours</td>

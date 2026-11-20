@@ -1,0 +1,167 @@
+/* Styles for Security.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.security {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.stack2 {
+  padding: 8px 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.lockRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.stack3 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.password {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.lastChanged {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.pwlabelButton {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-violet-700);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack4 {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 50px;
+  padding: 0 14px;
+  font-size: 16px;
+  outline: none;
+}
+
+.cur {
+  font-size: 13px;
+  color: var(--nd-error);
+  margin-top: -6px;
+}
+
+.updatePasswordButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  padding: 0 16px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.phoneButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nd-success);
+}
+
+.stack5 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.email {
+  font-size: 13px;
+  color: var(--nd-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-error);
+  font-size: 15px;
+  font-weight: 600;
+}

@@ -1,0 +1,256 @@
+/* Styles for Register.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  padding: 24px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.stack2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.createYourAccount {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.yourLoginAnd {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--nd-slate);
+}
+
+.copyButton {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-violet-700);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack3 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  background: var(--nd-violet-50);
+  border: 1.5px solid var(--nd-violet);
+}
+
+.youBeenInvited {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-violet-700);
+}
+
+.dayFreeTrial {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--nd-status-completed-ink);
+}
+
+.code {
+  letter-spacing: 0.06em;
+}
+
+.fullNameRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nd-slate);
+}
+
+.required {
+  font-size: 12px;
+  color: var(--nd-violet-700);
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 52px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  font-size: 16px;
+  color: var(--nd-ink);
+  outline: none;
+}
+
+.alertRow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--nd-error);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+
+.checkRow2 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+}
+
+.optional {
+  font-size: 12px;
+  color: var(--nd-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.row2 {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  background: var(--nd-white);
+  box-sizing: border-box;
+}
+
+.input2 {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  padding: 0 14px;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  outline: none;
+  background: transparent;
+  color: var(--nd-ink);
+}
+
+.check {
+  padding-right: 14px;
+  color: var(--nd-success);
+}
+
+.applyButton {
+  height: 52px;
+  padding: 0 18px;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.removeButton {
+  height: 52px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-border);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack4 {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  background: var(--nd-success-soft);
+  border: 1px solid var(--nd-success-border);
+  color: var(--nd-status-completed-ink);
+}
+
+.checkRow3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.youGetDay {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.alertRow2 {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--nd-error);
+}
+
+.continueWithoutReferralButton {
+  align-self: flex-start;
+  padding: 2px 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-violet-700);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hint {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--nd-muted);
+}
+
+.label {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--nd-slate);
+}
+
+.input3 {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--nd-violet);
+  flex: none;
+}
+
+.alertRow3 {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--nd-error);
+  margin-top: -12px;
+}

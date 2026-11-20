@@ -1,10 +1,12 @@
 // Entry point: the browser runs this file first (index.html loads it).
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from '@/app/App';
+// Global CSS first, so component CSS Modules (imported through App) come later and win ties.
+import '@/styles/tokens.css';
 import '@/styles/base.css';
 import '@/styles/app.css';
 import '@/styles/interactions.css';
+import App from '@/app/App';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('index.html is missing the #root element');

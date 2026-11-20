@@ -1,0 +1,599 @@
+/* Styles for Home.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 24px;
+}
+
+.row {
+  padding: 10px 12px 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.row2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.img {
+  height: 24px;
+  width: auto;
+}
+
+.text {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.nex {
+  letter-spacing: 0.105em;
+}
+
+.drive {
+  color: var(--nd-violet);
+  letter-spacing: 0.005em;
+  margin-left: -0.06em;
+}
+
+.row3 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.notificationsButton {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.unreadOverlay {
+  position: absolute;
+  top: 7px;
+  right: 6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accountButton {
+  width: 36px;
+  height: 36px;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+}
+
+.box {
+  padding: 18px 20px 16px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.datelabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--nd-muted);
+}
+
+.greeting {
+  margin: 6px 0 0;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.warnButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.text2 {
+  flex: 1;
+}
+
+.stack2 {
+  margin: 16px 20px 0;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  display: flex;
+  flex-direction: column;
+}
+
+.row4 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 0;
+}
+
+.stack3 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reminderRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.reminder {
+  width: 8px;
+  height: 8px;
+  background: var(--nd-white);
+  animation: nxPulse 1.6s infinite;
+}
+
+.yourNextLesson {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.dismissButton {
+  width: 36px;
+  height: 36px;
+  margin: -6px -8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  color: var(--nd-white);
+  cursor: pointer;
+  flex: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+  padding: 14px 16px 16px;
+  font-size: 14px;
+}
+
+.stack4 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.learner {
+  font-size: 12px;
+  color: var(--nd-violet-100);
+}
+
+.name {
+  font-weight: 600;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--nd-violet-500);
+}
+
+.eyeButton {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--nd-violet-500);
+  color: var(--nd-white);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.navButton {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  background: var(--nd-white);
+  border: 0;
+  color: var(--nd-violet-800);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  background: var(--nd-line);
+  border-bottom: 1px solid var(--nd-line);
+  margin-top: 16px;
+  border-top: 1px solid var(--nd-line);
+}
+
+.box2 {
+  background: var(--nd-white);
+  padding: 14px 20px;
+}
+
+.todayLessons {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--nd-muted);
+}
+
+.todayn {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.todaysub {
+  font-size: 12px;
+  color: var(--nd-muted);
+}
+
+.activesub {
+  font-size: 12px;
+}
+
+.stack5 {
+  padding: 22px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ongoing {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.button {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  text-align: left;
+  padding: 0;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  border: 0;
+  border-left: 4px solid var(--nd-violet);
+  cursor: pointer;
+}
+
+.stack6 {
+  padding: 14px 12px;
+  border-right: 1px solid var(--nd-ink-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.start {
+  font-size: 19px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.durs {
+  font-size: 12px;
+  color: #b4b4c4;
+}
+
+.stack7 {
+  padding: 14px 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.name2 {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ongoing2 {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  flex: none;
+}
+
+.todayEnds {
+  font-size: 13px;
+  color: #b4b4c4;
+}
+
+.row5 {
+  height: 4px;
+  background: var(--nd-ink-2);
+  display: flex;
+  margin-top: 2px;
+}
+
+.text3 {
+  background: var(--nd-violet-400);
+}
+
+.stack8 {
+  padding: 14px 14px 14px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.fin {
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.right {
+  color: #b4b4c4;
+}
+
+.row6 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.allBookingsButton {
+  padding: 4px 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-violet-700);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.grid4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 10px;
+}
+
+.button2 {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  text-align: left;
+  padding: 0;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1px solid var(--nd-line);
+  cursor: pointer;
+}
+
+.stack9 {
+  padding: 14px 12px;
+  border-right: 1px solid var(--nd-line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.daylabel {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.label {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+}
+
+.right2 {
+  color: var(--nd-subtle);
+}
+
+.stack10 {
+  border: 1px dashed var(--nd-border);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.calendar {
+  color: var(--nd-muted);
+}
+
+.stack11 {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.upcomingLessonsToday {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.bookLessonAnd {
+  font-size: 14px;
+  color: var(--nd-muted);
+  line-height: 1.5;
+}
+
+.plusButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 16px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack12 {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--nd-line);
+  border-top: 2px solid var(--nd-ink);
+}
+
+.button3 {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--nd-white);
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.giftRow {
+  width: 44px;
+  height: 44px;
+  background: var(--nd-violet-100);
+  color: var(--nd-violet-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack13 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.row7 {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bal {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.nexdriveCredit {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--nd-slate);
+}
+
+.grid5 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--nd-line);
+  background: var(--nd-mist);
+}
+
+.theyGetMonth {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--nd-slate);
+}
+
+.referInstructorButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.grid6 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--nd-line);
+  border: 1px solid var(--nd-line);
+}
+
+.newBookingButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 12px;
+  background: var(--nd-white);
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.calendarplus {
+  color: var(--nd-violet);
+}

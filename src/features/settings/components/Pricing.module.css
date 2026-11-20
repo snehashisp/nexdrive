@@ -1,0 +1,183 @@
+/* Styles for Pricing.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.pricing {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.stack2 {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.changesApplyNew {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--nd-slate);
+}
+
+.label {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.stack3 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label2 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.note {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  box-sizing: border-box;
+}
+
+.text {
+  padding: 0 2px 0 12px;
+  color: var(--nd-muted);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  padding: 0 4px;
+  font-size: 17px;
+  font-weight: 700;
+  outline: none;
+  background: transparent;
+}
+
+.text2 {
+  padding-right: 10px;
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.stack4 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.defaultLessonDuration {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nd-slate);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.button {
+  height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack5 {
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid var(--nd-ink);
+}
+
+.standardRatePreview {
+  padding: 10px 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.row2 {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 15px;
+}
+
+.text3 {
+  color: var(--nd-slate);
+}
+
+.text4 {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.box {
+  flex: none;
+  background: var(--nd-white);
+  border-top: 2px solid var(--nd-ink);
+}
+
+.savePricesButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 52px;
+  padding: 0 18px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}

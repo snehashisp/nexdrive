@@ -1,0 +1,336 @@
+/* Styles for Bookings.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.bookings {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0 20px 12px;
+  border: 1.5px solid var(--nd-ink);
+}
+
+.button {
+  height: 40px;
+  border: 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack2 {
+  padding: 18px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.button2 {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr) auto;
+  text-align: left;
+  padding: 0;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1px solid var(--nd-line);
+  cursor: pointer;
+}
+
+.stack3 {
+  padding: 12px 10px;
+  border-right: 1px solid var(--nd-line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.start {
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.durs {
+  font-size: 12px;
+  color: var(--nd-muted);
+}
+
+.stack4 {
+  padding: 12px 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.range {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.label2 {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+}
+
+.stack5 {
+  padding: 12px 12px 12px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.fin {
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.right {
+  color: var(--nd-subtle);
+}
+
+.stack6 {
+  margin: 24px 20px 0;
+  border: 1px dashed var(--nd-border);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.calendar {
+  color: var(--nd-muted);
+}
+
+.stack7 {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.yourCalendarClear {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.upcomingLessonsWill {
+  font-size: 14px;
+  color: var(--nd-muted);
+}
+
+.plusButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 16px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack8 {
+  padding: 16px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row2 {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.button3 {
+  flex: none;
+  height: 36px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.learnerLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--nd-slate);
+}
+
+.select {
+  height: 44px;
+  padding: 0 10px;
+  border: 1.5px solid var(--nd-border);
+  border-radius: 0;
+  background: var(--nd-white);
+  font-size: 15px;
+  color: var(--nd-ink);
+}
+
+.row3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0 8px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.summary {
+  font-size: 13px;
+  color: var(--nd-slate);
+}
+
+.clearFiltersButton {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-violet-700);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button4 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  width: 100%;
+  text-align: left;
+  padding: 12px 20px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  cursor: pointer;
+}
+
+.row4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.text {
+  width: 8px;
+  height: 8px;
+  flex: none;
+}
+
+.removed {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  background: var(--nd-mist);
+  border: 1px solid var(--nd-line);
+  color: var(--nd-muted);
+  flex: none;
+}
+
+.date {
+  font-size: 13px;
+  color: var(--nd-muted);
+  padding-left: 16px;
+}
+
+.label3 {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.movedFrom {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  color: var(--nd-warning);
+  padding-left: 16px;
+}
+
+.reason {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  color: var(--nd-error-strong);
+  padding-left: 16px;
+}
+
+.stack9 {
+  margin: 20px;
+  border: 1px dashed var(--nd-border);
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bookingHistoryYet {
+  font-size: 16px;
+  font-weight: 600;
+}

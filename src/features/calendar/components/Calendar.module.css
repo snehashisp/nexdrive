@@ -1,0 +1,529 @@
+/* Styles for Calendar.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  background: var(--nd-white);
+}
+
+.row {
+  padding: 14px 20px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.calendar {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.row2 {
+  display: flex;
+  gap: 8px;
+}
+
+.todayButton {
+  height: 40px;
+  padding: 0 14px;
+  border: 1.5px solid var(--nd-ink);
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.newBookingButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0 20px;
+  border: 1.5px solid var(--nd-ink);
+}
+
+.button {
+  height: 40px;
+  border: 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.row3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 8px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.previousButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.button2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 0 7px;
+  border: 0;
+  cursor: pointer;
+}
+
+.text {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.num {
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.text2 {
+  width: 5px;
+  height: 5px;
+}
+
+.clockRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 13px;
+  color: var(--nd-slate);
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.row4 {
+  margin: 16px 20px 0;
+  border: 1px dashed var(--nd-border);
+  padding: 18px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stack2 {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.lessonsBookedFor {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.plusButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 42px;
+  padding: 0 14px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: none;
+}
+
+.box {
+  position: relative;
+  margin: 18px 0 28px;
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #efeff3;
+}
+
+.labelOverlay {
+  position: absolute;
+  left: 12px;
+  top: -8px;
+  background: var(--nd-white);
+  padding-right: 6px;
+  font-size: 11px;
+  color: var(--nd-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.overlay2 {
+  position: absolute;
+  left: 54px;
+  right: 0;
+  height: 2px;
+  background: var(--nd-status-cancelled);
+  z-index: 3;
+}
+
+.overlay3 {
+  position: absolute;
+  left: -4px;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  background: var(--nd-status-cancelled);
+}
+
+.button3 {
+  position: absolute;
+  left: 60px;
+  right: 12px;
+  z-index: 2;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  text-align: left;
+  border: 0;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.row5 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  flex: none;
+}
+
+.range {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: 30px repeat(7, minmax(0, 1fr));
+  border-bottom: 1px solid var(--nd-line);
+  padding-right: 4px;
+}
+
+.button4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.text3 {
+  font-size: 11px;
+  color: var(--nd-muted);
+  font-weight: 500;
+}
+
+.numRow {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.grid4 {
+  display: grid;
+  grid-template-columns: 30px repeat(7, minmax(0, 1fr));
+  margin: 8px 0 16px;
+  padding-right: 4px;
+}
+
+.box2 {
+  position: relative;
+}
+
+.labelOverlay2 {
+  position: absolute;
+  left: 6px;
+  font-size: 10px;
+  color: var(--nd-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.box3 {
+  position: relative;
+  border-left: 1px solid var(--nd-line);
+  background: repeating-linear-gradient(to bottom, #efeff3 0, #efeff3 1px, transparent 1px, transparent 40px);
+}
+
+.button5 {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  padding: 3px;
+  box-sizing: border-box;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.initials {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.start {
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.grid5 {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding: 10px 12px 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--nd-muted);
+}
+
+.mon {
+  padding-left: 6px;
+}
+
+.grid6 {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--nd-line);
+  margin: 6px 12px 0;
+  border: 1px solid var(--nd-line);
+}
+
+.button6 {
+  height: 54px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 6px;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.num2 {
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.row6 {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.text4 {
+  width: 6px;
+  height: 6px;
+}
+
+.stack3 {
+  padding: 20px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.listlabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.button7 {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr) auto;
+  text-align: left;
+  padding: 0;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1px solid var(--nd-line);
+  cursor: pointer;
+}
+
+.stack4 {
+  padding: 12px 10px;
+  border-right: 1px solid var(--nd-line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.start2 {
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.durs {
+  font-size: 12px;
+  color: var(--nd-muted);
+}
+
+.stack5 {
+  padding: 12px 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.name2 {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.label2 {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+}
+
+.stack6 {
+  padding: 12px 12px 12px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.fin {
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.right {
+  color: var(--nd-subtle);
+}
+
+.row7 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px dashed var(--nd-border);
+}
+
+.yourCalendarClear {
+  font-size: 14px;
+  color: var(--nd-slate);
+}
+
+.scheduleLessonButton {
+  height: 38px;
+  padding: 0 12px;
+  background: transparent;
+  border: 1.5px solid var(--nd-ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.row8 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 12px 20px 24px;
+  border-top: 1px solid var(--nd-line);
+  margin-top: auto;
+}
+
+.row9 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--nd-slate);
+}
+
+.text5 {
+  width: 10px;
+  height: 10px;
+}

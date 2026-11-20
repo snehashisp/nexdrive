@@ -1,0 +1,151 @@
+/* Styles for Notifications.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.notifications {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.markAllReadButton {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-violet-700);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.row2 {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 0 20px 12px;
+}
+
+.button {
+  flex: none;
+  height: 36px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button2 {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 8px;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px 14px 20px;
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.iconRow {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack2 {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.row3 {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--nd-muted);
+}
+
+.time {
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.body {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--nd-slate);
+}
+
+.text {
+  width: 8px;
+  height: 8px;
+  margin-top: 4px;
+}
+
+.stack3 {
+  margin: 24px 20px;
+  border: 1px dashed var(--nd-border);
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bell {
+  color: var(--nd-muted);
+}
+
+.youAllCaught {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.lessonRemindersBooking {
+  font-size: 14px;
+  color: var(--nd-muted);
+  line-height: 1.5;
+}

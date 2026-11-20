@@ -1,0 +1,251 @@
+/* Styles for ReferralQr.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.referInstructor {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.stack2 {
+  padding: 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stack3 {
+  border: 1.5px solid var(--nd-ink);
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  padding: 22px;
+  display: flex;
+  justify-content: center;
+  background: var(--nd-white);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--nd-line);
+}
+
+.stack4 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.referralCode {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.code {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.row2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.img {
+  height: 18px;
+  width: auto;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.nex {
+  letter-spacing: 0.105em;
+}
+
+.drive {
+  color: var(--nd-violet);
+  letter-spacing: 0.005em;
+  margin-left: -0.06em;
+}
+
+.askAnotherDriving {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--nd-slate);
+  text-wrap: pretty;
+}
+
+.button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--nd-mist);
+  border: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.link {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--nd-slate);
+}
+
+.copyRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nd-violet-700);
+}
+
+.stack5 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shareCodeButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+  padding: 0 18px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.downloadButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 50px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack6 {
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid var(--nd-ink);
+  margin-top: 6px;
+}
+
+.messageTheyReceive {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+  padding: 12px 0 8px;
+}
+
+.msg {
+  padding: 14px;
+  background: var(--nd-mist);
+  border: 1px solid var(--nd-line);
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  color: var(--nd-ink);
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.messageButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.eyeButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 14px;
+  background: transparent;
+  color: var(--nd-slate);
+  border: 1px dashed var(--nd-border);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

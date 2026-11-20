@@ -1,3 +1,5 @@
+import styles from './Splash.module.css';
+
 // The NEXDrive launch animation shown over the app when it opens. Tap anywhere to skip it.
 // `run` is a counter that goes up each time the animation is replayed. It makes the SVG ids unique,
 // so a replay never points at the gradient or clip shapes of an older copy.
@@ -17,7 +19,7 @@ function Monogram({ id }) {
     </g>
   );
   return (
-    <svg viewBox="0 0 200 160" width="74" height="59" style={{ overflow: 'visible', flex: 'none' }}>
+    <svg viewBox="0 0 200 160" width="74" height="59" className={styles.svg}>
       <defs>
         <linearGradient id={`G${id}`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="130" y2="130">
           <stop offset="0" stopColor="#A78BFA" />
@@ -85,43 +87,22 @@ function Wordmark() {
     [72, 40],
   ];
   return (
-    <span
-      style={{
-        fontSize: 36,
-        fontWeight: 500,
-        lineHeight: 1,
-        display: 'flex',
-        alignItems: 'center',
-        whiteSpace: 'nowrap',
-      }}
-    >
-      <span style={{ letterSpacing: '.105em', display: 'flex' }}>
+    <span className={styles.row}>
+      <span className={styles.row2}>
         {'NEX'.split('').map((letter, i) => (
-          <span key={i} style={{ display: 'inline-block', ...anim('aLetter', 0.45, 0.55 + i * 0.07) }}>
+          <span key={i} className={styles.letter} style={{ ...anim('aLetter', 0.45, 0.55 + i * 0.07) }}>
             {letter}
           </span>
         ))}
       </span>
-      <span
-        style={{
-          position: 'relative',
-          display: 'inline-block',
-          color: '#7C3AED',
-          marginLeft: '-0.06em',
-          letterSpacing: '.005em',
-          ...anim('aDrive', 0.7, 0.85, 'cubic-bezier(.15,.85,.25,1)'),
-        }}
-      >
+      <span className={styles.drive} style={{ ...anim('aDrive', 0.7, 0.85, 'cubic-bezier(.15,.85,.25,1)') }}>
         Drive
         {speedLines.map(([top, width], i) => (
           <span
             key={i}
+            className={styles.overlay}
             style={{
-              position: 'absolute',
-              right: '100%',
-              marginRight: 6,
               top: `${top}%`,
-              height: 2,
               width,
               background: 'linear-gradient(90deg,transparent,#A78BFA)',
               transformOrigin: 'right',
@@ -137,69 +118,20 @@ function Wordmark() {
 export default function Splash({ run, fadingOut, onSkip }) {
   const id = 'sp' + run;
   return (
-    <div
-      onClick={onSkip}
-      style={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 100,
-        cursor: 'pointer',
-        opacity: fadingOut ? 0 : 1,
-        transition: 'opacity .4s ease',
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: '#0A0A0F',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          padding: '0 32px',
-          overflow: 'hidden',
-          fontFamily: "'Hanken Grotesk','Helvetica Neue',Arial,sans-serif",
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#FFFFFF' }}>
+    <div onClick={onSkip} className={styles.overlay2} style={{ opacity: fadingOut ? 0 : 1 }}>
+      <div className={styles.overlay3}>
+        <div className={styles.row3}>
           <Monogram id={id} />
           <Wordmark />
         </div>
-        <div style={{ marginTop: 20, fontSize: 14, color: '#8A8A9C', ...anim('ndUp', 0.5, 1.55) }}>
+        <div className={styles.lessonsLearnersAnd} style={{ ...anim('ndUp', 0.5, 1.55) }}>
           Lessons, learners and bookings
         </div>
-        <div
-          style={{
-            position: 'absolute',
-            left: 32,
-            right: 32,
-            bottom: 64,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
-          }}
-        >
-          <div style={{ height: 2, background: '#1A1A24', overflow: 'hidden' }}>
-            <div
-              style={{
-                height: '100%',
-                background: 'linear-gradient(90deg,#A78BFA,#7C3AED 39%,#3B82F6)',
-                transformOrigin: 'left',
-                ...anim('ndBar', 1.2, 1.55, 'cubic-bezier(.4,0,.2,1)'),
-              }}
-            />
+        <div className={styles.overlay4}>
+          <div className={styles.box}>
+            <div className={styles.box2} style={{ ...anim('ndBar', 1.2, 1.55, 'cubic-bezier(.4,0,.2,1)') }} />
           </div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: '.18em',
-              color: '#8A8A9C',
-              ...anim('ndFade', 0.4, 1.55),
-            }}
-          >
+          <div className={styles.row4} style={{ ...anim('ndFade', 0.4, 1.55) }}>
             <span>LOADING</span>
             <span>A NEXYRA PRODUCT</span>
           </div>

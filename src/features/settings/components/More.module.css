@@ -1,0 +1,171 @@
+/* Styles for More.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 24px;
+}
+
+.box {
+  padding: 14px 20px 12px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.more {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px 18px 20px;
+  background: var(--nd-white);
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.initialsRow {
+  width: 56px;
+  height: 56px;
+  flex: none;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.stack2 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.adiRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--nd-slate);
+}
+
+.adi {
+  width: 8px;
+  height: 12px;
+  flex: none;
+}
+
+.business {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.right {
+  color: var(--nd-subtle);
+}
+
+.business2 {
+  padding: 20px 20px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.listButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  padding: 10px 16px 10px 20px;
+  background: var(--nd-white);
+  border: 0;
+  border-top: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.stack3 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.text {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.bankButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  padding: 10px 16px 10px 20px;
+  background: var(--nd-white);
+  border: 0;
+  border-top: 1px solid var(--nd-line);
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.banksub {
+  font-size: 13px;
+}
+
+.subsub {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 24px;
+  min-height: 56px;
+  padding: 0 20px;
+  background: var(--nd-white);
+  border: 0;
+  border-top: 1px solid var(--nd-line);
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-error);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.nexdriveNexyraProductRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  font-size: 12px;
+  color: var(--nd-muted);
+}
+
+.nexdriveNexyraProductImg {
+  height: 14px;
+  width: auto;
+  opacity: 0.6;
+}

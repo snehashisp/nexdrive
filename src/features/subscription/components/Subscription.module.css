@@ -1,0 +1,246 @@
+/* Styles for Subscription.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.subscription {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.warnRow {
+  display: flex;
+  gap: 10px;
+  padding: 14px 20px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.stack2 {
+  padding: 20px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+}
+
+.currentPlan {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.row2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.planname {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.price {
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--nd-muted);
+}
+
+.save {
+  font-size: 14px;
+  color: var(--nd-success);
+  font-weight: 500;
+}
+
+.stack3 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.row3 {
+  height: 6px;
+  background: var(--nd-violet-100);
+  display: flex;
+}
+
+.text2 {
+  background: var(--nd-violet);
+}
+
+.row4 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--nd-slate);
+}
+
+.stack4 {
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.row5 {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 15px;
+}
+
+.text3 {
+  color: var(--nd-slate);
+  flex: none;
+}
+
+.text4 {
+  font-weight: 600;
+  text-align: right;
+}
+
+.button {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 20px 0;
+  padding: 14px;
+  background: var(--nd-violet-50);
+  border: 1.5px solid var(--nd-violet);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.giftRow {
+  width: 40px;
+  height: 40px;
+  background: var(--nd-violet-100);
+  color: var(--nd-violet-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack5 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bal {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.text5 {
+  font-size: 13px;
+  color: var(--nd-slate);
+}
+
+.right {
+  color: var(--nd-violet-700);
+}
+
+.stack6 {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.updatePaymentMethodButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 18px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.upgradeRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.youTheLongest {
+  font-size: 14px;
+  color: var(--nd-slate);
+}
+
+.cancellabelButton {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0 18px;
+  background: var(--nd-white);
+  color: var(--nd-error);
+  border: 1.5px solid var(--nd-error);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.plansRenewAutomatically {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--nd-muted);
+}

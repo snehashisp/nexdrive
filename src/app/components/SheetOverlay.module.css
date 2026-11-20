@@ -1,0 +1,22 @@
+/* Styles for SheetOverlay.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: rgba(10, 10, 15, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: nxFade 0.18s ease-out;
+}
+
+.box {
+  width: 100%;
+  max-width: 560px;
+  max-height: 92%;
+  overflow-y: auto;
+  background: var(--nd-white);
+  border-top: 2px solid var(--nd-ink);
+  animation: nxUp 0.26s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-sizing: border-box;
+}

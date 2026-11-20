@@ -1,64 +1,31 @@
+import styles from './PickBookingSheet.module.css';
+
 export default function PickBookingSheet({ v }) {
   const { closeSheet, ic, pb } = v;
   if (!pb) return null;
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '18px 12px 12px 20px',
-          borderBottom: '2px solid #0A0A0F',
-        }}
-      >
-        <span style={{ fontSize: '19px', fontWeight: 600 }}>{pb.title}</span>
-        <button
-          onClick={closeSheet}
-          aria-label="Close"
-          style={{
-            width: '40px',
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'transparent',
-            border: 0,
-            cursor: 'pointer',
-            color: '#0A0A0F',
-          }}
-        >
+      <div className={styles.row}>
+        <span className={styles.title}>{pb.title}</span>
+        <button onClick={closeSheet} aria-label="Close" className={styles.closeButton}>
           {ic.x}
         </button>
       </div>
       {pb.list.map((c, i) => (
         <button
           key={i}
-          className="hover-bg-mist"
+          className={`${styles.button} hover-bg-mist`}
           onClick={c.pick}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0,1fr) auto',
-            gap: '3px 12px',
-            width: '100%',
-            padding: '12px 20px',
-            background: '#FFFFFF',
-            border: 0,
-            borderBottom: '1px solid #E7E7EC',
-            borderLeft: `4px solid ${c.st.bar}`,
-            textAlign: 'left',
-            cursor: 'pointer',
-            color: '#0A0A0F',
-          }}
+          style={{ borderLeft: `4px solid ${c.st.bar}` }}
         >
-          <span style={{ fontSize: '15px', fontWeight: 600 }}>
+          <span className={styles.date}>
             {c.date} · {c.range}
           </span>
-          <span style={{ fontSize: '15px', fontWeight: 700 }}>{c.fin}</span>
-          <span style={{ fontSize: '13px', color: '#6B6B7B' }}>
+          <span className={styles.fin}>{c.fin}</span>
+          <span className={styles.dur}>
             {c.dur} · {c.pc}
           </span>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: c.st.fg, textAlign: 'right' }}>
+          <span className={styles.label} style={{ color: c.st.fg }}>
             {c.st.label}
           </span>
         </button>

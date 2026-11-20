@@ -1,0 +1,102 @@
+/* Styles for Splash.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.svg {
+  overflow: visible;
+  flex: none;
+}
+
+.row {
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.row2 {
+  letter-spacing: 0.105em;
+  display: flex;
+}
+
+.letter {
+  display: inline-block;
+}
+
+.drive {
+  position: relative;
+  display: inline-block;
+  color: var(--nd-violet);
+  margin-left: -0.06em;
+  letter-spacing: 0.005em;
+}
+
+.overlay {
+  position: absolute;
+  right: 100%;
+  margin-right: 6px;
+  height: 2px;
+}
+
+.overlay2 {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  cursor: pointer;
+  transition: opacity 0.4s ease;
+}
+
+.overlay3 {
+  position: absolute;
+  inset: 0;
+  background: var(--nd-ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 32px;
+  overflow: hidden;
+  font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.row3 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--nd-white);
+}
+
+.lessonsLearnersAnd {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #8a8a9c;
+}
+
+.overlay4 {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.box {
+  height: 2px;
+  background: var(--nd-ink-2);
+  overflow: hidden;
+}
+
+.box2 {
+  height: 100%;
+  background: linear-gradient(90deg, var(--nd-violet-400), var(--nd-violet) 39%, var(--nd-blue));
+  transform-origin: left;
+}
+
+.row4 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #8a8a9c;
+}

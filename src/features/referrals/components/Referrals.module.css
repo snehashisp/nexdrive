@@ -1,0 +1,400 @@
+/* Styles for Referrals.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.text {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.stack2 {
+  padding: 20px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.helpAnotherInstructor {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  text-wrap: pretty;
+}
+
+.shareYourCode {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--nd-slate);
+  text-wrap: pretty;
+}
+
+.box {
+  padding: 18px 20px 0;
+}
+
+.stack3 {
+  border: 1.5px solid var(--nd-ink);
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.yourReferralCode {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nd-success);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 14px;
+}
+
+.code {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.copyButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  height: 40px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--nd-line);
+}
+
+.messageButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mailButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  border: 0;
+  border-left: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.linkButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  border: 0;
+  border-top: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 14px;
+  background: var(--nd-violet);
+  border: 0;
+  border-top: 1px solid var(--nd-violet);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-white);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1px;
+  background: var(--nd-line);
+  border-top: 1px solid var(--nd-line);
+  border-bottom: 1px solid var(--nd-line);
+  margin-top: 18px;
+}
+
+.stack4 {
+  background: var(--nd-white);
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.yourReward {
+  font-size: 12px;
+  color: var(--nd-muted);
+}
+
+.nexdriveCredit {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.theirFirstSubscription {
+  font-size: 12px;
+  color: var(--nd-muted);
+  line-height: 1.4;
+}
+
+.button2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 20px 0;
+  padding: 16px;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  border: 0;
+  border-left: 4px solid var(--nd-violet);
+  text-align: left;
+  cursor: pointer;
+}
+
+.stack5 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.availableNexdriveCredit {
+  font-size: 12px;
+  color: #b4b4c4;
+}
+
+.bal {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.viewCreditRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nd-violet-100);
+}
+
+.grid4 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--nd-line);
+  border: 1px solid var(--nd-line);
+  margin: 10px 20px 0;
+}
+
+.box2 {
+  background: var(--nd-white);
+  padding: 12px 12px;
+}
+
+.box3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stack6 {
+  padding: 24px 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.row2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.histcount {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.button3 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  width: 100%;
+  padding: 13px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.reward {
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.label {
+  justify-self: end;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+  white-space: nowrap;
+}
+
+.stack7 {
+  margin-top: 14px;
+  border: 1px dashed var(--nd-border);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.referralsYet {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.shareYourCode2 {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--nd-muted);
+}
+
+.howWorks {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.shareYourCodeGrid {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.text2 {
+  color: var(--nd-violet-700);
+  font-weight: 600;
+  font-size: 12px;
+  padding-top: 2px;
+}
+
+.creditDoesnExpire {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--nd-muted);
+  padding-top: 10px;
+}

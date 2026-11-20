@@ -1,3 +1,4 @@
+import styles from './SheetOverlay.module.css';
 import CancelLessonSheet from '@/features/bookings/components/CancelLessonSheet';
 import CancelSubscriptionSheet from '@/features/subscription/components/CancelSubscriptionSheet';
 import ConfirmBookingSheet from '@/features/bookings/components/ConfirmBookingSheet';
@@ -16,34 +17,8 @@ import ReferralDetailSheet from '@/features/referrals/components/ReferralDetailS
 export default function SheetOverlay({ v }) {
   const { closeSheet, padB, sh, stop } = v;
   return (
-    <div
-      onClick={closeSheet}
-      style={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 40,
-        background: 'rgba(10,10,15,0.5)',
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        animation: 'nxFade .18s ease-out',
-      }}
-    >
-      <div
-        className="nx-scroll"
-        onClick={stop}
-        style={{
-          width: '100%',
-          maxWidth: '560px',
-          maxHeight: '92%',
-          overflowY: 'auto',
-          background: '#FFFFFF',
-          borderTop: '2px solid #0A0A0F',
-          paddingBottom: `${padB}px`,
-          animation: 'nxUp .26s cubic-bezier(.2,.8,.2,1)',
-          boxSizing: 'border-box',
-        }}
-      >
+    <div onClick={closeSheet} className={styles.overlay}>
+      <div className={`${styles.box} nx-scroll`} onClick={stop} style={{ paddingBottom: `${padB}px` }}>
         {sh.quickAdd && <QuickAddSheet v={v} />}
         {sh.learnerActions && <LearnerActionsSheet v={v} />}
         {sh.deleteLearner && <DeleteLearnerSheet v={v} />}

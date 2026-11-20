@@ -1,0 +1,62 @@
+/* Styles for TrialStarted.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  padding: 48px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.checkRow {
+  width: 56px;
+  height: 56px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.yourFreeTrial {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.welcomeNexdrive {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--nd-slate);
+}
+
+.stack3 {
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid var(--nd-ink);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 15px;
+}
+
+.text {
+  color: var(--nd-slate);
+}
+
+.text2 {
+  font-weight: 600;
+  text-align: right;
+}

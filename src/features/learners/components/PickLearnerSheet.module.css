@@ -1,0 +1,99 @@
+/* Styles for PickLearnerSheet.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 12px 12px 20px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.chooseLearner {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 20px;
+  background: var(--nd-white);
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.initialsRow {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  background: var(--nd-violet-100);
+  color: var(--nd-violet-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.text {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.incomplete {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+  background: var(--nd-status-rescheduled-bg);
+  color: var(--nd-warning);
+}
+
+.youHavenAdded {
+  padding: 20px;
+  font-size: 15px;
+  color: var(--nd-slate);
+}
+
+.userplusButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 0 20px;
+  background: var(--nd-white);
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-violet-700);
+  font-size: 16px;
+  font-weight: 600;
+}

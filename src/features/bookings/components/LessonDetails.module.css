@@ -1,0 +1,354 @@
+/* Styles for LessonDetails.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.lesson {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.stack2 {
+  padding: 18px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+}
+
+.note {
+  font-size: 13px;
+  color: var(--nd-slate);
+}
+
+.datelong {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.range {
+  font-size: 22px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--nd-slate);
+}
+
+.stack3 {
+  padding: 18px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.learner {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.row2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.initialsRow {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  background: var(--nd-violet-100);
+  color: var(--nd-violet-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.stack4 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.phone {
+  font-size: 14px;
+  color: var(--nd-slate);
+}
+
+.proflabelButton {
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-violet-700);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.phoneButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack5 {
+  padding: 22px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stack6 {
+  border: 1px solid var(--nd-line);
+  display: flex;
+  flex-direction: column;
+}
+
+.row3 {
+  height: 140px;
+  position: relative;
+  background-color: #f1f1f5;
+  background-image:
+    linear-gradient(#e4e4ea 1px, transparent 1px), linear-gradient(90deg, #e4e4ea 1px, transparent 1px);
+  background-size: 28px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pinStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--nd-violet-700);
+}
+
+.text {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: var(--nd-ink);
+  color: var(--nd-white);
+  padding: 3px 8px;
+}
+
+.mapPreviewOverlay {
+  position: absolute;
+  left: 10px;
+  bottom: 8px;
+  font-size: 11px;
+  color: var(--nd-muted);
+}
+
+.stack7 {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-top: 1px solid var(--nd-line);
+}
+
+.loc {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.text2 {
+  font-size: 14px;
+  color: var(--nd-slate);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+  padding: 0 16px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.navRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.opensGoogleMaps {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nd-violet-100);
+}
+
+.stack8 {
+  padding: 22px 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.payment {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.row4 {
+  display: flex;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 15px;
+}
+
+.rate {
+  color: var(--nd-slate);
+}
+
+.raterow {
+  font-weight: 600;
+}
+
+.disc {
+  font-weight: 600;
+  color: var(--nd-success);
+}
+
+.row5 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+}
+
+.finalAmount {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.fin {
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.grid2 {
+  padding: 6px 20px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.repeatButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 50px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.calendarxButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 50px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  color: var(--nd-error);
+  border: 1.5px solid var(--nd-error);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.thisLessonWas {
+  margin: 6px 20px 0;
+  padding: 12px 14px;
+  background: var(--nd-error-bg);
+  border: 1px solid var(--nd-error-border);
+  font-size: 14px;
+  color: var(--nd-status-cancelled-ink);
+  line-height: 1.5;
+}

@@ -321,10 +321,12 @@ The same loop drives every interaction: **event → App method → setState → 
 
 ### 7.2 Styling
 
-- `src/styles/base.css` holds the self-hosted font, colour tokens as CSS variables (`--nd-violet`…) and a small reset.
-- `src/styles/app.css` holds body defaults and every `@keyframes` animation.
-- `src/styles/interactions.css` holds hover, focus and pressed-state classes such as `hover-bg-mist`. They use `!important` because they must override inline styles.
-- Everything else is inline `style={{…}}` in the JSX, using literal hex colours (section 8.3).
+- **Each component has a CSS Module** next to it (`Pricing.jsx` + `Pricing.module.css`). The component imports it as `styles` and uses `className={styles.header}`. Vite renames the classes at build time, so names never clash between components.
+- **Colours come from design tokens**: `src/styles/tokens.css` defines them as CSS variables (`--nd-ink`, `--nd-violet`, `--nd-error`, status colours…), mirroring `docs/brand/tokens.json`. Module CSS uses `var(--nd-…)`, never a literal brand hex.
+- **Inline `style` remains only for values computed at run time** (for example a border colour that turns red when a field is invalid, or a phone-frame size). About 270 such declarations are left, against 7,200 moved into modules.
+- `src/styles/base.css` holds the self-hosted font and a small reset; `src/styles/app.css` holds body defaults and every `@keyframes` animation. Their element rules are wrapped in `:where(…)`, which gives them zero specificity, so any component class overrides them.
+- `src/styles/interactions.css` holds hover, focus and pressed-state classes such as `hover-bg-mist`. They still use `!important`, because some elements keep a run-time inline colour that the hover colour must beat.
+- `main.tsx` imports the global CSS before `App`, so component modules come later in the bundle and win ties.
 
 ### 7.3 Dates and time
 
@@ -348,7 +350,7 @@ All of these are listed with their impact in [gaps-and-quirks.md](gaps-and-quirk
 
 1. **One big state component and a single `v` object** instead of many components with their own state and specific props.
 2. **A 2,100-line view-model function.**
-3. **Inline styles everywhere** rather than CSS classes or a component library.
+3. **Run-time colours passed as values.** Most styling is in CSS Modules, but the view model still computes some colours (for example "selected" chip colours) and passes them to inline `style`.
 4. **Very short variable names** (`s`, `v`, `B`, `L`, `bf`, `bk2`) inherited from the original code, mostly inside `App` and the view model. The shared helpers in `src/lib/` and the feature constants have descriptive names.
 5. **Navigation is a stack in state**, not URLs. The browser's back button does not move between screens.
 6. **A module-level mutable clock** (`TODAY`, `NOW`) instead of passing time in.
@@ -366,6 +368,8 @@ All of these are listed with their impact in [gaps-and-quirks.md](gaps-and-quirk
 | Referral rules and statuses | `src/features/referrals/constants.js`, `utils.js` |
 | Demo workflows | `src/demo/flows.js` |
 | Date / money / validation helpers | `src/lib/` |
+| A component's look | Its `.module.css` file next to the `.jsx` |
+| Brand colours | `src/styles/tokens.css` (and `docs/brand/tokens.json`) |
 | Hover/focus colours | `src/styles/interactions.css` |
 | Offline behaviour | `public/sw.js`, `build.js` |
 | Server headers / port | `server.js` |

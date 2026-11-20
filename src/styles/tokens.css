@@ -1,0 +1,81 @@
+/* NexDrive design tokens as CSS custom properties. Source of truth: docs/brand/tokens.json; change both
+   together. Components use these through var(--nd-…) in their CSS Modules. */
+:root {
+  --nd-font-sans: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --nd-violet-50: #f7f5ff;
+  --nd-violet-100: #ede9fe;
+  --nd-violet-400: #a78bfa;
+  --nd-violet-500: #8b5cf6;
+  --nd-violet: #7c3aed;
+  --nd-violet-700: #6d28d9;
+  --nd-violet-800: #5b21b6;
+  --nd-slice: #9333ea;
+  --nd-blue: #3b82f6;
+  --nd-gradient: linear-gradient(90deg, #a78bfa 0%, #7c3aed 39%, #3b82f6 100%);
+  --nd-ink: #0a0a0f;
+  --nd-ink-2: #1a1a24;
+  --nd-slate: #4a4a5a;
+  --nd-muted: #6b6b7b;
+  --nd-subtle: #9a9aaa;
+  --nd-border: #cfcfd8;
+  --nd-line: #e7e7ec;
+  --nd-mist: #f7f7f9;
+  --nd-white: #ffffff;
+  --nd-status-upcoming: #2563eb;
+  --nd-status-ongoing: #7c3aed;
+  --nd-status-completed: #16a34a;
+  --nd-status-cancelled: #dc2626;
+  --nd-status-rescheduled: #d97706;
+
+  /* Lesson status badges: background, text, tinted panel, dark text on tint */
+  --nd-status-upcoming-bg: #dbeafe;
+  --nd-status-upcoming-fg: #1d4ed8;
+  --nd-status-upcoming-tint: #eff6ff;
+  --nd-status-upcoming-ink: #1e3a8a;
+  --nd-status-ongoing-tint: #ede9fe;
+  --nd-status-ongoing-ink: #5b21b6;
+  --nd-status-completed-bg: #dcfce7;
+  --nd-status-completed-fg: #166534;
+  --nd-status-completed-tint: #f0fdf4;
+  --nd-status-completed-ink: #14532d;
+  --nd-status-cancelled-bg: #fee2e2;
+  --nd-status-cancelled-fg: #991b1b;
+  --nd-status-cancelled-tint: #fef2f2;
+  --nd-status-cancelled-ink: #7f1d1d;
+  --nd-status-rescheduled-bg: #fef3c7;
+  --nd-status-rescheduled-fg: #92400e;
+  --nd-status-rescheduled-tint: #fffbeb;
+  --nd-status-rescheduled-ink: #78350f;
+
+  /* Feedback */
+  --nd-error: #b91c1c;
+  --nd-error-strong: #991b1b;
+  --nd-error-bg: #fef2f2;
+  --nd-error-border: #fecaca;
+  --nd-warning: #92400e;
+  --nd-warning-strong: #78350f;
+  --nd-warning-bg: #fffbeb;
+  --nd-warning-border: #fde68a;
+  --nd-warning-accent: #d97706;
+  --nd-success: #166534;
+  --nd-success-bg: #dcfce7;
+  --nd-success-soft: #f0fdf4;
+  --nd-success-border: #bbf7d0;
+
+  /* Instructor badges */
+  --nd-badge-adi: #16a34a;
+  --nd-badge-pdi: #ec4899;
+
+  --nd-space-1: 4px;
+  --nd-space-2: 8px;
+  --nd-space-3: 12px;
+  --nd-space-4: 16px;
+  --nd-space-5: 20px;
+  --nd-space-6: 24px;
+  --nd-space-8: 32px;
+  --nd-radius: 0;
+  --nd-rule: 2px solid #0a0a0f;
+  --nd-hairline: 1px solid #e7e7ec;
+  --nd-touch-min: 44px;
+  --nd-button-h: 52px;
+}

@@ -1,0 +1,246 @@
+/* Styles for ChoosePlan.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  padding: 24px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.stack2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.startYourDay {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.fullAccessEvery {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--nd-slate);
+}
+
+.stack3 {
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--nd-violet);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.code {
+  letter-spacing: 0.08em;
+}
+
+.stack4 {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--nd-violet-50);
+}
+
+.dayFreeTrial {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.text {
+  color: var(--nd-violet-700);
+}
+
+.yourAdditionalFree {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--nd-slate);
+}
+
+.stack5 {
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid var(--nd-ink);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.text2 {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.text3 {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.stack6 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chooseYourPlan {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.button {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.text4 {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.stack7 {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.save {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+  background: var(--nd-success-bg);
+  color: var(--nd-success);
+}
+
+.term {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.monthFreeThrough {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nd-violet-700);
+}
+
+.text5 {
+  text-align: right;
+}
+
+.price {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.per {
+  font-size: 12px;
+  color: var(--nd-muted);
+}
+
+.row2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--nd-border);
+}
+
+.card {
+  color: var(--nd-ink);
+}
+
+.visa {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--nd-success);
+}
+
+.plusButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  background: var(--nd-white);
+  cursor: pointer;
+  color: var(--nd-ink);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.alertRow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--nd-error);
+}
+
+.stack8 {
+  padding: 16px;
+  background: var(--nd-mist);
+  border: 1px solid var(--nd-line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--nd-slate);
+}
+
+.howRenewalWorks {
+  font-weight: 600;
+  color: var(--nd-ink);
+  font-size: 14px;
+}

@@ -1,0 +1,283 @@
+/* Styles for Learners.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 24px;
+}
+
+.row {
+  padding: 14px 20px 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stack2 {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.learners {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.count {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.userplusButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack3 {
+  padding: 0 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 8px 0 12px;
+  border: 1.5px solid var(--nd-border);
+  color: var(--nd-muted);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  font-size: 16px;
+  color: var(--nd-ink);
+  background: transparent;
+}
+
+.clearSearchButton {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-slate);
+}
+
+.row2 {
+  display: flex;
+  gap: 8px;
+}
+
+.button {
+  flex: none;
+  white-space: nowrap;
+  height: 36px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button2 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 16px 12px 20px;
+  min-height: 70px;
+  background: var(--nd-white);
+  border: 0;
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.initialsRow {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  background: var(--nd-violet-100);
+  color: var(--nd-violet-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.stack4 {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--nd-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.incomplete {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 7px;
+  background: var(--nd-status-rescheduled-bg);
+  color: var(--nd-warning);
+  flex: none;
+}
+
+.right {
+  color: var(--nd-subtle);
+}
+
+.stack5 {
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trySurnameMobile {
+  font-size: 14px;
+  color: var(--nd-muted);
+}
+
+.stack6 {
+  margin: 24px 20px 0;
+  border: 1px dashed var(--nd-border);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.usersRow {
+  width: 48px;
+  height: 48px;
+  background: var(--nd-violet-100);
+  color: var(--nd-violet-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack7 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.youHavenAdded {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.addLearnerContact {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--nd-muted);
+}
+
+.addYourFirstButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 50px;
+  padding: 0 16px;
+  min-width: 240px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stack8 {
+  padding: 24px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.removedLearners {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.historyButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 16px 12px 20px;
+  background: var(--nd-white);
+  border: 0;
+  border-top: 1px solid var(--nd-line);
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-slate);
+}
+
+.initialsRow2 {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  background: var(--nd-mist);
+  border: 1px solid var(--nd-line);
+  color: var(--nd-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.stack9 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.name2 {
+  font-size: 15px;
+  font-weight: 600;
+}

@@ -1,0 +1,301 @@
+/* Styles for BankDetails.jsx. Colours come from the design tokens in src/styles/tokens.css. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 28px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--nd-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 12px 0 4px;
+  border-bottom: 2px solid var(--nd-ink);
+}
+
+.backButton {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.bankDetails {
+  font-size: 17px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.stack2 {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.lockRow {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--nd-mist);
+  border: 1px solid var(--nd-line);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--nd-slate);
+}
+
+.warnRow {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--nd-warning-bg);
+  border: 1px solid var(--nd-warning-border);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--nd-warning-strong);
+}
+
+.stack3 {
+  border: 1.5px solid var(--nd-ink);
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--nd-line);
+}
+
+.paymentAccount {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--nd-muted);
+}
+
+.revealiconButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-violet-700);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.row2 {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--nd-line);
+  font-size: 15px;
+}
+
+.accountName {
+  color: var(--nd-slate);
+}
+
+.holder {
+  font-weight: 600;
+}
+
+.sortm {
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.row3 {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  font-size: 15px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  color: var(--nd-ink);
+  border: 1.5px solid var(--nd-ink);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.trashButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 14px;
+  background: var(--nd-white);
+  color: var(--nd-error);
+  border: 1.5px solid var(--nd-error);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.accountHolderName {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--nd-slate);
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 52px;
+  padding: 0 14px;
+  font-size: 16px;
+  outline: none;
+}
+
+.alertRow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--nd-error);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: 8px;
+}
+
+.input2 {
+  width: 100%;
+  box-sizing: border-box;
+  height: 52px;
+  padding: 0 14px;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+  outline: none;
+}
+
+.alertRow2 {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--nd-error);
+  margin-top: -8px;
+}
+
+.cancelEditingButton {
+  align-self: flex-start;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--nd-slate);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--nd-line);
+  border-bottom: 1px solid var(--nd-line);
+  text-align: left;
+  cursor: pointer;
+  color: var(--nd-ink);
+}
+
+.stack4 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.includeLessonMessages {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.addsPaymentSection {
+  font-size: 13px;
+  color: var(--nd-muted);
+}
+
+.text {
+  width: 48px;
+  height: 28px;
+  flex: none;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 3px;
+  width: 22px;
+  height: 22px;
+  background: var(--nd-white);
+}
+
+.box {
+  flex: none;
+  background: var(--nd-white);
+  border-top: 2px solid var(--nd-ink);
+}
+
+.checkButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 52px;
+  padding: 0 18px;
+  background: var(--nd-violet);
+  color: var(--nd-white);
+  border: 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lockRow2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
