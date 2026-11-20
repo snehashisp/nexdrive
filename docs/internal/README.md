@@ -2,6 +2,8 @@
 
 Internal notes for engineers joining the project. They describe the code **as it is** (November 2026, branch `refactor/vite-react-ts`, which builds on `react-vite-jsx`), including the parts that are unfinished or unusual.
 
+**Coding guidelines and project structure:** [`CLAUDE.md`](../../CLAUDE.md) in the repository root. All changes must follow it.
+
 | Read | When |
 | --- | --- |
 | [setup.md](setup.md) | First. Get the app running locally and find your way around it in Chrome |
