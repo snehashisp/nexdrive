@@ -120,40 +120,12 @@ export function useViewContext() {
     credit: () => store.pushScreen('credit'),
     bookings: () => store.pushScreen('bookings'),
     subscription: () => store.pushScreen('subscription'),
-    upgrade: () => {
-      store.setState({
-        upPick: PLANS.find((x) => x.months > plan.months)
-          ? PLANS.find((x) => x.months > plan.months).key
-          : plan.key,
-      });
-      store.pushScreen('upgrade');
-    },
-    profile: () => {
-      store.setState({ profForm: { ...s.inst, areas: s.inst.areas.join(', ') }, profTried: false });
-      store.pushScreen('profile');
-    },
-    pricing: () => {
-      store.setState({
-        priceForm: {
-          rates: s.inst.rates.map((r) => ({ ...r, rate: String(r.rate) })),
-          dur: s.inst.defaultDur,
-        },
-      });
-      store.pushScreen('pricing');
-    },
-    bank: () => {
-      store.setState({
-        bankForm: s.bank ? { ...s.bank } : { holder: s.inst.name, sort: '', acct: '', include: true },
-        bankTried: false,
-        bankReveal: false,
-      });
-      store.pushScreen('bank');
-    },
+    upgrade: () => store.openUpgrade(),
+    profile: () => store.openProfile(),
+    pricing: () => store.openPricing(),
+    bank: () => store.openBankDetails(),
     prefs: () => store.pushScreen('prefs'),
-    security: () => {
-      store.setState({ pw: null, pwTried: false });
-      store.pushScreen('security');
-    },
+    security: () => store.openSecurity(),
     history: () => {
       store.setState({ bkSeg: 'history' });
       store.pushScreen('bookings');

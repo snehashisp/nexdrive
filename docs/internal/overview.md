@@ -42,6 +42,7 @@ nexdrive/
 │   │   ├── store/            The app store (Zustand): createAppStore.ts composes the slices;
 │   │   │                       appSlice.ts (navigation, sheets, toasts, splash, clock); initialState.ts
 │   │   ├── hooks/            useShellView: values for the frame, status bar, nav, toast, sheets
+│   │   ├── routing/          A URL per screen: routes.ts (URL table), useUrlSync.ts (history sync)
 │   │   ├── AppView.tsx       Top-level layout: phone frame, current screen, nav, sheets
 │   │   └── components/       Shell pieces: bottom nav, status bar, splash, sheet overlay
 │   ├── features/           One folder per business area; each holds its screens and sheets
@@ -172,7 +173,7 @@ Dependencies: `react`, `react-dom` (UI library), `zustand` (app store), `qrcode-
 
 **In this repo** (`vite.config.mts`):
 
-- `base: './'`: links in the built page are relative, so the app also works from a sub-folder.
+- `base: '/'`: links in the built page are absolute. Every screen has its own URL (`/learners/L1`), so relative links would break on those pages. To host the app in a sub-folder, set `base` to that folder and update the paths in `public/sw.js`.
 - `build.assetsDir: 'bundle'`: compiled JS/CSS land in `dist/bundle/`, kept apart from `public/assets/`.
 - `server.port: 3300`.
 - CSS files are imported from `main.tsx` (`import './styles/base.css'`). Vite bundles them into one CSS file.
@@ -188,7 +189,7 @@ Dependencies: `react`, `react-dom` (UI library), `zustand` (app store), `qrcode-
    - `/bundle/*`: `Cache-Control: max-age=1 year, immutable`, because the names are content-hashed.
    - `sw.js`, `sw-precache.js`: never cached, and allowed to control the whole site.
    - `.webmanifest`: correct content type.
-3. **SPA fallback:** any `GET` that asks for HTML and matched no file gets `index.html`. (The app has no URL routes, so this rarely matters; see [gaps-and-quirks.md](gaps-and-quirks.md).)
+3. **SPA fallback:** any `GET` that asks for HTML and matched no file gets `index.html`. (This is what makes deep links such as `/learners/L1` work on a fresh load; see [gaps-and-quirks.md](gaps-and-quirks.md).)
 4. Anything else: plain-text 404.
 5. Listens on `PORT` (default 3300) and `HOST` (default `0.0.0.0`).
 
@@ -263,7 +264,7 @@ AppView + feature components (src/app, src/features)   JSX            "how it lo
 | `phase` | `'onboarding'` or `'app'` |
 | `ob` | Current onboarding step: `welcome`, `register`, `verify`, `details`, `plan`, `started` |
 | `tab` | Bottom-nav tab: `home`, `calendar`, `learners`, `more` |
-| `stack` | Screens opened on top of the tab, e.g. `[{name:'learner', params:{lid:'L1'}}, {name:'learnerForm'}]`. The last entry is visible; `pushScreen()` adds one and `back()` pops it. **This is the app's whole navigation system; there is no URL routing** |
+| `stack` | Screens opened on top of the tab, e.g. `[{name:'learner', params:{lid:'L1'}}, {name:'learnerForm'}]`. The last entry is visible; `pushScreen()` adds one and `back()` pops it. This is the source of truth for navigation; the URL follows it (section 6.5) |
 | `sheet` | The pop-up panel currently open, e.g. `{type:'conflict', cid:'b12'}`, or `null` |
 | `learners`, `bookings`, `notifs`, `refs`, `credit` | The data, as arrays of plain objects |
 | `inst`, `bank`, `sub`, `prefs` | The instructor's profile, bank details, subscription and preferences |
@@ -332,6 +333,24 @@ Tapping **Confirm** in the "Confirm booking" sheet:
 
 The same loop drives every interaction: **event → store action → setState → subscribed components re-render → view hooks → JSX**. A sequence diagram is in [component-diagram.md](component-diagram.md#4-one-interaction-end-to-end).
 
+### 6.5 URLs and browser history
+
+Every screen has a URL, so links can be shared or bookmarked and the browser's back and forward buttons move between screens. The store's navigation (`phase`, `ob`, `tab`, `stack`) stays the source of truth; `src/app/routing/` keeps the address bar in step with it:
+
+- `routes.ts` is the table of URLs. `pathFor(state)` gives the URL of what is on screen; `openPath(store, path)` shows the screen for a URL by calling the same actions the buttons use (so forms are prepared), putting the parent screen underneath where there is one.
+- `useUrlSync(store)`, called from `App`, subscribes to the store and updates the URL once per tick, after the store settles (so an action that resets and then opens a screen counts as one step). Opening a screen pushes a browser-history entry; switching tab or replacing a screen replaces the entry; in-app **Back** steps back in history. The browser's back/forward buttons (`popstate`) and a URL typed or loaded on start call the store in turn. Unknown or unreachable URLs fall back to what the store shows.
+
+| URL | Screen |
+| --- | --- |
+| `/`, `/calendar`, `/learners`, `/account` | The four tabs |
+| `/learners/L1`, `/learners/L1/edit`, `/learners/new` | Learner profile, edit learner, add learner |
+| `/lessons`, `/lessons/new`, `/lessons/b12`, `/lessons/b12/reschedule` | Bookings list, new booking, lesson details, reschedule |
+| `/notifications`, `/referrals`, `/referrals/share`, `/credit` | Notifications, refer & earn, QR invite, NexDrive Credit |
+| `/account/subscription` (`/upgrade`, `/upgraded`), `/account/profile`, `/account/pricing`, `/account/bank-details`, `/account/preferences`, `/account/security` | Account screens |
+| `/start`, `/start/register` … `/start/started` | Onboarding steps (only while onboarding) |
+
+Sheets, toasts and form contents are not part of the URL. The Express server and the service worker both answer any page URL with `index.html`, so deep links work on a fresh load and offline. `routes.test.ts` checks that every URL opens a screen whose URL is the same.
+
 ## 7. Cross-cutting details
 
 ### 7.1 Configuration
@@ -378,7 +397,7 @@ All of these are listed with their impact in [gaps-and-quirks.md](gaps-and-quirk
 2. **A 2,100-line view-model function.**
 3. **Run-time colours passed as values.** Most styling is in CSS Modules, but the view hooks still compute some colours (for example "selected" chip colours) and passes them to inline `style`.
 4. **Very short variable names** (`s`, `v`, `B`, `L`, `bf`, `bk2`) inherited from the original code, mostly inside the store slices and view hooks. The shared helpers in `src/lib/` and the feature constants have descriptive names.
-5. **Navigation is a stack in state**, not URLs. The browser's back button does not move between screens.
+5. **Navigation lives in the store, not in a router.** Each screen has a URL and the browser's back/forward buttons work, but the URL is kept in step with the store (section 6.5) rather than driving it, unlike a typical React Router app.
 6. **A module-level mutable clock** (`TODAY`, `NOW`) instead of passing time in.
 
 ## 9. Where to look for…
@@ -386,6 +405,7 @@ All of these are listed with their impact in [gaps-and-quirks.md](gaps-and-quirk
 | Task | File |
 | --- | --- |
 | Change wording or layout of a screen | `src/features/<feature>/components/<Screen>.tsx` (sheets live in the same folder) |
+| Add a screen's URL | `src/app/routing/routes.ts` (`SCREEN_PATHS` and `openPath`) |
 | Change what a button does | Find its `onClick={x.y}` → find `y:` in the screen's view hook (`features/<feature>/hooks/use<Screen>View.ts`) → follow to the store action in `features/<feature>/stores/` |
 | Change a calculation shown on screen | The screen's view hook (display) or `bfModel()` in the bookings slice (booking maths) |
 | Add or change demo data | `src/demo/seeds.ts` |

@@ -133,7 +133,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <div class="layout">
   <nav class="sidebar">
     <div class="toc-title">Pages</div><a class="page" href="index.html">Start here</a><a class="page" href="setup.html">Setup</a><a class="page current" href="overview.html">How it works</a><a class="page" href="component-diagram.html">Component diagrams</a><a class="page" href="database.html">Database</a><a class="page" href="gaps-and-quirks.html">Gaps & quirks</a>
-    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#1-the-product-in-one-paragraph">1. The product in one paragraph</a><a class="toc d2" href="#2-what-exists-today-and-what-doesnt">2. What exists today and what doesn&#39;t</a><a class="toc d2" href="#3-repository-map">3. Repository map</a><a class="toc d2" href="#4-tools-and-frameworks-one-at-a-time">4. Tools and frameworks, one at a time</a><a class="toc d3" href="#41-npm-and-packagejson">4.1 npm and package.json</a><a class="toc d3" href="#42-javascript-modules-import--export">4.2 JavaScript modules (import / export)</a><a class="toc d3" href="#43-react">4.3 React</a><a class="toc d3" href="#44-jsx">4.4 JSX</a><a class="toc d3" href="#45-vite-build-tool-and-development-server">4.5 Vite (build tool and development server)</a><a class="toc d3" href="#46-nodejs-and-express-the-web-server">4.6 Node.js and Express (the web server)</a><a class="toc d3" href="#47-service-worker-and-pwa">4.7 Service worker and PWA</a><a class="toc d3" href="#48-small-libraries">4.8 Small libraries</a><a class="toc d3" href="#49-typescript">4.9 TypeScript</a><a class="toc d2" href="#5-what-happens-when-someone-opens-the-app-production">5. What happens when someone opens the app (production)</a><a class="toc d2" href="#6-how-the-app-is-structured-inside">6. How the app is structured inside</a><a class="toc d3" href="#61-the-store-state-and-actions">6.1 The store: state and actions</a><a class="toc d3" href="#62-view-hooks-state-into-display-values">6.2 View hooks: state into display values</a><a class="toc d3" href="#63-the-views-appview-screens-sheets">6.3 The views: AppView, screens, sheets</a><a class="toc d3" href="#64-one-click-end-to-end">6.4 One click, end to end</a><a class="toc d2" href="#7-cross-cutting-details">7. Cross-cutting details</a><a class="toc d3" href="#71-configuration">7.1 Configuration</a><a class="toc d3" href="#72-styling">7.2 Styling</a><a class="toc d3" href="#73-dates-and-time">7.3 Dates and time</a><a class="toc d3" href="#74-business-rules-in-the-front-end">7.4 Business rules in the front end</a><a class="toc d2" href="#8-things-that-look-odd-at-first">8. Things that look odd at first</a><a class="toc d2" href="#9-where-to-look-for">9. Where to look for…</a>
+    <div class="sep"></div><div class="toc-title">On this page</div><a class="toc d2" href="#1-the-product-in-one-paragraph">1. The product in one paragraph</a><a class="toc d2" href="#2-what-exists-today-and-what-doesnt">2. What exists today and what doesn&#39;t</a><a class="toc d2" href="#3-repository-map">3. Repository map</a><a class="toc d2" href="#4-tools-and-frameworks-one-at-a-time">4. Tools and frameworks, one at a time</a><a class="toc d3" href="#41-npm-and-packagejson">4.1 npm and package.json</a><a class="toc d3" href="#42-javascript-modules-import--export">4.2 JavaScript modules (import / export)</a><a class="toc d3" href="#43-react">4.3 React</a><a class="toc d3" href="#44-jsx">4.4 JSX</a><a class="toc d3" href="#45-vite-build-tool-and-development-server">4.5 Vite (build tool and development server)</a><a class="toc d3" href="#46-nodejs-and-express-the-web-server">4.6 Node.js and Express (the web server)</a><a class="toc d3" href="#47-service-worker-and-pwa">4.7 Service worker and PWA</a><a class="toc d3" href="#48-small-libraries">4.8 Small libraries</a><a class="toc d3" href="#49-typescript">4.9 TypeScript</a><a class="toc d2" href="#5-what-happens-when-someone-opens-the-app-production">5. What happens when someone opens the app (production)</a><a class="toc d2" href="#6-how-the-app-is-structured-inside">6. How the app is structured inside</a><a class="toc d3" href="#61-the-store-state-and-actions">6.1 The store: state and actions</a><a class="toc d3" href="#62-view-hooks-state-into-display-values">6.2 View hooks: state into display values</a><a class="toc d3" href="#63-the-views-appview-screens-sheets">6.3 The views: AppView, screens, sheets</a><a class="toc d3" href="#64-one-click-end-to-end">6.4 One click, end to end</a><a class="toc d3" href="#65-urls-and-browser-history">6.5 URLs and browser history</a><a class="toc d2" href="#7-cross-cutting-details">7. Cross-cutting details</a><a class="toc d3" href="#71-configuration">7.1 Configuration</a><a class="toc d3" href="#72-styling">7.2 Styling</a><a class="toc d3" href="#73-dates-and-time">7.3 Dates and time</a><a class="toc d3" href="#74-business-rules-in-the-front-end">7.4 Business rules in the front end</a><a class="toc d2" href="#8-things-that-look-odd-at-first">8. Things that look odd at first</a><a class="toc d2" href="#9-where-to-look-for">9. Where to look for…</a>
   </nav>
   <main class="content">
 <h1 id="how-the-nexdrive-codebase-works">How the NexDrive codebase works</h1>
@@ -188,6 +188,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 │   │   ├── store/            The app store (Zustand): createAppStore.ts composes the slices;
 │   │   │                       appSlice.ts (navigation, sheets, toasts, splash, clock); initialState.ts
 │   │   ├── hooks/            useShellView: values for the frame, status bar, nav, toast, sheets
+│   │   ├── routing/          A URL per screen: routes.ts (URL table), useUrlSync.ts (history sync)
 │   │   ├── AppView.tsx       Top-level layout: phone frame, current screen, nav, sheets
 │   │   └── components/       Shell pieces: bottom nav, status bar, splash, sheet overlay
 │   ├── features/           One folder per business area; each holds its screens and sheets
@@ -337,7 +338,7 @@ jsx('button', { onClick: save, style: { color: 'red' }, children: ['Save ', name
 </aside>
 <p><strong>In this repo</strong> (<code>vite.config.mts</code>):</p>
 <ul>
-<li><code>base: &#39;./&#39;</code>: links in the built page are relative, so the app also works from a sub-folder.</li>
+<li><code>base: &#39;/&#39;</code>: links in the built page are absolute. Every screen has its own URL (<code>/learners/L1</code>), so relative links would break on those pages. To host the app in a sub-folder, set <code>base</code> to that folder and update the paths in <code>public/sw.js</code>.</li>
 <li><code>build.assetsDir: &#39;bundle&#39;</code>: compiled JS/CSS land in <code>dist/bundle/</code>, kept apart from <code>public/assets/</code>.</li>
 <li><code>server.port: 3300</code>.</li>
 <li>CSS files are imported from <code>main.tsx</code> (<code>import &#39;./styles/base.css&#39;</code>). Vite bundles them into one CSS file.</li>
@@ -354,7 +355,7 @@ jsx('button', { onClick: save, style: { color: 'red' }, children: ['Save ', name
 <li><code>.webmanifest</code>: correct content type.</li>
 </ul>
 </li>
-<li><strong>SPA fallback:</strong> any <code>GET</code> that asks for HTML and matched no file gets <code>index.html</code>. (The app has no URL routes, so this rarely matters; see <a href="gaps-and-quirks.html">Gaps & quirks</a>.)</li>
+<li><strong>SPA fallback:</strong> any <code>GET</code> that asks for HTML and matched no file gets <code>index.html</code>. (This is what makes deep links such as <code>/learners/L1</code> work on a fresh load; see <a href="gaps-and-quirks.html">Gaps & quirks</a>.)</li>
 <li>Anything else: plain-text 404.</li>
 <li>Listens on <code>PORT</code> (default 3300) and <code>HOST</code> (default <code>0.0.0.0</code>).</li>
 </ol>
@@ -440,7 +441,7 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 </tr>
 <tr>
 <td><code>stack</code></td>
-<td>Screens opened on top of the tab, e.g. <code>[{name:&#39;learner&#39;, params:{lid:&#39;L1&#39;}}, {name:&#39;learnerForm&#39;}]</code>. The last entry is visible; <code>pushScreen()</code> adds one and <code>back()</code> pops it. <strong>This is the app&#39;s whole navigation system; there is no URL routing</strong></td>
+<td>Screens opened on top of the tab, e.g. <code>[{name:&#39;learner&#39;, params:{lid:&#39;L1&#39;}}, {name:&#39;learnerForm&#39;}]</code>. The last entry is visible; <code>pushScreen()</code> adds one and <code>back()</code> pops it. This is the source of truth for navigation; the URL follows it (section 6.5)</td>
 </tr>
 <tr>
 <td><code>sheet</code></td>
@@ -555,6 +556,46 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <li><code>AppView</code> → <code>SheetOverlay</code> → <code>MessageSheet</code> renders the preview. React updates only the parts of the page that changed.</li>
 </ol>
 <p>The same loop drives every interaction: <strong>event → store action → setState → subscribed components re-render → view hooks → JSX</strong>. A sequence diagram is in <a href="component-diagram.html#4-one-interaction-end-to-end">Component diagrams</a>.</p>
+<h3 id="65-urls-and-browser-history">6.5 URLs and browser history<a class="anchor" href="#65-urls-and-browser-history" aria-hidden="true">#</a></h3>
+<p>Every screen has a URL, so links can be shared or bookmarked and the browser&#39;s back and forward buttons move between screens. The store&#39;s navigation (<code>phase</code>, <code>ob</code>, <code>tab</code>, <code>stack</code>) stays the source of truth; <code>src/app/routing/</code> keeps the address bar in step with it:</p>
+<ul>
+<li><code>routes.ts</code> is the table of URLs. <code>pathFor(state)</code> gives the URL of what is on screen; <code>openPath(store, path)</code> shows the screen for a URL by calling the same actions the buttons use (so forms are prepared), putting the parent screen underneath where there is one.</li>
+<li><code>useUrlSync(store)</code>, called from <code>App</code>, subscribes to the store and updates the URL once per tick, after the store settles (so an action that resets and then opens a screen counts as one step). Opening a screen pushes a browser-history entry; switching tab or replacing a screen replaces the entry; in-app <strong>Back</strong> steps back in history. The browser&#39;s back/forward buttons (<code>popstate</code>) and a URL typed or loaded on start call the store in turn. Unknown or unreachable URLs fall back to what the store shows.</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Screen</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/</code>, <code>/calendar</code>, <code>/learners</code>, <code>/account</code></td>
+<td>The four tabs</td>
+</tr>
+<tr>
+<td><code>/learners/L1</code>, <code>/learners/L1/edit</code>, <code>/learners/new</code></td>
+<td>Learner profile, edit learner, add learner</td>
+</tr>
+<tr>
+<td><code>/lessons</code>, <code>/lessons/new</code>, <code>/lessons/b12</code>, <code>/lessons/b12/reschedule</code></td>
+<td>Bookings list, new booking, lesson details, reschedule</td>
+</tr>
+<tr>
+<td><code>/notifications</code>, <code>/referrals</code>, <code>/referrals/share</code>, <code>/credit</code></td>
+<td>Notifications, refer &amp; earn, QR invite, NexDrive Credit</td>
+</tr>
+<tr>
+<td><code>/account/subscription</code> (<code>/upgrade</code>, <code>/upgraded</code>), <code>/account/profile</code>, <code>/account/pricing</code>, <code>/account/bank-details</code>, <code>/account/preferences</code>, <code>/account/security</code></td>
+<td>Account screens</td>
+</tr>
+<tr>
+<td><code>/start</code>, <code>/start/register</code> … <code>/start/started</code></td>
+<td>Onboarding steps (only while onboarding)</td>
+</tr>
+</tbody></table>
+</div>
+<p>Sheets, toasts and form contents are not part of the URL. The Express server and the service worker both answer any page URL with <code>index.html</code>, so deep links work on a fresh load and offline. <code>routes.test.ts</code> checks that every URL opens a screen whose URL is the same.</p>
 <h2 id="7-cross-cutting-details">7. Cross-cutting details<a class="anchor" href="#7-cross-cutting-details" aria-hidden="true">#</a></h2>
 <h3 id="71-configuration">7.1 Configuration<a class="anchor" href="#71-configuration" aria-hidden="true">#</a></h3>
 <div class="table-wrap"><table>
@@ -619,7 +660,7 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <li><strong>A 2,100-line view-model function.</strong></li>
 <li><strong>Run-time colours passed as values.</strong> Most styling is in CSS Modules, but the view hooks still compute some colours (for example &quot;selected&quot; chip colours) and passes them to inline <code>style</code>.</li>
 <li><strong>Very short variable names</strong> (<code>s</code>, <code>v</code>, <code>B</code>, <code>L</code>, <code>bf</code>, <code>bk2</code>) inherited from the original code, mostly inside the store slices and view hooks. The shared helpers in <code>src/lib/</code> and the feature constants have descriptive names.</li>
-<li><strong>Navigation is a stack in state</strong>, not URLs. The browser&#39;s back button does not move between screens.</li>
+<li><strong>Navigation lives in the store, not in a router.</strong> Each screen has a URL and the browser&#39;s back/forward buttons work, but the URL is kept in step with the store (section 6.5) rather than driving it, unlike a typical React Router app.</li>
 <li><strong>A module-level mutable clock</strong> (<code>TODAY</code>, <code>NOW</code>) instead of passing time in.</li>
 </ol>
 <h2 id="9-where-to-look-for">9. Where to look for…<a class="anchor" href="#9-where-to-look-for" aria-hidden="true">#</a></h2>
@@ -633,6 +674,10 @@ AppView + feature components (src/app, src/features)   JSX            &quot;how 
 <tbody><tr>
 <td>Change wording or layout of a screen</td>
 <td><code>src/features/&lt;feature&gt;/components/&lt;Screen&gt;.tsx</code> (sheets live in the same folder)</td>
+</tr>
+<tr>
+<td>Add a screen&#39;s URL</td>
+<td><code>src/app/routing/routes.ts</code> (<code>SCREEN_PATHS</code> and <code>openPath</code>)</td>
 </tr>
 <tr>
 <td>Change what a button does</td>

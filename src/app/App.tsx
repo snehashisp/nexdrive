@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import AppView from './AppView';
+import { useUrlSync } from './routing/useUrlSync';
 import { createAppStore } from './store/createAppStore';
 import { AppStoreContext } from '@/stores/appStoreContext';
 
@@ -31,6 +32,9 @@ export default function App(props) {
 
   // Listeners and timers (resize, clock, splash, ?ref= links) for the lifetime of the app.
   useEffect(() => store.getState().mount(), [store]);
+
+  // A URL per screen: address bar, browser back/forward and deep links (after mount() has read ?ref=).
+  useUrlSync(store);
 
   // Reload the demo data if the dataState preview switch changes.
   const { dataState } = props;

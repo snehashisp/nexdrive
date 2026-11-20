@@ -7,7 +7,7 @@ export default function Welcome() {
   return (
     <div className={styles.stack}>
       <div className={styles.row}>
-        <img src="assets/logos/monogram-gradient.svg" alt="" className={styles.img} />
+        <img src="/assets/logos/monogram-gradient.svg" alt="" className={styles.img} />
         <span className={styles.text}>
           <span className={styles.nex}>NEX</span>
           <span className={styles.drive}>Drive</span>
@@ -62,7 +62,7 @@ export default function Welcome() {
         </button>
       </div>
       <div className={styles.nexyraProductRow}>
-        <img src="assets/logos/monogram-mono-white.svg" alt="" className={styles.nexyraProductImg} />A Nexyra
+        <img src="/assets/logos/monogram-mono-white.svg" alt="" className={styles.nexyraProductImg} />A Nexyra
         product
       </div>
     </div>

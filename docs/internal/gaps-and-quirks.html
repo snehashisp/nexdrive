@@ -336,7 +336,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <td>B7</td>
 <td><strong>Navigation is a stack in state</strong> (<code>tab</code> + <code>stack</code>), with no URLs</td>
 <td>A router (React Router) with a URL per screen</td>
-<td>No deep links, no browser back button, no bookmarkable screens; the server&#39;s SPA fallback has nothing to route</td>
+<td>No deep links, no browser back button, no bookmarkable screens; the server&#39;s SPA fallback has nothing to route. Fixed: every screen has a URL (<code>src/app/routing/</code>); deep links, bookmarks and the browser back/forward buttons work. The URL follows the store rather than driving it</td>
 </tr>
 <tr>
 <td>B8</td>
@@ -378,7 +378,7 @@ figure.diagram::after { content: "Click to enlarge"; display: block; margin-top:
 <td>B14</td>
 <td><strong>Mixed absolute and relative URLs.</strong> Vite <code>base: &#39;./&#39;</code> and image paths like <code>&#39;assets/logos/…&#39;</code> are relative, while <code>sw.js</code> uses root-absolute paths (<code>&#39;/index.html&#39;</code>, <code>&#39;/sw-precache.js&#39;</code>)</td>
 <td>One consistent base path</td>
-<td>Works at a domain root. Under a sub-folder (for example <code>user.github.io/nexdrive/</code>) the app loads but offline mode breaks</td>
+<td>Works at a domain root. Under a sub-folder (for example <code>user.github.io/nexdrive/</code>) the app loads but offline mode breaks. Fixed: all links are absolute now (<code>base: &#39;/&#39;</code>), which per-screen URLs need; hosting in a sub-folder means setting <code>base</code> and the paths in <code>sw.js</code></td>
 </tr>
 <tr>
 <td>B15</td>

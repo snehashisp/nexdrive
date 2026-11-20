@@ -22,7 +22,7 @@ createRoot(rootElement).render(
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
-      .register('sw.js', { scope: './' })
+      .register('/sw.js', { scope: '/' })
       .catch((e) => console.warn('[nexdrive] SW registration failed:', e));
   });
 }

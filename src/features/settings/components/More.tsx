@@ -96,7 +96,7 @@ export default function More() {
         {ic.logout}Log out
       </button>
       <div className={styles.nexdriveNexyraProductRow}>
-        <img src="assets/logos/monogram-mono-black.svg" alt="" className={styles.nexdriveNexyraProductImg} />
+        <img src="/assets/logos/monogram-mono-black.svg" alt="" className={styles.nexdriveNexyraProductImg} />
         NexDrive 1.0 · A Nexyra product
       </div>
     </div>

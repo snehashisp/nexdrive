@@ -7,7 +7,7 @@ export default function DemoPanel() {
   return (
     <aside className={styles.aside}>
       <div className={styles.row}>
-        <img src="assets/logos/monogram-on-light.svg" alt="" className={styles.img} />
+        <img src="/assets/logos/monogram-on-light.svg" alt="" className={styles.img} />
         <span className={styles.text}>
           <span className={styles.nex}>NEX</span>
           <span className={styles.drive}>Drive</span>

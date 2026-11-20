@@ -12,8 +12,9 @@ export default defineConfig({
     // `@/…` imports resolve from src/ (mirrored in tsconfig.json "paths").
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
-  // Relative asset links, so the built app also works when hosted in a sub-folder.
-  base: './',
+  // Absolute asset links: every screen has its own URL (/learners/L1…), so relative links would break.
+  // To host under a sub-folder, set this to that folder (e.g. '/nexdrive/') and update public/sw.js.
+  base: '/',
   build: {
     outDir: 'dist',
     // Bundled JS/CSS go in dist/bundle/ so they don't mix with the static files in public/assets/.

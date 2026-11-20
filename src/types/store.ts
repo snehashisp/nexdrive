@@ -302,10 +302,15 @@ export interface ReferralsActions {
 
 export interface SettingsActions {
   goBank: () => void;
+  openProfile: () => void;
+  openPricing: () => void;
+  openBankDetails: () => void;
+  openSecurity: () => void;
 }
 
 export interface SubscriptionActions {
   subState: () => string;
+  openUpgrade: () => void;
 }
 
 export type AppStore = AppData &

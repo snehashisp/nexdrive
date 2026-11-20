@@ -9,7 +9,7 @@ export default function Home() {
     <div className={styles.stack}>
       <div className={styles.row}>
         <div className={styles.row2}>
-          <img src="assets/logos/monogram-on-light.svg" alt="" className={styles.img} />
+          <img src="/assets/logos/monogram-on-light.svg" alt="" className={styles.img} />
           <span className={styles.text}>
             <span className={styles.nex}>NEX</span>
             <span className={styles.drive}>Drive</span>

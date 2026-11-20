@@ -39,7 +39,7 @@ There are two ways. Use one at a time, because both use port 3300.
 npm run dev
 ```
 
-Open **http://nexdrive.localhost:3300** in Chrome. This runs Vite's development server. When you save a file under `src/`, the page updates within a second without a reload. The service worker (offline support) is turned off in this mode on purpose.
+Open **http://nexdrive.localhost:3300** in Chrome. This runs Vite's development server. Each screen has its own URL (for example `/learners/L2` or `/account/subscription`), so you can open or bookmark a screen directly. When you save a file under `src/`, the page updates within a second without a reload. The service worker (offline support) is turned off in this mode on purpose.
 
 Before committing, run `npm run check`. It type-checks, lints, checks formatting and runs the unit tests; `npm run format` fixes formatting.
 
